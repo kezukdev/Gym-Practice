@@ -1,9 +1,15 @@
+  
+  # JOIN & LEFT SERVER MESSAGE #
+
 join-message:
   enabled: "true"
   message: "&a%player% &bis now online."
 leave-message:
   enabled: "true"
   message: "&c%player% &bis now offline."
+  
+  #ITEMS#
+  
 spawn-items:
   0:
     material: "IRON_SWORD"
@@ -32,3 +38,5 @@ spawn-items:
   8:
     material: "BOOK"
     displayname: "&3Editor"
+    
+    # 
