@@ -4,3 +4,31 @@ join-message:
 leave-message:
   enabled: "true"
   message: "&c%player% &bis now offline."
+spawn-items:
+  0:
+    material: "IRON_SWORD"
+    displayname: "&3Casual"
+  1:
+    material: "DIAMOND_SWORD"
+    displayname: "&5Ranked"
+  2:
+    material: "AIR"
+    displayname: "null"
+  3:
+    material: "AIR"
+    displayname: "null"
+  4:
+    material: "NAME_TAG"
+    displayname: "&3Party"
+  5:
+    material: "AIR"
+    displayname: "null"
+  6:
+    material: "AIR"
+    displayname: "null"
+  7:
+    material: "REDSTONE"
+    displayname: "&3Settings"
+  8:
+    material: "BOOK"
+    displayname: "&3Editor"

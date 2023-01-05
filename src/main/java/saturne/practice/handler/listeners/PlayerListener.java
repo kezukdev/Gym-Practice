@@ -21,6 +21,7 @@ public class PlayerListener implements Listener {
 			String message = this.main.getConfig().getString("join-message.message");
 			event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message.replace(message, ConfigTranslator.translate(message)).replace("%player%", event.getPlayer().getDisplayName())));
 		}
+		this.main.getManagerHandler().getItemManager().giveItems(event.getPlayer(), "spawn-items");
 	}
 	
 	@EventHandler(priority=EventPriority.HIGH)
