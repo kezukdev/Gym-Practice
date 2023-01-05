@@ -26,6 +26,8 @@ public class PlayerListener implements Listener {
 			event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName())));
 		}
 		new Profile(event.getPlayer().getUniqueId());
+		event.getPlayer().setFoodLevel(20);
+		event.getPlayer().setHealth(event.getPlayer().getMaxHealth());
 		this.main.getManagerHandler().getItemManager().giveItems(event.getPlayer(), "spawn-items");
 	}
 	
