@@ -1,0 +1,6 @@
+join-message:
+  enabled: "true"
+  message: "&a%player% &bis now online."
+leave-message:
+  enabled: "true"
+  message: "&c%player% &bis now offline."
