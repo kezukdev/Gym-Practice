@@ -2,3 +2,21 @@ name: Gym
 auhtor: [kezukdev & yunggukka]
 version: 0.0.1
 main: saturne.practice.Main
+commands:
+  kit:
+    aliases: [ladder, gametype]
+    description: "Create your own game mode according to your desires!"
+  arena:
+    aliases: [arenas]
+    description: "Allows you to manage your game arenas!"
+  casual:
+    aliases: [unranked]
+    description: "Open the casual inventory"
+  ranked:
+    description: "Move up in the rankings by joining the queue dedicated to ranked!"
+  editor:
+    aliases: [kiteditor]
+    description: "Change your personal kit!"
+  settings:
+    aliases: [options, parameters]
+    description: "Configure your play space to your liking!"

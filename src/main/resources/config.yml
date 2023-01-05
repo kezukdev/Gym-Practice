@@ -1,42 +1,75 @@
-  
-  # JOIN & LEFT SERVER MESSAGE #
+licence: "LICENCE_KEY"  
 
+  ########################
+  # SERVER CONFIGURATION #
+  ########################
+  
 join-message:
   enabled: "true"
-  message: "&a%player% &bis now online."
+  message: "&a%player% &bis now online. &a%currentlyOnline%&7/&c%maxSlots%"
 leave-message:
   enabled: "true"
   message: "&c%player% &bis now offline."
+motd: 
+  whitelist:
+    1: "&3Saturne &7| &bPractice"
+    2: "&cCurrently under whitelist follow us on Twitter for more informations @SaturneServices"
+  unwhitelist:
+    1: "&3Saturne &7| &bPractice"
+    2: "&aServer dedicated to testing!"
+maxslots: 2023
   
-  #ITEMS#
+  #########
+  # ITEMS #
+  #########
   
 spawn-items:
   0:
     material: "IRON_SWORD"
     displayname: "&3Casual"
+    command: "/casual"
   1:
     material: "DIAMOND_SWORD"
     displayname: "&5Ranked"
+    command: "/ranked"
   2:
     material: "AIR"
     displayname: "null"
+    command: "null"
   3:
     material: "AIR"
     displayname: "null"
+    command: "null"
   4:
     material: "NAME_TAG"
     displayname: "&3Party"
+    command: "/party create"
   5:
     material: "AIR"
     displayname: "null"
+    command: "null"
   6:
     material: "AIR"
     displayname: "null"
+    command: "null"
   7:
     material: "REDSTONE"
     displayname: "&3Settings"
+    command: "/settings"
   8:
     material: "BOOK"
     displayname: "&3Editor"
+    command: "/editor"
     
-    # 
+    #############
+    # INVENTORY #
+    #############
+    
+inventory:
+  automatic-calcul-size: "true"
+  casual:
+    name: "&8Casual Queue:"
+    size: 9
+  ranked:
+    name: "&8Ranked Queue:"
+    size: 9
