@@ -64,7 +64,7 @@ spawn-items:
     #############
     # INVENTORY #
     #############
-    
+# Be aware that inventory sizes are only calculated by 9 (example 9+9 = 18) #
 inventory:
   automatic-calcul-size: "true"
   casual:
@@ -89,5 +89,6 @@ permissions:
 messages:
   no-permissions: "&cYou don't have the permissions!"
   ladder-already-exist: "&cThis ladder already exists!"
+  ladder-doesnt-exist: "&cThe ladder: &f%ladderName% &cdoesn't exists!"
   created-ladder: "&aThe ladder: &f%ladderName% &awas created in &f%ladderType%&a!"
   ladder-type-doesnt-exist: "&cThe ladder types currently available are: &3normal&7, &3uhc&7, &3sumo&7, &3hcf&7, &3spleef&7, &3bridges&7, &3combo!"
