@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.google.common.collect.Lists;
 
 import net.minecraft.util.com.google.common.collect.Maps;
+import saturne.practice.arena.Arena;
 import saturne.practice.handler.CommandHandler;
 import saturne.practice.handler.ListenerHandler;
 import saturne.practice.handler.ManagerHandler;
@@ -29,6 +30,7 @@ public class Main extends JavaPlugin {
 	private ManagerHandler managerHandler;
 	private CommandHandler commandHandler;
 	private HashMap<UUID, Profile> profiles = Maps.newHashMap();
+	private List<Arena> arenas = Lists.newArrayList();
 	private List<Ladder> ladders = Lists.newArrayList();
 	
 	public void onEnable() {
@@ -79,5 +81,9 @@ public class Main extends JavaPlugin {
 	
 	public List<Ladder> getLadders() {
 		return ladders;
+	}
+	
+	public List<Arena> getArenas() {
+		return arenas;
 	}
 }
