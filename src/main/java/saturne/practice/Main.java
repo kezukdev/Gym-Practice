@@ -47,7 +47,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		this.saveDefaultConfig();
-		
+		this.ladderFile = new LadderFile(this);
         try {
             URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -63,7 +63,6 @@ public class Main extends JavaPlugin {
 		this.listenerHandler = new ListenerHandler(this);
 		this.managerHandler = new ManagerHandler();
 		this.commandHandler = new CommandHandler(this);
-		this.ladderFile = new LadderFile(this);
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {
 				new Profile(players.getUniqueId());
@@ -85,6 +84,11 @@ public class Main extends JavaPlugin {
 	public void onDisable() {
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			this.profiles.clear();
+		}
+		try {
+			this.getLadderFile().getConfig().save(this.getLadderFile().getFile());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -9,7 +9,8 @@ public enum LadderType {
 	SPLEEF(ArenaType.SPLEEF),
 	BRIDGES(ArenaType.BRIDGES),
 	HCF(ArenaType.HCF),
-	SUMO(ArenaType.SUMO);
+	SUMO(ArenaType.SUMO),
+	COMBO(ArenaType.NORMAL);
 	
 	final ArenaType arenaType;
 	
