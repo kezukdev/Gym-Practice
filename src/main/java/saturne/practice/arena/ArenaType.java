@@ -6,6 +6,7 @@ public enum ArenaType {
 	HCF,
 	SPLEEF,
 	UHC,
-	BRIDGES;
+	BRIDGES,
+	SUMO;
 
 }
