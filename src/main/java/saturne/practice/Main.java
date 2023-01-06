@@ -19,6 +19,7 @@ import saturne.practice.handler.CommandHandler;
 import saturne.practice.handler.ListenerHandler;
 import saturne.practice.handler.ManagerHandler;
 import saturne.practice.ladder.Ladder;
+import saturne.practice.ladder.sub.LadderFile;
 import saturne.practice.profile.Profile;
 
 public class Main extends JavaPlugin {
@@ -27,15 +28,26 @@ public class Main extends JavaPlugin {
 	public static Main getInstance() { return instance; }
 	
 	private ListenerHandler listenerHandler;
+	public ListenerHandler getListenerHandler() { return listenerHandler; }
 	private ManagerHandler managerHandler;
+	public ManagerHandler getManagerHandler() { return managerHandler; }
 	private CommandHandler commandHandler;
+	public CommandHandler getCommandHandler() { return commandHandler; }
+	
 	private HashMap<UUID, Profile> profiles = Maps.newHashMap();
+	public HashMap<UUID, Profile> getProfiles() { return profiles; }
 	private List<Arena> arenas = Lists.newArrayList();
+	public List<Arena> getArenas() { return arenas; }
 	private List<Ladder> ladders = Lists.newArrayList();
+	public List<Ladder> getLadders() { return ladders; }
+	
+	private LadderFile ladderFile;
+	public LadderFile getLadderFile() { return ladderFile; }
 	
 	public void onEnable() {
 		instance = this;
 		this.saveDefaultConfig();
+		
         try {
             URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -47,12 +59,25 @@ public class Main extends JavaPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+        
 		this.listenerHandler = new ListenerHandler(this);
 		this.managerHandler = new ManagerHandler();
 		this.commandHandler = new CommandHandler(this);
+		this.ladderFile = new LadderFile(this);
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {
 				new Profile(players.getUniqueId());
+			}
+		}
+	}
+	
+	public void loadKits() {
+		this.ladders.clear();
+		if(this.ladderFile.getConfig().getList("ladders") != null) {
+			for(Object o : this.ladderFile.getConfig().getList("ladders")) {
+				if(o instanceof Ladder){
+					this.ladders.add((Ladder) o);
+				}
 			}
 		}
 	}
@@ -61,29 +86,5 @@ public class Main extends JavaPlugin {
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			this.profiles.clear();
 		}
-	}
-	
-	public ListenerHandler getListenerHandler() {
-		return listenerHandler;
-	}
-	
-	public ManagerHandler getManagerHandler() {
-		return managerHandler;
-	}
-	
-	public CommandHandler getCommandHandler() {
-		return commandHandler;
-	}
-	
-	public HashMap<UUID, Profile> getProfiles() {
-		return profiles;
-	}
-	
-	public List<Ladder> getLadders() {
-		return ladders;
-	}
-	
-	public List<Arena> getArenas() {
-		return arenas;
 	}
 }
