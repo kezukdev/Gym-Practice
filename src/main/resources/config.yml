@@ -70,10 +70,16 @@ inventory:
   casual:
     name: "&8Casual Queue:"
     size: 9
+    lore:
+      - "&3Queueing&7: &f%inQueue%"
+      - "&5Fighting&7: &f%inFight%"
   ranked:
     name: "&8Ranked Queue:"
     size: 9
-    
+    lore:
+      - "&3Queueing&7: &f%inQueue%"
+      - "&5Fighting&7: &f%inFight%"
+      
     ###############
     # PERMISSIONS #
     ###############
@@ -92,3 +98,23 @@ messages:
   ladder-doesnt-exist: "&cThe ladder: &f%ladderName% &cdoesn't exists!"
   created-ladder: "&aThe ladder: &f%ladderName% &awas created in &f%ladderType%&a!"
   ladder-type-doesnt-exist: "&cThe ladder types currently available are: &3normal&7, &3uhc&7, &3sumo&7, &3hcf&7, &3spleef&7, &3bridges&7, &3combo!"
+  ladder-help:
+    - ""
+    - "§5Ladders Command:"
+    - ""
+    - "§d/ladder create <name> <type>"
+    - "§d/ladder setinv <name>"
+    - "§d/ladder seticon <name>"
+    - "§d/ladder seteditable <name> <true/false>"
+    - "§d/ladder setslots <name> <number>"
+    - "§d/ladder setdisplay <name> <displayName>"
+  arena-help:
+    - ""
+    - "§5Arena Command:"
+    - ""
+    - "§d/arena create <name> <type>"
+    - "§d/arena setloc<1/2> <name>"
+  arena-not-exist: "&cThis arena does not exist!"
+  arena-location: "&aYou have well defined the %locationSet% position"
+  arena-created: "&aYou have created the arena: %arenaName% in the type: %arenaType%"
+  arena-already-exist: "&cThis arena already exists!"

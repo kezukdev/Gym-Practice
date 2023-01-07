@@ -1,9 +1,6 @@
 package saturne.practice.ladder;
 
-import java.util.List;
 import org.bukkit.inventory.ItemStack;
-import com.google.common.collect.Lists;
-
 import saturne.practice.Main;
 
 public class Ladder {
@@ -15,14 +12,40 @@ public class Ladder {
 	private LadderType ladderType;
 	private Integer slots;
 	private ItemStack icon;
-	private List<ItemStack> inventory = Lists.newArrayList();
+	private ItemStack[] content;
+	private ItemStack[] armorContent;
 	private boolean editable;
 	
-	public Ladder(final String displayName, final LadderType ladderType, final Integer slots) {
+	public Ladder(final String name, final ItemStack icon, final ItemStack[] content, final ItemStack[] armorContent,final String displayName, final LadderType ladderType, final Integer slots, final boolean editable) {
+		this.name = name;
+		this.icon = icon;
+		this.content = content;
+		this.armorContent = armorContent;
 		this.displayName = displayName;
 		this.ladderType = ladderType;
 		this.slots = slots;
+		this.editable = editable;
 		this.main.getLadders().add(this);
+	}
+	
+	public ItemStack[] getArmorContent() {
+		return armorContent;
+	}
+	
+	public ItemStack[] getContent() {
+		return content;
+	}
+	
+	public ItemStack getIcon() {
+		return icon;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public boolean isEditable() {
+		return editable;
 	}
 	
 	public String getDisplayName() {

@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.collect.Lists;
@@ -19,8 +23,10 @@ import saturne.practice.handler.CommandHandler;
 import saturne.practice.handler.ListenerHandler;
 import saturne.practice.handler.ManagerHandler;
 import saturne.practice.ladder.Ladder;
+import saturne.practice.ladder.LadderType;
 import saturne.practice.ladder.sub.LadderFile;
 import saturne.practice.profile.Profile;
+import saturne.practice.utils.BukkitSerialization;
 
 public class Main extends JavaPlugin {
 	
@@ -72,13 +78,6 @@ public class Main extends JavaPlugin {
 	
 	public void loadKits() {
 		this.ladders.clear();
-		if(this.ladderFile.getConfig().getList("ladders") != null) {
-			for(Object o : this.ladderFile.getConfig().getList("ladders")) {
-				if(o instanceof Ladder){
-					this.ladders.add((Ladder) o);
-				}
-			}
-		}
 	}
 	
 	public void onDisable() {
@@ -87,6 +86,7 @@ public class Main extends JavaPlugin {
 		}
 		try {
 			this.getLadderFile().getConfig().save(this.getLadderFile().getFile());
+			this.managerHandler.getArenaManager().saveArenas();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
