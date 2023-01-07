@@ -7,6 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -52,5 +56,40 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
+	
+	@EventHandler(priority=EventPriority.LOW)
+	public void PlayerFoodChange(final FoodLevelChangeEvent event) {
+		final Profile profile = this.main.getProfiles().get(event.getEntity().getUniqueId());
+		if (profile.getProfileState().equals(ProfileState.FIGHT)) {
+			return;
+		}
+		event.setCancelled(true);
+	}
 
+	@EventHandler(priority=EventPriority.LOW)
+	public void PlayerPlaceBlockEvent(final BlockPlaceEvent event) {
+		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		if (profile.getProfileState().equals(ProfileState.FIGHT)) {
+			return;
+		}
+		event.setCancelled(true);
+	}
+	
+	@EventHandler(priority=EventPriority.LOW)
+	public void PlayerBreakBlockEvent(final BlockBreakEvent event) {
+		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		if (profile.getProfileState().equals(ProfileState.FIGHT)) {
+			return;
+		}
+		event.setCancelled(true);
+	}
+	
+	@EventHandler(priority=EventPriority.LOW)
+	public void PlayerDropEvent(final PlayerDropItemEvent event) {
+		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		if (profile.getProfileState().equals(ProfileState.FIGHT)) {
+			return;
+		}
+		event.setCancelled(true);
+	}
 }
