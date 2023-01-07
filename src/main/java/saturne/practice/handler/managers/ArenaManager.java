@@ -61,7 +61,7 @@ public class ArenaManager {
 		loadArenas();
 	}
 
-    public static Arena getRandomArena(ArenaType arenaType) {
+    public Arena getRandomArena(ArenaType arenaType) {
         List<Arena> availableArena = Main.getInstance().getArenas().stream().filter(arenaManager -> arenaManager.getArenaType() == arenaType).collect(Collectors.toList());
         Collections.shuffle(availableArena);
         return availableArena.get(0);

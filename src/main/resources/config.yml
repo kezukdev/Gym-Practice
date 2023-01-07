@@ -60,6 +60,44 @@ spawn-items:
     material: "BOOK"
     displayname: "&3Editor"
     command: "/editor"
+
+queue-items:
+  0:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  1:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  2:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  3:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  4:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  5:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  6:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  7:
+    material: "AIR"
+    displayname: "null"
+    command: "null"
+  8:
+    material: "PACKED_ICE"
+    displayname: "&cLeave queue."
+    command: "/leavequeue"
     
     #############
     # INVENTORY #
@@ -118,3 +156,4 @@ messages:
   arena-location: "&aYou have well defined the %locationSet% position"
   arena-created: "&aYou have created the arena: %arenaName% in the type: %arenaType%"
   arena-already-exist: "&cThis arena already exists!"
+  enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"

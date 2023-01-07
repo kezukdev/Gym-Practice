@@ -5,7 +5,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,7 +22,9 @@ import saturne.practice.handler.ListenerHandler;
 import saturne.practice.handler.ManagerHandler;
 import saturne.practice.ladder.Ladder;
 import saturne.practice.ladder.sub.LadderFile;
+import saturne.practice.match.MatchEntry;
 import saturne.practice.profile.Profile;
+import saturne.practice.queue.QueueEntry;
 
 public class Main extends JavaPlugin {
 	
@@ -40,6 +44,10 @@ public class Main extends JavaPlugin {
 	public List<Arena> getArenas() { return arenas; }
 	private List<Ladder> ladders = Lists.newArrayList();
 	public List<Ladder> getLadders() { return ladders; }
+	private ConcurrentMap<UUID, QueueEntry> queues = Maps.newConcurrentMap();
+	public ConcurrentMap<UUID, QueueEntry> getQueues() { return queues; }
+	private Map<UUID, MatchEntry> matchs = Maps.newHashMap();
+	public Map<UUID, MatchEntry> getMatchs() { return matchs; }
 	
 	private LadderFile ladderFile;
 	public LadderFile getLadderFile() { return ladderFile; }
