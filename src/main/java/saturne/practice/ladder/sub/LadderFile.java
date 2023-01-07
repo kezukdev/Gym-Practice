@@ -35,6 +35,7 @@ public class LadderFile {
 		config = YamlConfiguration.loadConfiguration(file);
 		if (config.getKeys(true).size() > 2) {
 			for (String str : getConfig().getConfigurationSection("ladders").getKeys(false)) {
+				System.out.println(str);
 				try {
 					new Ladder(str, new ItemStack(Material.valueOf(getConfig().getConfigurationSection("ladders").getString(str + ".icon"))), BukkitSerialization.itemStackArrayFromBase64(getConfig().getConfigurationSection("ladders").getString(str + ".content")), BukkitSerialization.itemStackArrayFromBase64(getConfig().getConfigurationSection("ladders").getString(str + ".armorContent")), getConfig().getConfigurationSection("ladders").getString(str + ".displayname"), LadderType.valueOf(getConfig().getConfigurationSection("ladders").getString(str + ".type")), Integer.valueOf(getConfig().getConfigurationSection("ladders").getInt(str + ".slots")), Boolean.valueOf(getConfig().getConfigurationSection("ladders").getString(str + ".editable")));
 				} catch (IOException e) {

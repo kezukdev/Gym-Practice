@@ -18,6 +18,10 @@ public class InventoryManager {
 	public InventoryManager() {
 		this.casualInventory = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.casual.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name")));
 		this.rankedInventory = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.ranked.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name")));
+		this.refreshInventory();
+	}
+	
+	public void refreshInventory() {
 		for (Ladder ladder : this.main.getLadders()) {
 			final ItemStack item = new ItemStack(ladder.getIcon());
 			final ItemMeta meta = item.getItemMeta();

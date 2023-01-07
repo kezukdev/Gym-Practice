@@ -1,5 +1,7 @@
 package saturne.practice.handler.command;
 
+import java.io.IOException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 import saturne.practice.Main;
+import saturne.practice.ladder.Ladder;
 import saturne.practice.ladder.LadderType;
 import saturne.practice.utils.BukkitSerialization;
 
@@ -42,7 +45,9 @@ public class LadderCommand implements CommandExecutor {
 				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.ladder-type-doesnt-exist")));
 				return false;
 			}
-			fileConfig.set("ladders", args[1]);
+			final int slots = this.main.getLadders().isEmpty() ? 0 : this.main.getLadders().size();
+			new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true);
+			fileConfig.createSection("ladders." + args[1]);
 			fileConfig.createSection("ladders." + args[1] + ".type");
 			fileConfig.set("ladders." + args[1] + ".type", args[2]);
 			fileConfig.createSection("ladders." + args[1] + ".content");
@@ -52,11 +57,12 @@ public class LadderCommand implements CommandExecutor {
 			fileConfig.createSection("ladders." + args[1] + ".icon");
 			fileConfig.set("ladders." + args[1] + ".icon", player.getItemInHand().getType().toString());
 			fileConfig.createSection("ladders." + args[1] + ".slots");
-			fileConfig.set("ladders." + args[1] + ".slots", this.main.getLadders().size() == 0 ? 0 : this.main.getLadders().size()+1);
+			fileConfig.set("ladders." + args[1] + ".slots", slots);
 			fileConfig.createSection("ladders." + args[1] + ".editable");
 			fileConfig.set("ladders." + args[1] + ".editable", "true");
 			fileConfig.createSection("ladders." + args[1] + ".displayname");
 			fileConfig.set("ladders." + args[1] + ".displayname", "&a" + args[1]);
+			this.save();
 			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.created-ladder").replace("%ladderName%", args[1]).replace("%ladderType%", args[2])));
 			return false;
 		}
@@ -71,6 +77,7 @@ public class LadderCommand implements CommandExecutor {
 			}
 			fileConfig.set("ladders." + args[1] + ".content", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getContents()));
 			fileConfig.set("ladders." + args[1] + ".armorContent", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getArmorContents()));
+			this.save();
 			sender.sendMessage(ChatColor.GREEN + "The inventory was correctly defined!");
 		}
 		if (args[0].equalsIgnoreCase("seticon")) {
@@ -83,6 +90,7 @@ public class LadderCommand implements CommandExecutor {
 				return false;
 			}
 			fileConfig.set("ladders." + args[1] + ".icon", player.getItemInHand().getType().toString());
+			this.save();
 			sender.sendMessage(ChatColor.GREEN + "The icon has been defined to " + player.getItemInHand().getType().toString());
 		}
 		if (args[0].equalsIgnoreCase("setslots")) {
@@ -98,7 +106,8 @@ public class LadderCommand implements CommandExecutor {
 				sender.sendMessage(ChatColor.RED + "Please provide a correct format!");
 				return false;
 			}
-			fileConfig.set("ladders." + args[1] + ".slots", args[2]);
+			fileConfig.set("ladders." + args[1] + ".slots", Integer.valueOf(args[2]));
+			this.save();
 			sender.sendMessage(ChatColor.GREEN + "The slots of " + args[1] + " has been defined to " + args[2]);
 		}
 		if (args[0].equalsIgnoreCase("seteditable")) {
@@ -132,4 +141,11 @@ public class LadderCommand implements CommandExecutor {
 		return false;
 	}
 
+	private void save() {
+		try {
+			fileConfig.save(this.main.getLadderFile().getFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
