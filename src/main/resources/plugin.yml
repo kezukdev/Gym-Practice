@@ -1,7 +1,7 @@
 name: Gym
-auhtor: [kezukdev & yunggukka]
-version: 0.0.1
-main: saturne.practice.Main
+auhtor: [kezukdev]
+version: 1.0
+main: bawz.practice.Main
 commands:
   kit:
     aliases: [ladder, gametype]
@@ -20,3 +20,9 @@ commands:
   settings:
     aliases: [options, parameters]
     description: "Configure your play space to your liking!"
+  leavequeue:
+    aliases: [quitqueue, lqueue, exitqueue]
+    description : "Used to leave the queue!"
+  locations:
+    aliases: [loc, location]
+    description: "Define the different teleportation points!"

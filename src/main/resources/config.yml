@@ -12,11 +12,11 @@ leave-message:
   message: "&c%player% &bis now offline."
 motd: 
   whitelist:
-    1: "&3Saturne &7| &bPractice"
-    2: "&cCurrently under whitelist follow us on Twitter for more informations @SaturneServices"
+    1: "&3Bawz &7| &bPractice"
+    2: "&cCurrently under whitelist!"
   unwhitelist:
-    1: "&3Saturne &7| &bPractice"
-    2: "&aServer dedicated to testing!"
+    1: "&3bawz &7| &bPractice"
+    2: "&aFollow @BawzNet!"
 maxslots: 2023
   
   #########
@@ -123,8 +123,9 @@ inventory:
     ###############
     
 permissions:
-  ladder: "saturne.ladder"
-  arena: "saturne.arena"
+  ladder: "bawz.ladder"
+  arena: "bawz.arena"
+  locations: "bawz.location"
   
     ############
     # MESSAGES #
@@ -157,3 +158,11 @@ messages:
   arena-created: "&aYou have created the arena: %arenaName% in the type: %arenaType%"
   arena-already-exist: "&cThis arena already exists!"
   enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"
+  leave-queue: "&cYou have been left the queue!"
+  
+  #############
+  # LOCATIONS #
+  #############
+  
+spawn:
+editor:
