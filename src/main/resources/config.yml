@@ -160,6 +160,25 @@ messages:
   enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"
   leave-queue: "&cYou have been left the queue!"
   
+  #################
+  # MATCH MESSAGE #
+  #################
+  
+  kill-message: "&3%killer% to kill &d%killed%"
+  match-found: "&7* &fA opponent was found! It's about &3%opponent%&f!"
+  countdown-message: "&3Match starting in &f%countdown% seconds!"
+  inventories-message: 
+    - ""
+    - "&3%winner% &fhave won the match! &dInventories&7: &a%winnerInventories%&7, &c%looserInventories%&7."
+  match-started: "&fThe match has been begin!"
+  
+  #######################
+  # MATCH CONFIGURATION #
+  #######################
+  
+#The result can only be calculated in second grade!#
+respawn-after-match-time: 10
+  
   #############
   # LOCATIONS #
   #############

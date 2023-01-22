@@ -85,9 +85,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	private void loadLocations() {
-		if (getConfig().getString("spawn") != null) {
-			this.spawnLocation = LocationSerializer.stringToLocation(getConfig().getString("spawn")).toBukkitLocation();
-		}
+		this.spawnLocation = getConfig().getString("spawn") != null ? LocationSerializer.stringToLocation(getConfig().getString("spawn")).toBukkitLocation() : Bukkit.getWorld("world").getSpawnLocation();
 		if (getConfig().getString("editor") != null) {
 			this.editorLocation = LocationSerializer.stringToLocation(getConfig().getString("editor")).toBukkitLocation();
 		}

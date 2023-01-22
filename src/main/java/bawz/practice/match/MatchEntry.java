@@ -1,7 +1,10 @@
 package bawz.practice.match;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import com.google.common.collect.Lists;
 
 import bawz.practice.Main;
 import bawz.practice.ladder.Ladder;
@@ -24,6 +27,10 @@ public class MatchEntry {
 	private MatchState matchState;
 	public MatchState getMatchState() { return matchState; }
 	public void setMatchState(MatchState matchState) { this.matchState = matchState; }
+	private List<List<UUID>> alives;
+	public List<List<UUID>> getAlives() { return alives; }
+	private List<UUID> spectator;
+	public List<UUID> getSpectator() { return spectator; }
 	
 	public MatchEntry(final List<UUID> firstList, final List<UUID> secondList, final Ladder ladder, final QueueType queueType) {
 		this.matchID = UUID.randomUUID();
@@ -31,6 +38,8 @@ public class MatchEntry {
 		this.secondList = secondList;
 		this.ladder = ladder;
 		this.queueType = queueType;
+		this.alives = Arrays.asList(firstList, secondList);
+		this.spectator = Lists.newArrayList();
 		this.main.getMatchs().putIfAbsent(getMatchID(), this);
 		this.main.getManagerHandler().getMatchManager().startMatch(firstList, secondList, this.getMatchID());
 	}
