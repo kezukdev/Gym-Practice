@@ -3,7 +3,15 @@ licence: "LICENCE_KEY"
   ########################
   # SERVER CONFIGURATION #
   ########################
-  
+
+database:
+  sql:
+    enable: "false"
+  mongo:
+    enable: "false"
+    
+default-elos: 1200
+ 
 join-message:
   enabled: "true"
   message: "&a%player% &bis now online. &a%currentlyOnline%&7/&c%maxSlots%"

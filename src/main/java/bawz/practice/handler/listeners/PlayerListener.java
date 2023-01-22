@@ -55,7 +55,7 @@ public class PlayerListener implements Listener {
 			String message = this.main.getConfig().getString("leave-message.message");
 			event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName())));
 		}
-		this.main.getProfiles().remove(event.getPlayer().getUniqueId());
+		this.main.getProfiles().get(event.getPlayer().getUniqueId()).exit();
 	}
 	
 	@EventHandler(priority=EventPriority.LOW)

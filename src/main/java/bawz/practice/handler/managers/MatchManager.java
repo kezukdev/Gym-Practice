@@ -79,6 +79,8 @@ public class MatchManager {
 					final Profile profile = main.getProfiles().get(uuid);
 					player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
 					profile.getProfileCache().setMatchID(null);
+					profile.setProfileState(ProfileState.FREE);
+					main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
 				}
 			}
 		}.runTaskLaterAsynchronously(main, 20*this.main.getConfig().getInt("respawn-after-match-time"));
