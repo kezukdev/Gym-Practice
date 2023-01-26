@@ -40,8 +40,6 @@ public class Main extends JavaPlugin {
 	private CommandHandler commandHandler;
 	public CommandHandler getCommandHandler() { return commandHandler; }
 	
-	private HashMap<UUID, Profile> profiles = Maps.newHashMap();
-	public HashMap<UUID, Profile> getProfiles() { return profiles; }
 	private List<Arena> arenas = Lists.newArrayList();
 	public List<Arena> getArenas() { return arenas; }
 	private List<Ladder> ladders = Lists.newArrayList();
@@ -92,8 +90,11 @@ public class Main extends JavaPlugin {
 	}
 
 	public void onDisable() {
+		for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
+			
+		}
 		if (Bukkit.getOnlinePlayers().size() != 0) {
-			this.profiles.clear();
+			this.managerHandler.getProfileManager().getProfiles().clear();
 		}
 		try {
 			this.getLadderFile().getConfig().save(this.getLadderFile().getFile());

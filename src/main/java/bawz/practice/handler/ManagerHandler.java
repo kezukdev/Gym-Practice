@@ -4,6 +4,7 @@ import bawz.practice.handler.managers.ArenaManager;
 import bawz.practice.handler.managers.InventoryManager;
 import bawz.practice.handler.managers.ItemManager;
 import bawz.practice.handler.managers.MatchManager;
+import bawz.practice.handler.managers.ProfileManager;
 import bawz.practice.handler.managers.QueueManager;
 
 public class ManagerHandler {
@@ -18,6 +19,8 @@ public class ManagerHandler {
 	public QueueManager getQueueManager() { return queueManager; }
 	private final MatchManager matchManager;
 	public MatchManager getMatchManager() { return matchManager; }
+	private final ProfileManager profileManager;
+	public ProfileManager getProfileManager() { return profileManager; }
 	
 	public ManagerHandler() {
 		this.itemManager = new ItemManager();
@@ -27,5 +30,6 @@ public class ManagerHandler {
 		this.arenaManager = new ArenaManager();
 		this.queueManager = new QueueManager();
 		this.matchManager = new MatchManager();
+		this.profileManager = new ProfileManager();
 	}
 }

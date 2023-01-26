@@ -30,7 +30,7 @@ public class MatchManager {
 		final Arena arena = this.main.getManagerHandler().getArenaManager().getRandomArena(ladder.getLadderType().getArenaType());
 		matchEntry.setMatchState(MatchState.STARTING);
 		for (UUID uuid : players) {
-			final Profile profile = this.main.getProfiles().get(uuid);
+			final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 			final Player player = Bukkit.getPlayer(uuid);
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.match-found").replace("%opponent%", Bukkit.getPlayer(this.getOpponent(uuid)).getName())));
 			player.teleport(firstList.contains(uuid) ? arena.getLoc1().toBukkitLocation() : arena.getLoc2().toBukkitLocation());
@@ -76,7 +76,7 @@ public class MatchManager {
 			public void run() {
 				for (UUID uuid : players) {
 					final Player player = Bukkit.getPlayer(uuid);
-					final Profile profile = main.getProfiles().get(uuid);
+					final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 					player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
 					profile.getProfileCache().setMatchID(null);
 					profile.setProfileState(ProfileState.FREE);
@@ -87,7 +87,7 @@ public class MatchManager {
 	}
 	
 	public UUID getOpponent(final UUID uuid) {
-		final Profile profile = this.main.getProfiles().get(uuid);
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 		final MatchEntry matchEntry = this.main.getMatchs().get(profile.getProfileCache().getMatchID());
 		if (matchEntry.getFirstList().contains(uuid)) {
 			for (UUID uuids : matchEntry.getSecondList()) {

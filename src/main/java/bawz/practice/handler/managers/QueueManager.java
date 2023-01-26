@@ -24,7 +24,7 @@ public class QueueManager {
 	public void addPlayerToQueue(final List<UUID> uuids, final Ladder ladder, final QueueType queueType) {
 		for (UUID uuid : uuids) {
 			if(!this.main.getQueues().containsKey(uuid)) {
-	            final Profile pm = this.main.getProfiles().get(uuid);
+	            final Profile pm = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 	            this.main.getQueues().putIfAbsent(uuid, new QueueEntry(uuids, ladder, queueType));
 	            pm.setProfileState(ProfileState.QUEUE);	
 	            this.main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(uuid), "queue-items");

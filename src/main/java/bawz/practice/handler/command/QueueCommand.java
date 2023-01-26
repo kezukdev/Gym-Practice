@@ -18,7 +18,7 @@ public class QueueCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
-		final Profile profile = this.main.getProfiles().get(Bukkit.getPlayer(sender.getName()).getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(Bukkit.getPlayer(sender.getName()).getUniqueId());
 		if (profile.getProfileState() != ProfileState.QUEUE) {
 			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.not-in-queue")));
 			return false;

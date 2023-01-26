@@ -17,7 +17,7 @@ public class EntityListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void onDamage(final EntityDamageEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getEntity().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		if (event.getEntity() instanceof Player) {
 			if (profile.getProfileState().equals(ProfileState.FIGHT)) {
 				return;
@@ -28,8 +28,8 @@ public class EntityListener implements Listener {
 
 	@EventHandler(priority=EventPriority.LOW)
 	public void onDamageOnAnotherEntity(final EntityDamageByEntityEvent event) {
-		final Profile profileDamaged = this.main.getProfiles().get(event.getEntity().getUniqueId());
-		final Profile profileDamager = this.main.getProfiles().get(event.getDamager().getUniqueId());
+		final Profile profileDamaged = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
+		final Profile profileDamager = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getDamager().getUniqueId());
 		if (event.getEntity() instanceof Player) {
 			if (profileDamaged.getProfileState().equals(ProfileState.FIGHT) && profileDamager.getProfileState().equals(ProfileState.FIGHT)) {
 				return;

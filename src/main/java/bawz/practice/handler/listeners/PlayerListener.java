@@ -55,12 +55,12 @@ public class PlayerListener implements Listener {
 			String message = this.main.getConfig().getString("leave-message.message");
 			event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName())));
 		}
-		this.main.getProfiles().get(event.getPlayer().getUniqueId()).exit();
+		this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId()).exit();
 	}
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerInteract(final PlayerInteractEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getItem().getType() != Material.AIR) {
 				event.getPlayer().chat(this.main.getConfig().getString((profile.getProfileState().equals(ProfileState.FREE) ? "spawn" : "queue") + "-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerFoodChange(final FoodLevelChangeEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getEntity().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		if (profile.getProfileState().equals(ProfileState.FIGHT)) {
 			return;
 		}
@@ -79,7 +79,7 @@ public class PlayerListener implements Listener {
 
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerPlaceBlockEvent(final BlockPlaceEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		final LadderType type = this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC))) {
 			return;
@@ -89,7 +89,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerBreakBlockEvent(final BlockBreakEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		final LadderType type = this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC)|| type.equals(LadderType.SPLEEF))) {
 			return;
@@ -99,7 +99,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerDropEvent(final PlayerDropItemEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		if (profile.getProfileState().equals(ProfileState.FIGHT)) {
 			return;
 		}
@@ -108,7 +108,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerDeathEvent(final PlayerDeathEvent event) {
-		final Profile profile = this.main.getProfiles().get(event.getEntity().getUniqueId());
+		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getMatchState().equals(MatchState.PLAYING)) {
 			final MatchEntry matchEntry = this.main.getMatchs().get(profile.getProfileCache().getMatchID());
 			Integer teamID = matchEntry.getFirstList().contains(event.getEntity().getUniqueId()) ? 0 : 1;
