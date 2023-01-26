@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import bawz.practice.Main;
@@ -12,11 +13,11 @@ public class ItemManager {
 	
 	private Main main = Main.getInstance();
 	
+	private PlayerInventory spawnInventory;
+	private PlayerInventory queueInventory;
+	
 	public void giveItems(final Player player, final String type) {
-		player.getInventory().clear();
-		for (int i = 0; i < 9; i++) {
-			player.getInventory().setItem(i, this.configToItem(type, String.valueOf(i)));
-		}
+		player.getInventory().setContents(type.equalsIgnoreCase("spawn-items") ? spawnInventory.getContents() : queueInventory.getContents());
 		player.updateInventory();
 	}
 	
@@ -29,5 +30,12 @@ public class ItemManager {
 		}
 		return item;
 	}
-
+	
+	public void loadItems(final String type) {
+		final PlayerInventory inventory = type.equalsIgnoreCase("spawn-items") ? this.spawnInventory : this.queueInventory;
+		inventory.clear();
+		for (int i = 0; i < 9; i++) {
+			inventory.setItem(i, this.configToItem(type, String.valueOf(i)));
+		}
+	}
 }

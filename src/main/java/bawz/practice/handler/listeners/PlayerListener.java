@@ -61,19 +61,10 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerInteract(final PlayerInteractEvent event) {
 		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
-		if (profile.getProfileState().equals(ProfileState.FREE)) {
-			if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-				if (event.getItem().getType() != Material.AIR) {
-					event.getPlayer().chat(this.main.getConfig().getString("spawn-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
-				}	
-			}
-		}
-		if (profile.getProfileState().equals(ProfileState.QUEUE)) {
-			if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-				if (event.getItem().getType() != Material.AIR) {
-					event.getPlayer().chat(this.main.getConfig().getString("queue-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
-				}	
-			}
+		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+			if (event.getItem().getType() != Material.AIR) {
+				event.getPlayer().chat(this.main.getConfig().getString((profile.getProfileState().equals(ProfileState.FREE) ? "spawn" : "queue") + "-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
+			}	
 		}
 	}
 	
@@ -90,7 +81,7 @@ public class PlayerListener implements Listener {
 	public void PlayerPlaceBlockEvent(final BlockPlaceEvent event) {
 		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
 		final LadderType type = this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
-		if (profile.getProfileState().equals(ProfileState.FIGHT) && type.equals(LadderType.BRIDGES) || profile.getProfileState().equals(ProfileState.FIGHT) && type.equals(LadderType.UHC)) {
+		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC))) {
 			return;
 		}
 		event.setCancelled(true);
@@ -100,7 +91,7 @@ public class PlayerListener implements Listener {
 	public void PlayerBreakBlockEvent(final BlockBreakEvent event) {
 		final Profile profile = this.main.getProfiles().get(event.getPlayer().getUniqueId());
 		final LadderType type = this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
-		if (profile.getProfileState().equals(ProfileState.FIGHT) && type.equals(LadderType.BRIDGES) || profile.getProfileState().equals(ProfileState.FIGHT) && type.equals(LadderType.UHC)|| profile.getProfileState().equals(ProfileState.FIGHT) && type.equals(LadderType.SPLEEF)) {
+		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC)|| type.equals(LadderType.SPLEEF))) {
 			return;
 		}
 		event.setCancelled(true);

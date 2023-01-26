@@ -15,7 +15,7 @@ public class CasualCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
 		final Player player = (Player) sender;
-		player.openInventory(this.main.getManagerHandler().getInventoryManager().getCasualInventory());
+		player.openInventory(this.main.getManagerHandler().getInventoryManager().getQueue()[0]);
 		return false;
 	}
 

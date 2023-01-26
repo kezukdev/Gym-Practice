@@ -12,12 +12,12 @@ import bawz.practice.ladder.Ladder;
 public class InventoryManager {
 	
 	private final Main main = Main.getInstance();
-	private Inventory casualInventory;
-	private Inventory rankedInventory;
+	private Inventory[] queue;
+	public Inventory[] getQueue() { return queue; }
 	
 	public InventoryManager() {
-		this.casualInventory = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.casual.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name")));
-		this.rankedInventory = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.ranked.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name")));
+		this.queue[0] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.casual.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name")));
+		this.queue[1] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.ranked.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name")));
 		this.refreshInventory();
 	}
 	
@@ -27,17 +27,11 @@ public class InventoryManager {
 			final ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ladder.getDisplayName()));
 			item.setItemMeta(meta);
-			this.casualInventory.setItem(ladder.getSlots(), item);
-			this.rankedInventory.setItem(ladder.getSlots(), item);
+			for (Inventory inventory : queue) {
+				if (inventory == queue[1] && !ladder.isRanked()) return;
+				inventory.setItem(ladder.getSlots(), item);
+			}
 		}
-	}
-	
-	public Inventory getCasualInventory() {
-		return casualInventory;
-	}
-	
-	public Inventory getRankedInventory() {
-		return rankedInventory;
 	}
 	
 	private int calculateSize(int size) {
@@ -45,7 +39,7 @@ public class InventoryManager {
 		if ((size % 9) != 0) {
 			sizeNeeded += 1;
 		}
-		return (sizeNeeded * 9);
+		return (sizeNeeded == 0 ? 9 : sizeNeeded * 9);
 	}
 
 }

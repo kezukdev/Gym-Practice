@@ -15,7 +15,7 @@ public class RankedCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
 		final Player player = (Player) sender;
-		player.openInventory(this.main.getManagerHandler().getInventoryManager().getRankedInventory());
+		player.openInventory(this.main.getManagerHandler().getInventoryManager().getQueue()[1]);
 		return false;
 	}
 
