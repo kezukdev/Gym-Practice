@@ -9,35 +9,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.google.common.collect.Lists;
 
 import bawz.practice.arena.Arena;
 import bawz.practice.handler.CommandHandler;
-import bawz.practice.handler.ListenerHandler;
 import bawz.practice.handler.ManagerHandler;
+import bawz.practice.handler.listeners.EntityListener;
+import bawz.practice.handler.listeners.InventoryListener;
+import bawz.practice.handler.listeners.PlayerListener;
+import bawz.practice.handler.listeners.ServerListener;
 import bawz.practice.ladder.Ladder;
 import bawz.practice.ladder.sub.LadderFile;
 import bawz.practice.match.MatchEntry;
 import bawz.practice.profile.Profile;
 import bawz.practice.queue.QueueEntry;
 import bawz.practice.utils.LocationSerializer;
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public class Main extends JavaPlugin {
 	
 	private static Main instance;
 	public static Main getInstance() { return instance; }
 	
-	private ListenerHandler listenerHandler;
-	public ListenerHandler getListenerHandler() { return listenerHandler; }
 	private ManagerHandler managerHandler;
 	public ManagerHandler getManagerHandler() { return managerHandler; }
 	private CommandHandler commandHandler;
@@ -47,9 +49,9 @@ public class Main extends JavaPlugin {
 	public List<Arena> getArenas() { return arenas; }
 	private List<Ladder> ladders = Lists.newArrayList();
 	public List<Ladder> getLadders() { return ladders; }
-	private ConcurrentMap<UUID, QueueEntry> queues = Maps.newConcurrentMap();
+	private ConcurrentMap<UUID, QueueEntry> queues = new ConcurrentHashMap<>();
 	public ConcurrentMap<UUID, QueueEntry> getQueues() { return queues; }
-	private Map<UUID, MatchEntry> matchs = Maps.newHashMap();
+	private Map<UUID, MatchEntry> matchs = new HashMap<>();
 	public Map<UUID, MatchEntry> getMatchs() { return matchs; }
 	private Location spawnLocation;
 	public Location getSpawnLocation() { return spawnLocation; }
@@ -75,7 +77,9 @@ public class Main extends JavaPlugin {
 			e.printStackTrace();
 		}
         this.loadLocations();
-		this.listenerHandler = new ListenerHandler(this);
+        for (Listener listener : Arrays.asList(new EntityListener(), new InventoryListener(), new ServerListener(), new PlayerListener())) {
+        	this.getServer().getPluginManager().registerEvents(listener, this);
+        }
 		this.managerHandler = new ManagerHandler();
 		this.commandHandler = new CommandHandler(this);
 		if (Bukkit.getOnlinePlayers().size() != 0) {

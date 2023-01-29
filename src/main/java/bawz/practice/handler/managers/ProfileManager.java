@@ -11,13 +11,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import bawz.practice.Main;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.data.ProfileData;
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public class ProfileManager {
 	
-	private final HashMap<UUID, ProfileData> profileData = Maps.newHashMap();
+	private final HashMap<UUID, ProfileData> profileData = new HashMap<>();
 	public HashMap<UUID, ProfileData> getProfileData() { return profileData; }
-	private final Map<UUID, Profile> profiles = Maps.newHashMap();
+	private final Map<UUID, Profile> profiles = new HashMap<>();
 	public Map<UUID, Profile> getProfiles() { return profiles; }
 	
 	public ProfileManager() {

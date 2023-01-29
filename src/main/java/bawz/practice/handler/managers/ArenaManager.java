@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.minecraft.util.com.google.common.collect.Maps;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +17,7 @@ import bawz.practice.utils.config.Config;
 
 public class ArenaManager {
 	
-	private HashMap<String, Arena> arenas = Maps.newHashMap();
+	private HashMap<String, Arena> arenas = new HashMap<>();
 	private final Config config = new Config("arenas", (JavaPlugin)Main.getInstance());
 	
 	public ArenaManager() {

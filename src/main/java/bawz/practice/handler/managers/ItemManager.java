@@ -1,5 +1,6 @@
 package bawz.practice.handler.managers;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -10,13 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import bawz.practice.Main;
-import net.minecraft.util.com.google.common.collect.Maps;
 
 public class ItemManager {
 	
 	private Main main = Main.getInstance();
 	
-	private Map<String, Map<Integer, ItemStack>> inventory = Maps.newHashMap();
+	private Map<String, Map<Integer, ItemStack>> inventory = new HashMap<>();
 	
 	public void giveItems(final Player player, final String type) {
 		player.getInventory().clear();
@@ -37,7 +37,7 @@ public class ItemManager {
 	}
 	
 	public void loadItems(final String type) {
-		Map<Integer, ItemStack> items = Maps.newHashMap();
+		Map<Integer, ItemStack> items = new HashMap<>();
 		for (int i = 0; i < 9; i++) {
 			items.put(i, configToItem(type, String.valueOf(i)));
 			inventory.put(type, items);
