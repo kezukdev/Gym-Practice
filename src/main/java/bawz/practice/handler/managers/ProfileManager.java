@@ -32,6 +32,7 @@ public class ProfileManager {
 				elos.toArray(elosArray);
 				this.profileData.putIfAbsent(UUID.fromString(str), new ProfileData(elosArray));
 			}	
+			System.out.println("Data Player > Loaded!");
 		}
 	}
 	

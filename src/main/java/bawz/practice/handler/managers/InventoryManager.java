@@ -12,7 +12,7 @@ import bawz.practice.ladder.Ladder;
 public class InventoryManager {
 	
 	private final Main main = Main.getInstance();
-	private Inventory[] queue;
+	private Inventory[] queue = new Inventory[2];
 	public Inventory[] getQueue() { return queue; }
 	
 	public InventoryManager() {

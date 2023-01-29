@@ -1,8 +1,10 @@
 package bawz.practice;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -90,8 +93,17 @@ public class Main extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
-			
+		if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
+			for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
+				File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");
+				if (!file.exists()) this.saveResource(getDataFolder() + "/players/" + uuid.toString() + ".yml", false);
+				YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+				configFile.createSection("elos");
+				Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
+				List<Integer> eloList = Arrays.asList(elos);
+				configFile.set("elos", eloList);
+			}	
+			System.out.println("Data Player > Saved!");
 		}
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			this.managerHandler.getProfileManager().getProfiles().clear();
