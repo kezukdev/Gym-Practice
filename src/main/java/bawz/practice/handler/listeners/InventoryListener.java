@@ -10,7 +10,6 @@ import com.google.common.collect.Lists;
 import bawz.practice.Main;
 import bawz.practice.ladder.Ladder;
 import bawz.practice.queue.QueueType;
-import net.md_5.bungee.api.ChatColor;
 
 public class InventoryListener implements Listener {
 	
@@ -19,11 +18,10 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void inventoryInteraction(final InventoryClickEvent event) {
 		event.setCancelled(true);
-		final String casualInventoryName = ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name"));
-		final String rankedInventoryName = ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name"));
-		if (event.getClickedInventory().getName().equalsIgnoreCase(casualInventoryName) || event.getClickedInventory().getName().equalsIgnoreCase(rankedInventoryName)) {
+		if (event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[0].getName()) || event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[1].getName())) {
 			event.getWhoClicked().closeInventory();
-			this.main.getManagerHandler().getQueueManager().addPlayerToQueue(Lists.newArrayList(event.getWhoClicked().getUniqueId()), Ladder.getLadderBySlots(event.getSlot()), event.getClickedInventory().getName().equalsIgnoreCase(rankedInventoryName) ? QueueType.RANKED : QueueType.CASUAL);
+			this.main.getManagerHandler().getQueueManager().addPlayerToQueue(Lists.newArrayList(event.getWhoClicked().getUniqueId()), Ladder.getLadderBySlots(event.getSlot()), event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[1].getName()) ? QueueType.RANKED : QueueType.CASUAL);
+			return;
 		}
 	}
 

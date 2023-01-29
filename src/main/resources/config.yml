@@ -190,6 +190,6 @@ respawn-after-match-time: 10
   #############
   # LOCATIONS #
   #############
-  
-spawn:
-editor:
+locations:
+  spawn:
+  editor:

@@ -26,7 +26,10 @@ public class LocationsCommand implements CommandExecutor {
 			return false;
 		}
 		if (args[0].contains("spawn") || args[0].contains("editor")) {
-			this.main.getConfig().set(args[0].contains("spawn") ? "spawn" : "editor", LocationSerializer.locationToString(LocationSerializer.fromBukkitLocation(Bukkit.getPlayer(sender.getName()).getLocation())));
+			LocationSerializer location = LocationSerializer.fromBukkitLocation(Bukkit.getPlayer(sender.getName()).getLocation());
+			String loc = LocationSerializer.locationToString(location);
+			String bool = args[0].contains("spawn") ? "locations.spawn" : "locations.editor";
+			this.main.getConfig().set(bool, loc);
 			sender.sendMessage(ChatColor.GREEN + "The location " + ChatColor.WHITE + (args[0].contains("spawn") ? "spawn" : "editor") + ChatColor.GREEN + " has been set!");
 		}
 		return false;

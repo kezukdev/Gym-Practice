@@ -86,7 +86,7 @@ public class Main extends JavaPlugin {
 	}
 	
 	private void loadLocations() {
-		this.spawnLocation = getConfig().getString("spawn") != null ? LocationSerializer.stringToLocation(getConfig().getString("spawn")).toBukkitLocation() : Bukkit.getWorld("world").getSpawnLocation();
+		this.spawnLocation = getConfig().getString("locations.spawn") != null ? LocationSerializer.stringToLocation(getConfig().getString("locations.spawn")).toBukkitLocation() : Bukkit.getWorld("world").getSpawnLocation();
 		if (getConfig().getString("editor") != null) {
 			this.editorLocation = LocationSerializer.stringToLocation(getConfig().getString("editor")).toBukkitLocation();
 		}
@@ -102,6 +102,11 @@ public class Main extends JavaPlugin {
 				Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
 				List<Integer> eloList = Arrays.asList(elos);
 				configFile.set("elos", eloList);
+				try {
+					configFile.save(file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}	
 			System.out.println("Data Player > Saved!");
 		}

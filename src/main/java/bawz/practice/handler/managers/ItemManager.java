@@ -37,11 +37,11 @@ public class ItemManager {
 	}
 	
 	public void loadItems(final String type) {
+		Map<Integer, ItemStack> items = Maps.newHashMap();
 		for (int i = 0; i < 9; i++) {
-			Map<Integer, ItemStack> items = Maps.newHashMap();
 			items.put(i, configToItem(type, String.valueOf(i)));
 			inventory.put(type, items);
 		}
-		System.out.println("Items > " + type + " loaded!");
+		System.out.println((type.equals("spawn-items") ? "Spawn" : "Queue") + "-Items > loaded!");
 	}
 }
