@@ -34,30 +34,12 @@ public class Profile {
 		this.profileState = ProfileState.FREE;
 		this.profileCache = new ProfileCache();
 		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
-		this.load();
-		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
-	}
-	
-	private void load() {
-		if (!Boolean.valueOf(this.main.getConfig().getString("database.sql.enable")) && !Boolean.valueOf(this.main.getConfig().getString("database.mongo.enable"))) {
-			if (!this.main.getManagerHandler().getProfileManager().getProfileData().containsKey(this.uuid)) {
-				file = new File(this.main.getDataFolder() + "/players/" + uuid.toString() + ".yml");
-				if (file.exists()) {
-					configFile = YamlConfiguration.loadConfiguration(file);
-					List<Integer> elos = configFile.getIntegerList("elos");
-					Integer[] elosArray = new Integer[this.main.getLadders().size()];
-					elos.toArray(elosArray);
-					this.profileData = new ProfileData(elosArray);
-					return;
-				}
-				if (!file.exists()) {
-					this.main.saveResource(this.main.getDataFolder() + "/players/" + uuid.toString(), false);
-					Integer[] elos = new Integer[this.main.getLadders().size()];
-			        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getConfig().getInt("default-elos");
-					this.profileData = new ProfileData(elos);
-				}	
-			}
+		if (!this.main.getManagerHandler().getProfileManager().getProfileData().containsKey(uuid)) {
+			Integer[] elos = new Integer[this.main.getLadders().size()];
+	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getConfig().getInt("default-elos");
+			this.profileData = new ProfileData(elos);	
 		}
+		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
 	}
 	
 	public void exit() {
