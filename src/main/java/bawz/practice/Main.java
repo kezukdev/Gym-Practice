@@ -96,7 +96,14 @@ public class Main extends JavaPlugin {
 		if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
 			for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
 				File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");
-				if (!file.exists()) this.saveResource(getDataFolder() + "/players/" + uuid.toString() + ".yml", false);
+				if (!file.exists()) {
+					try {
+		                file.getParentFile().mkdirs();
+						file.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 				YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 				configFile.createSection("elos");
 				Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
