@@ -1,7 +1,6 @@
 package bawz.practice.profile;
 
 import java.io.File;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
