@@ -15,14 +15,14 @@ import bawz.practice.profile.data.ProfileData;
 public class ProfileManager {
 	
 	private Main main;
-	public ProfileManager(final Main main) { this.main = main; }
 	
 	private final HashMap<UUID, ProfileData> profileData = new HashMap<>();
 	public HashMap<UUID, ProfileData> getProfileData() { return profileData; }
 	private final Map<UUID, Profile> profiles = new HashMap<>();
 	public Map<UUID, Profile> getProfiles() { return profiles; }
 	
-	public ProfileManager() {
+	public ProfileManager(final Main main) {
+		this.main = main;
 		final File dir = new File(this.main.getDataFolder() + "/players/");
 		File[] files = dir.listFiles();
 		if (dir.exists()) {

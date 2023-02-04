@@ -31,7 +31,9 @@ public class ScoreboardFile {
 		}
 		config = YamlConfiguration.loadConfiguration(file);
 		if (config.getKeys(true).size() > 2) {
-				
+			for (String str : getConfig().getConfigurationSection("scoreboard").getKeys(false)) {
+				this.adaptater = new Adaptater(this.getConfig().getString("global-name"), str,this.getConfig().getBoolean("queueboard-in-lobbyboard"), this.getConfig().getConfigurationSection(str).getStringList(str));
+			}
 		}
 	}
 

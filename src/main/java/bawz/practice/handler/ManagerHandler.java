@@ -31,6 +31,6 @@ public class ManagerHandler {
 		this.arenaManager = new ArenaManager(main);
 		this.queueManager = new QueueManager(main);
 		this.matchManager = new MatchManager(main);
-		this.profileManager = new ProfileManager();
+		this.profileManager = new ProfileManager(main);
 	}
 }

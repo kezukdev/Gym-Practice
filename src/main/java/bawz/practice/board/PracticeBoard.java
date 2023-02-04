@@ -39,7 +39,7 @@ public class PracticeBoard implements BoardAdapter {
             this.plugin.getLogger().warning(String.valueOf(player.getName()) + "'s profile data is null");
             return null;
         }
-        if (pm.getProfileData().isScoreboard()) {
+        if (pm.getProfileData().isScoreboard() || ) {
         	if (pm.getProfileState().equals(ProfileState.FREE)) {
         		return getLobbyBoard(player);
         	}
