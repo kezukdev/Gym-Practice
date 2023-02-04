@@ -37,7 +37,7 @@ public class LadderCommand implements CommandExecutor {
 		}
 		if (args[0].equalsIgnoreCase("create")) {
 			if (args.length < 3 || args.length > 3) {
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "/ladder create <name> <type>");
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "/ladder create <name> <NORMAL/SUMO/UHC/BRIDGES/HCF/COMBO/SPLEEF>");
 				return false;
 			}
 			if (fileConfig.contains("ladders." + args[1])) {
@@ -49,7 +49,7 @@ public class LadderCommand implements CommandExecutor {
 				return false;
 			}
 			final int slots = this.main.getLadders().isEmpty() ? 0 : this.main.getLadders().size();
-			new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true, true);
+			final Ladder ladder = new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true, true);
 			fileConfig.createSection("ladders." + args[1]);
 			fileConfig.createSection("ladders." + args[1] + ".type");
 			fileConfig.set("ladders." + args[1] + ".type", args[2]);
@@ -67,6 +67,8 @@ public class LadderCommand implements CommandExecutor {
 			fileConfig.set("ladders." + args[1] + ".ranked", "true");
 			fileConfig.createSection("ladders." + args[1] + ".displayname");
 			fileConfig.set("ladders." + args[1] + ".displayname", "&a" + args[1]);
+			fileConfig.createSection("ladders." + args[1] + ".id");
+			fileConfig.set("ladders." + args[1] + ".id", ladder.getId());
 			this.save();
 			this.main.getManagerHandler().getInventoryManager().refreshInventory();
 			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.created-ladder").replace("%ladderName%", args[1]).replace("%ladderType%", args[2])));

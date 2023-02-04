@@ -17,6 +17,7 @@ public class Ladder {
 	private ItemStack[] armorContent;
 	private boolean ranked;
 	private boolean editable;
+	private Integer id;
 	
 	public Ladder(final String name, final ItemStack icon, final ItemStack[] content, final ItemStack[] armorContent,final String displayName, final LadderType ladderType, final Integer slots, final boolean editable, final boolean ranked) {
 		this.name = name;
@@ -28,6 +29,7 @@ public class Ladder {
 		this.slots = slots;
 		this.editable = editable;
 		this.ranked = ranked;
+		this.id = this.main.getLadders().size() == 0 ? 0 : this.main.getLadders().size() + 1;
 		this.main.getLadders().add(this);
 	}
 	
@@ -65,6 +67,10 @@ public class Ladder {
 	
 	public Integer getSlots() {
 		return slots;
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 	
     public static Ladder getLadderBySlots(Integer slots) {

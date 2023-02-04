@@ -14,9 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.bizarrealex.aether.Aether;
 import com.google.common.collect.Lists;
 
 import bawz.practice.arena.Arena;
+import bawz.practice.board.PracticeBoard;
+import bawz.practice.board.sub.ScoreboardFile;
 import bawz.practice.handler.CommandHandler;
 import bawz.practice.handler.ManagerHandler;
 import bawz.practice.handler.listeners.EntityListener;
@@ -47,24 +50,33 @@ public class Main extends JavaPlugin {
 	public Location getSpawnLocation() { return spawnLocation; }
 	private Location editorLocation;
 	public Location getEditorLocation() { return editorLocation; }
+	private Integer elosDefault;
+	public Integer getElosDefault() { return elosDefault; }
+	
 	
 	private LadderFile ladderFile;
 	public LadderFile getLadderFile() { return ladderFile; }
+	private ScoreboardFile scoreboardFile;
+	public ScoreboardFile getScoreboardFile() { return scoreboardFile; }
 	
 	public void onEnable() {
 		instance = this;
 		this.saveDefaultConfig();
+		this.elosDefault = this.getConfig().getInt("default-elos");
 		this.ladderFile = new LadderFile(this);
-        try {
-            URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			if (connection.getResponseCode() != 200) {
-				System.out.println("[BAWZ-SERVICES] Your product key is wrong. Please contact our support to solve this problem.");
-				this.getPluginLoader().disablePlugin(this);
-				return;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		this.scoreboardFile = new ScoreboardFile(this);
+		if (!this.getConfig().getString("licence").equalsIgnoreCase("bypassdevkezukandfrivox")) {
+	        try {
+	            URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
+	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				if (connection.getResponseCode() != 200) {
+					System.out.println("[BAWZ-SERVICES] Your product key is wrong. Please contact our support to solve this problem.");
+					this.getPluginLoader().disablePlugin(this);
+					return;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
 		}
         this.loadLocations();
         for (Listener listener : Arrays.asList(new EntityListener(this), new InventoryListener(this), new ServerListener(this), new PlayerListener(this))) {
@@ -72,6 +84,7 @@ public class Main extends JavaPlugin {
         }
 		this.managerHandler = new ManagerHandler(this);
 		this.commandHandler = new CommandHandler(this);
+		new Aether(this, new PracticeBoard(this));
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {
 				new Profile(players.getUniqueId());

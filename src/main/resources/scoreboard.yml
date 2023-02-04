@@ -1,0 +1,30 @@
+global-name: "&3Bawz &7[&bServices&7]"
+
+scoreboard:
+  spawn:
+    - "&7&m----------------"
+    - " &3Online&7: &f%currentlyOnline%"
+    - " &3Queueing&7: &f%currentlyQueueing%"
+    - " &3Fighting&7: &f%currentlyFighting%"
+    - "&7&m----------------"
+    - "&3%laddersName%&7: &f%laddersElo%"
+    - "&7&m----------------"
+  queue:
+    - "&7&m----------------"
+    - " &3Ladder&7: &f%ladderName%"
+    - " &3Type&7: &f%queueType%"
+    - "&7&m----------------"
+  start-fight:
+    - "&7&m----------------"
+    - " &3Match starting..."
+    - "&7&m----------------"
+  fight:
+    - "&7&m----------------"
+    - " &3Opponent&7: &f%opponentName%"
+    - " &3Their Ping&7: &f%opponentPing%"
+    - " &3Their Elos&7: &f%opponentElo%"
+    - "&7&m----------------"
+  end-fight:
+    - "&7&m----------------"
+    - " &3Match ending..."
+    - "&7&m----------------"

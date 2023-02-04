@@ -32,7 +32,8 @@ public class ProfileManager {
 				List<Integer> elos = configFile.getIntegerList("elos");
 				Integer[] elosArray = new Integer[this.main.getLadders().size()];
 				elos.toArray(elosArray);
-				this.profileData.putIfAbsent(UUID.fromString(str), new ProfileData(elosArray));
+				final boolean scoreboard = configFile.getBoolean("scoreboard");
+				this.profileData.putIfAbsent(UUID.fromString(str), new ProfileData(elosArray, scoreboard));
 			}	
 			System.out.println("Data Player > Loaded!");
 		}

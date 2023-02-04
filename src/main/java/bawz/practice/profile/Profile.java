@@ -35,8 +35,8 @@ public class Profile {
 		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
 		if (!this.main.getManagerHandler().getProfileManager().getProfileData().containsKey(uuid)) {
 			Integer[] elos = new Integer[this.main.getLadders().size()];
-	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getConfig().getInt("default-elos");
-			this.profileData = new ProfileData(elos);	
+	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getElosDefault();
+			this.profileData = new ProfileData(elos, true);	
 		}
 		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
 	}
