@@ -1,6 +1,8 @@
 package bawz.practice.handler.managers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -20,12 +22,17 @@ import net.md_5.bungee.api.ChatColor;
 
 public class MatchManager {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public MatchManager(final Main main) { this.main = main; }
+	
+	private Map<UUID, MatchEntry> matchs = new HashMap<>();
+	public Map<UUID, MatchEntry> getMatchs() { return matchs; }
 	
 	public void startMatch(final List<UUID> firstList, final List<UUID> secondList, final UUID matchID) {
 		final List<UUID> players = Lists.newArrayList(firstList);
 		players.addAll(secondList);
-		final MatchEntry matchEntry = this.main.getMatchs().get(matchID);
+		final MatchEntry matchEntry = this.getMatchs().get(matchID);
 		final Ladder ladder = matchEntry.getLadder();
 		final Arena arena = this.main.getManagerHandler().getArenaManager().getRandomArena(ladder.getLadderType().getArenaType());
 		matchEntry.setMatchState(MatchState.STARTING);
@@ -61,7 +68,7 @@ public class MatchManager {
 	}
 	
 	public void endMatch(final UUID winner, final UUID matchID) {
-		final MatchEntry matchEntry = this.main.getMatchs().get(matchID);
+		final MatchEntry matchEntry = this.getMatchs().get(matchID);
 		matchEntry.setMatchState(MatchState.ENDING);
 		final List<UUID> players = Lists.newArrayList(matchEntry.getFirstList());
 		players.addAll(matchEntry.getSecondList());
@@ -88,7 +95,7 @@ public class MatchManager {
 	
 	public UUID getOpponent(final UUID uuid) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
-		final MatchEntry matchEntry = this.main.getMatchs().get(profile.getProfileCache().getMatchID());
+		final MatchEntry matchEntry = this.getMatchs().get(profile.getProfileCache().getMatchID());
 		if (matchEntry.getFirstList().contains(uuid)) {
 			for (UUID uuids : matchEntry.getSecondList()) {
 				return uuids;

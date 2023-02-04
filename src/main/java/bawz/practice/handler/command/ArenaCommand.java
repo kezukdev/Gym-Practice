@@ -13,7 +13,10 @@ import org.bukkit.*;
 
 public class ArenaCommand implements CommandExecutor {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public ArenaCommand(final Main main) { this.main = main; }
+	
 	private final String[] help = this.main.getConfig().getConfigurationSection("messages").getStringList("arena-help").toArray(new String[this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").size()]);
 	
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {

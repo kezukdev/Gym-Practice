@@ -9,7 +9,9 @@ import bawz.practice.Main;
 
 public class RankedCommand implements CommandExecutor {
 
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public RankedCommand(final Main main) { this.main = main; }
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

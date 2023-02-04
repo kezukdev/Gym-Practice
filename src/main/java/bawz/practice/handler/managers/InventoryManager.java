@@ -11,11 +11,12 @@ import bawz.practice.ladder.Ladder;
 
 public class InventoryManager {
 	
-	private final Main main = Main.getInstance();
+	private final Main main;
 	private Inventory[] queue = new Inventory[2];
 	public Inventory[] getQueue() { return queue; }
 	
-	public InventoryManager() {
+	public InventoryManager(final Main main) {
+		this.main = main;
 		this.queue[0] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.casual.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name")));
 		this.queue[1] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.ranked.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name")));
 		this.refreshInventory();

@@ -14,9 +14,11 @@ import bawz.practice.Main;
 
 public class ItemManager {
 	
-	private Main main = Main.getInstance();
+	private Main main;
 	
 	private Map<String, Map<Integer, ItemStack>> inventory = new HashMap<>();
+	
+	public ItemManager(final Main main) { this.main = main; }
 	
 	public void giveItems(final Player player, final String type) {
 		player.getInventory().clear();

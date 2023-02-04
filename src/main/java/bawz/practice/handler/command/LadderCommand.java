@@ -16,7 +16,10 @@ import net.md_5.bungee.api.ChatColor;
 
 public class LadderCommand implements CommandExecutor {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public LadderCommand(final Main main) { this.main = main; }
+	
 	final FileConfiguration fileConfig = this.main.getLadderFile().getConfig();
 	private final String[] help = this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").toArray(new String[this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").size()]);
 

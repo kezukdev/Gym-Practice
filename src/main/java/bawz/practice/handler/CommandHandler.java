@@ -11,12 +11,12 @@ import bawz.practice.handler.command.RankedCommand;
 public class CommandHandler {
 	
 	public CommandHandler(final Main main) {
-		main.getCommand("casual").setExecutor(new CasualCommand());
-		main.getCommand("ranked").setExecutor(new RankedCommand());
-		main.getCommand("ladder").setExecutor(new LadderCommand());
-		main.getCommand("arena").setExecutor(new ArenaCommand());
-		main.getCommand("leavequeue").setExecutor(new QueueCommand());
-		main.getCommand("location").setExecutor(new LocationsCommand());
+		main.getCommand("casual").setExecutor(new CasualCommand(main));
+		main.getCommand("ranked").setExecutor(new RankedCommand(main));
+		main.getCommand("ladder").setExecutor(new LadderCommand(main));
+		main.getCommand("arena").setExecutor(new ArenaCommand(main));
+		main.getCommand("leavequeue").setExecutor(new QueueCommand(main));
+		main.getCommand("location").setExecutor(new LocationsCommand(main));
 	}
 
 }

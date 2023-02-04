@@ -17,12 +17,13 @@ import bawz.practice.utils.config.Config;
 
 public class ArenaManager {
 	
-	private HashMap<String, Arena> arenas = new HashMap<>();
-	private final Config config = new Config("arenas", (JavaPlugin)Main.getInstance());
+	private Main main;
+	public ArenaManager(final Main main) { this.main = main; }
 	
-	public ArenaManager() {
-		loadArenas();
-	}
+	private HashMap<String, Arena> arenas = new HashMap<>();
+	private final Config config = new Config("arenas", (JavaPlugin)this.main);
+	
+	public ArenaManager() { loadArenas(); }
 
 	private void loadArenas() {
 		FileConfiguration fileConfig = this.config.getConfig();
@@ -60,7 +61,7 @@ public class ArenaManager {
 	}
 
     public Arena getRandomArena(ArenaType arenaType) {
-        List<Arena> availableArena = Main.getInstance().getArenas().stream().filter(arenaManager -> arenaManager.getArenaType() == arenaType).collect(Collectors.toList());
+        List<Arena> availableArena = this.main.getArenas().stream().filter(arenaManager -> arenaManager.getArenaType() == arenaType).collect(Collectors.toList());
         Collections.shuffle(availableArena);
         return availableArena.get(0);
     }

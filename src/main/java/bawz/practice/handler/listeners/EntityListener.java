@@ -13,7 +13,9 @@ import bawz.practice.profile.ProfileState;
 
 public class EntityListener implements Listener {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public EntityListener(final Main main) { this.main = main; }
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void onDamage(final EntityDamageEvent event) {

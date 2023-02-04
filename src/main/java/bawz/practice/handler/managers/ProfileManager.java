@@ -14,20 +14,23 @@ import bawz.practice.profile.data.ProfileData;
 
 public class ProfileManager {
 	
+	private Main main;
+	public ProfileManager(final Main main) { this.main = main; }
+	
 	private final HashMap<UUID, ProfileData> profileData = new HashMap<>();
 	public HashMap<UUID, ProfileData> getProfileData() { return profileData; }
 	private final Map<UUID, Profile> profiles = new HashMap<>();
 	public Map<UUID, Profile> getProfiles() { return profiles; }
 	
 	public ProfileManager() {
-		final File dir = new File(Main.getInstance().getDataFolder() + "/players/");
+		final File dir = new File(this.main.getDataFolder() + "/players/");
 		File[] files = dir.listFiles();
 		if (dir.exists()) {
 			for (File file : files) {
 				YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 				final String str = file.getName().replace(".yml", "");
 				List<Integer> elos = configFile.getIntegerList("elos");
-				Integer[] elosArray = new Integer[Main.getInstance().getLadders().size()];
+				Integer[] elosArray = new Integer[this.main.getLadders().size()];
 				elos.toArray(elosArray);
 				this.profileData.putIfAbsent(UUID.fromString(str), new ProfileData(elosArray));
 			}	

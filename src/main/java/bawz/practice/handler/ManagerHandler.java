@@ -1,5 +1,6 @@
 package bawz.practice.handler;
 
+import bawz.practice.Main;
 import bawz.practice.handler.managers.ArenaManager;
 import bawz.practice.handler.managers.InventoryManager;
 import bawz.practice.handler.managers.ItemManager;
@@ -22,14 +23,14 @@ public class ManagerHandler {
 	private final ProfileManager profileManager;
 	public ProfileManager getProfileManager() { return profileManager; }
 	
-	public ManagerHandler() {
-		this.itemManager = new ItemManager();
+	public ManagerHandler(final Main main) {
+		this.itemManager = new ItemManager(main);
 		this.itemManager.loadItems("spawn-items");
 		this.itemManager.loadItems("queue-items");
-		this.inventoryManager = new InventoryManager();
+		this.inventoryManager = new InventoryManager(main);
 		this.arenaManager = new ArenaManager();
-		this.queueManager = new QueueManager();
-		this.matchManager = new MatchManager();
+		this.queueManager = new QueueManager(main);
+		this.matchManager = new MatchManager(main);
 		this.profileManager = new ProfileManager();
 	}
 }

@@ -13,7 +13,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class QueueCommand implements CommandExecutor {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public QueueCommand(final Main main) { this.main = main; }
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -23,7 +25,7 @@ public class QueueCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.not-in-queue")));
 			return false;
 		}
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.leave-queue").replace("%ladderName%", ChatColor.stripColor(this.main.getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getLadder().getDisplayName()))).replace("%queueType%", this.main.getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getQueueType().toString().toLowerCase()));
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.leave-queue").replace("%ladderName%", ChatColor.stripColor(this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getLadder().getDisplayName()))).replace("%queueType%", this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getQueueType().toString().toLowerCase()));
 		profile.setProfileState(ProfileState.FREE);
 		this.main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(sender.getName()), "spawn-items");
 		return false;

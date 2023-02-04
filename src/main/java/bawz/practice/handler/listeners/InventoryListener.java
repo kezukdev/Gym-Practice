@@ -15,7 +15,9 @@ import bawz.practice.queue.QueueType;
 
 public class InventoryListener implements Listener {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public InventoryListener(final Main main) { this.main = main; }
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void inventoryInteraction(final InventoryClickEvent event) {

@@ -11,7 +11,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class ServerListener implements Listener {
 	
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public ServerListener(final Main main) { this.main = main; }
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPing(final ServerListPingEvent event) {

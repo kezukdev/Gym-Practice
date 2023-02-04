@@ -40,7 +40,7 @@ public class MatchEntry {
 		this.queueType = queueType;
 		this.alives = Arrays.asList(firstList, secondList);
 		this.spectator = Lists.newArrayList();
-		this.main.getMatchs().putIfAbsent(getMatchID(), this);
+		this.main.getManagerHandler().getMatchManager().getMatchs().putIfAbsent(getMatchID(), this);
 		this.main.getManagerHandler().getMatchManager().startMatch(firstList, secondList, this.getMatchID());
 	}
 }

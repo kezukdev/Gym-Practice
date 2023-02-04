@@ -9,7 +9,9 @@ import bawz.practice.Main;
 
 public class CasualCommand implements CommandExecutor {
 
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public CasualCommand(final Main main) { this.main = main; }
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

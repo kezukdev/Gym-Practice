@@ -5,13 +5,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,9 +25,7 @@ import bawz.practice.handler.listeners.PlayerListener;
 import bawz.practice.handler.listeners.ServerListener;
 import bawz.practice.ladder.Ladder;
 import bawz.practice.ladder.sub.LadderFile;
-import bawz.practice.match.MatchEntry;
 import bawz.practice.profile.Profile;
-import bawz.practice.queue.QueueEntry;
 import bawz.practice.utils.LocationSerializer;
 
 public class Main extends JavaPlugin {
@@ -49,10 +42,7 @@ public class Main extends JavaPlugin {
 	public List<Arena> getArenas() { return arenas; }
 	private List<Ladder> ladders = Lists.newArrayList();
 	public List<Ladder> getLadders() { return ladders; }
-	private ConcurrentMap<UUID, QueueEntry> queues = new ConcurrentHashMap<>();
-	public ConcurrentMap<UUID, QueueEntry> getQueues() { return queues; }
-	private Map<UUID, MatchEntry> matchs = new HashMap<>();
-	public Map<UUID, MatchEntry> getMatchs() { return matchs; }
+	
 	private Location spawnLocation;
 	public Location getSpawnLocation() { return spawnLocation; }
 	private Location editorLocation;
@@ -77,10 +67,10 @@ public class Main extends JavaPlugin {
 			e.printStackTrace();
 		}
         this.loadLocations();
-        for (Listener listener : Arrays.asList(new EntityListener(), new InventoryListener(), new ServerListener(), new PlayerListener())) {
+        for (Listener listener : Arrays.asList(new EntityListener(this), new InventoryListener(this), new ServerListener(this), new PlayerListener(this))) {
         	this.getServer().getPluginManager().registerEvents(listener, this);
         }
-		this.managerHandler = new ManagerHandler();
+		this.managerHandler = new ManagerHandler(this);
 		this.commandHandler = new CommandHandler(this);
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {

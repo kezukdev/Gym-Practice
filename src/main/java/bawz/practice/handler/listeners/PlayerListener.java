@@ -32,7 +32,9 @@ import bawz.practice.profile.ProfileState;
 
 public class PlayerListener implements Listener {
 	
-	private Main main = Main.getInstance();
+	private Main main;
+	
+	public PlayerListener(final Main main) { this.main = main; }
 	
 	@EventHandler(priority=EventPriority.HIGH)
 	public void PlayerJoin(final PlayerJoinEvent event) {
@@ -80,7 +82,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerPlaceBlockEvent(final BlockPlaceEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
-		final LadderType type = this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
+		final LadderType type = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC))) {
 			return;
 		}
@@ -90,7 +92,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerBreakBlockEvent(final BlockBreakEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
-		final LadderType type = this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
+		final LadderType type = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC)|| type.equals(LadderType.SPLEEF))) {
 			return;
 		}
@@ -109,8 +111,8 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerDeathEvent(final PlayerDeathEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
-		if (profile.getProfileState().equals(ProfileState.FIGHT) && this.main.getMatchs().get(profile.getProfileCache().getMatchID()).getMatchState().equals(MatchState.PLAYING)) {
-			final MatchEntry matchEntry = this.main.getMatchs().get(profile.getProfileCache().getMatchID());
+		if (profile.getProfileState().equals(ProfileState.FIGHT) && this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getMatchState().equals(MatchState.PLAYING)) {
+			final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
 			Integer teamID = matchEntry.getFirstList().contains(event.getEntity().getUniqueId()) ? 0 : 1;
 			matchEntry.getAlives().get(teamID).remove(event.getEntity().getUniqueId());
 			List<UUID> players = Lists.newArrayList(matchEntry.getFirstList());

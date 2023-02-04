@@ -12,7 +12,9 @@ import net.md_5.bungee.api.ChatColor;
 
 public class LocationsCommand implements CommandExecutor {
 
-	private final Main main = Main.getInstance();
+	private Main main;
+	
+	public LocationsCommand(final Main main) { this.main = main; }
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
