@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import bawz.practice.Main;
 import bawz.practice.arena.Arena;
 import bawz.practice.arena.ArenaType;
@@ -18,12 +16,15 @@ import bawz.practice.utils.config.Config;
 public class ArenaManager {
 	
 	private Main main;
-	public ArenaManager(final Main main) { this.main = main; }
+	private HashMap<String, Arena> arenas;
+	private final Config config;
 	
-	private HashMap<String, Arena> arenas = new HashMap<>();
-	private final Config config = new Config("arenas", (JavaPlugin)this.main);
-	
-	public ArenaManager() { loadArenas(); }
+	public ArenaManager(final Main main) { 
+		this.main = main;
+		this.arenas = new HashMap<>();
+		this.config = new Config("arenas", this.main);
+		this.loadArenas();
+	}
 
 	private void loadArenas() {
 		FileConfiguration fileConfig = this.config.getConfig();

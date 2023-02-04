@@ -28,7 +28,7 @@ public class ManagerHandler {
 		this.itemManager.loadItems("spawn-items");
 		this.itemManager.loadItems("queue-items");
 		this.inventoryManager = new InventoryManager(main);
-		this.arenaManager = new ArenaManager();
+		this.arenaManager = new ArenaManager(main);
 		this.queueManager = new QueueManager(main);
 		this.matchManager = new MatchManager(main);
 		this.profileManager = new ProfileManager();
