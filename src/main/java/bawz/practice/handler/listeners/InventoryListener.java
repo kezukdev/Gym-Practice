@@ -24,10 +24,10 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void inventoryInteraction(final InventoryClickEvent event) {
 		if (event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)) return;
+		if (event.getCurrentItem() == null || event.getCurrentItem().equals(new ItemStack(Material.AIR))) return;
 		if (this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getWhoClicked().getUniqueId()).getProfileState().equals(ProfileState.FIGHT)) return;
 		event.setCancelled(true);
 		if (event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[0].getName()) || event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[1].getName())) {
-			if (event.getCurrentItem() == null || event.getCurrentItem().equals(new ItemStack(Material.AIR))) return;
 			event.getWhoClicked().closeInventory();
 			this.main.getManagerHandler().getQueueManager().addPlayerToQueue(Lists.newArrayList(event.getWhoClicked().getUniqueId()), Ladder.getLadderBySlots(event.getSlot()), event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[1].getName()) ? QueueType.RANKED : QueueType.CASUAL);
 			return;

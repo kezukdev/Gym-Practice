@@ -140,7 +140,7 @@ public class PlayerListener implements Listener {
                         ex.printStackTrace();
                     }
                 }
-            }.runTaskLaterAsynchronously(this.main, 2L);
+            }.runTaskLater(this.main, 2L);
 			final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
 			Integer teamID = matchEntry.getFirstList().contains(event.getEntity().getUniqueId()) ? 0 : 1;
 			matchEntry.getAlives().get(teamID).remove(event.getEntity().getUniqueId());

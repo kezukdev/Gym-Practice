@@ -27,6 +27,7 @@ public class QueueCommand implements CommandExecutor {
 		}
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.leave-queue").replace("%ladderName%", ChatColor.stripColor(this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getLadder().getDisplayName()))).replace("%queueType%", this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getQueueType().toString().toLowerCase()));
 		profile.setProfileState(ProfileState.FREE);
+		this.main.getManagerHandler().getQueueManager().getQueues().remove(Bukkit.getPlayer(sender.getName()).getUniqueId());
 		this.main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(sender.getName()), "spawn-items");
 		return false;
 	}

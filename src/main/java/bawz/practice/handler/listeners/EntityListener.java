@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import bawz.practice.Main;
+import bawz.practice.match.MatchState;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
 
@@ -33,7 +34,7 @@ public class EntityListener implements Listener {
 		final Profile profileDamaged = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		final Profile profileDamager = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getDamager().getUniqueId());
 		if (event.getEntity() instanceof Player) {
-			if (profileDamaged.getProfileState().equals(ProfileState.FIGHT) && profileDamager.getProfileState().equals(ProfileState.FIGHT)) return;	
+			if (profileDamaged.getProfileState().equals(ProfileState.FIGHT) && profileDamager.getProfileState().equals(ProfileState.FIGHT) && (this.main.getManagerHandler().getMatchManager().getMatchs().get(profileDamager.getProfileCache().getMatchID()) != null && this.main.getManagerHandler().getMatchManager().getMatchs().get(profileDamager.getProfileCache().getMatchID()).getMatchState().equals(MatchState.PLAYING))) return;	
 		}
 		event.setCancelled(true);
 	}
