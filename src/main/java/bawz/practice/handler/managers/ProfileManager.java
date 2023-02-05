@@ -35,7 +35,7 @@ public class ProfileManager {
 				final boolean scoreboard = configFile.getBoolean("scoreboard");
 				this.profileData.putIfAbsent(UUID.fromString(str), new ProfileData(elosArray, scoreboard));
 			}	
-			System.out.println("Data Player > Loaded!");
+			System.out.println("[GYM] Data Player > Loaded!");
 		}
 	}
 	

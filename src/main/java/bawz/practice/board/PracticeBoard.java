@@ -29,7 +29,7 @@ public class PracticeBoard implements BoardAdapter {
     
     @Override
     public String getTitle(final Player player) {
-        return ChatColor.translateAlternateColorCodes('&', this.plugin.getScoreboardFile().getAdaptater().getName());
+        return ChatColor.translateAlternateColorCodes('&', this.plugin.getScoreboardFile().getName());
     }
     
     @Override
@@ -39,8 +39,8 @@ public class PracticeBoard implements BoardAdapter {
             this.plugin.getLogger().warning(String.valueOf(player.getName()) + "'s profile data is null");
             return null;
         }
-        if (pm.getProfileData().isScoreboard() || ) {
-        	if (pm.getProfileState().equals(ProfileState.FREE)) {
+        if (pm.getProfileData().isScoreboard()) {
+        	if (pm.getProfileState().equals(ProfileState.FREE) || pm.getProfileState().equals(ProfileState.QUEUE)) {
         		return getLobbyBoard(player);
         	}
         }
@@ -50,12 +50,16 @@ public class PracticeBoard implements BoardAdapter {
 	private List<String> getLobbyBoard(final Player player) {
         final List<String> board = new LinkedList<String>();
         final Profile pm = this.plugin.getManagerHandler().getProfileManager().getProfiles().get(player.getUniqueId());
-        for (String str : this.plugin.getScoreboardFile().getAdaptater().getScoreboard().get(0).get("spawn")) {
+        for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(0)) {
         	String string = str;
         	for (Ladder ladder : this.plugin.getLadders()) {
-            	string = str.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%laddersName%", ChatColor.stripColor(ladder.getDisplayName()).replace("%laddersElo%", String.valueOf(pm.getProfileData().getElos()[ladder.getId()])));	
+            	board.add(str.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%laddersName%", ChatColor.stripColor(ladder.getDisplayName()).replace("%laddersElo%", String.valueOf(pm.getProfileData().getElos()[ladder.getId()]))));
         	}
-        	board.add(string);
+        }
+        if (this.plugin.getScoreboardFile().isQueueInLobby() && pm.getProfileState().equals(ProfileState.QUEUE)) {
+            for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(1)) {
+            	board.add(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString())));
+            }
         }
         return board;
     }

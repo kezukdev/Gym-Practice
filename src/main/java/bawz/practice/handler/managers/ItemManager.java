@@ -44,6 +44,5 @@ public class ItemManager {
 			items.put(i, configToItem(type, String.valueOf(i)));
 			inventory.put(type, items);
 		}
-		System.out.println((type.equals("spawn-items") ? "Spawn" : "Queue") + "-Items > loaded!");
 	}
 }

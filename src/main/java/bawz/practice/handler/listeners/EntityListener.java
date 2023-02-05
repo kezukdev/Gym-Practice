@@ -33,9 +33,7 @@ public class EntityListener implements Listener {
 		final Profile profileDamaged = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		final Profile profileDamager = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getDamager().getUniqueId());
 		if (event.getEntity() instanceof Player) {
-			if (profileDamaged.getProfileState().equals(ProfileState.FIGHT) && profileDamager.getProfileState().equals(ProfileState.FIGHT)) {
-				return;
-			}	
+			if (profileDamaged.getProfileState().equals(ProfileState.FIGHT) && profileDamager.getProfileState().equals(ProfileState.FIGHT)) return;	
 		}
 		event.setCancelled(true);
 	}

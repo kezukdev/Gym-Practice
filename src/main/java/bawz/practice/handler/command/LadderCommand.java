@@ -17,11 +17,14 @@ import net.md_5.bungee.api.ChatColor;
 public class LadderCommand implements CommandExecutor {
 	
 	private Main main;
+	final FileConfiguration fileConfig;
+	private final String[] help;
 	
-	public LadderCommand(final Main main) { this.main = main; }
-	
-	final FileConfiguration fileConfig = this.main.getLadderFile().getConfig();
-	private final String[] help = this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").toArray(new String[this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").size()]);
+	public LadderCommand(final Main main) {
+		this.main = main;
+		this.fileConfig = this.main.getLadderFile().getConfig();
+		this.help = this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").toArray(new String[this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").size()]);
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

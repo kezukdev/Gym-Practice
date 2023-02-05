@@ -84,7 +84,6 @@ public class Main extends JavaPlugin {
         }
 		this.managerHandler = new ManagerHandler(this);
 		this.commandHandler = new CommandHandler(this);
-		new Aether(this, new PracticeBoard(this));
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {
 				new Profile(players.getUniqueId());
@@ -113,16 +112,18 @@ public class Main extends JavaPlugin {
 				}
 				YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
 				configFile.createSection("elos");
+				configFile.createSection("scoreboard");
 				Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
 				List<Integer> eloList = Arrays.asList(elos);
 				configFile.set("elos", eloList);
+				configFile.set("scoreboard", String.valueOf(this.getManagerHandler().getProfileManager().getProfileData().get(uuid).isScoreboard()));
 				try {
 					configFile.save(file);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}	
-			System.out.println("Data Player > Saved!");
+			System.out.println("[GYM] Data Player > Saved!");
 		}
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			this.managerHandler.getProfileManager().getProfiles().clear();

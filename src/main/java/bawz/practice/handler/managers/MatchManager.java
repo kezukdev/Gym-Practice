@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.google.common.collect.Lists;
@@ -38,6 +39,7 @@ public class MatchManager {
 		matchEntry.setMatchState(MatchState.STARTING);
 		for (UUID uuid : players) {
 			final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
+			profile.getProfileCache().setMatchID(matchID);
 			final Player player = Bukkit.getPlayer(uuid);
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.match-found").replace("%opponent%", Bukkit.getPlayer(this.getOpponent(uuid)).getName())));
 			player.teleport(firstList.contains(uuid) ? arena.getLoc1().toBukkitLocation() : arena.getLoc2().toBukkitLocation());
@@ -52,16 +54,18 @@ public class MatchManager {
 				if (matchEntry.getMatchState().equals(MatchState.ENDING) || matchEntry.getMatchState().equals(MatchState.PLAYING)) {
 					this.cancel();
 				}
-				if (counter == 0) {
+				counter -= 1;
+				if (counter <= 0) {
 					for (UUID uuid : players) {
 						Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.match-started")));
 					}
 					matchEntry.setMatchState(MatchState.PLAYING);
 					this.cancel();
 				}
-				counter =- 1;
-				for (UUID uuid : players) {
-					Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.countdown-message").replace("%countdown%", String.valueOf(counter))));
+				if (counter > 0) {
+					for (UUID uuid : players) {
+						Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.countdown-message").replace("%countdown%", String.valueOf(counter))));
+					}	
 				}
 			}
 		}.runTaskTimerAsynchronously(main, 20L, 20L);
@@ -87,24 +91,32 @@ public class MatchManager {
 					player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
 					profile.getProfileCache().setMatchID(null);
 					profile.setProfileState(ProfileState.FREE);
+					player.getInventory().setArmorContents(null);
+					for (PotionEffect effect : player.getActivePotionEffects()) {
+						player.removePotionEffect(effect.getType());
+					}
+					player.updateInventory();
 					main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
 				}
 			}
 		}.runTaskLaterAsynchronously(main, 20*this.main.getConfig().getInt("respawn-after-match-time"));
 	}
 	
-	public UUID getOpponent(final UUID uuid) {
+    public UUID getOpponent(final UUID uuid) {
+    	UUID opponentUUID = null;
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 		final MatchEntry matchEntry = this.getMatchs().get(profile.getProfileCache().getMatchID());
-		if (matchEntry.getFirstList().contains(uuid)) {
-			for (UUID uuids : matchEntry.getSecondList()) {
-				return uuids;
-			}
-		}
-		for (UUID uuids : matchEntry.getSecondList()) {
-			return uuids;
-		}
-		return null;
-	}
+    	if (matchEntry.getFirstList().contains(uuid)) {
+    		for (UUID uuid1 : matchEntry.getSecondList()) {
+    			opponentUUID = uuid1;
+    		}
+    	}
+    	if (matchEntry.getSecondList().contains(uuid)) {
+    		for (UUID uuid1 : matchEntry.getFirstList()) {
+    			opponentUUID = uuid1;
+    		}
+    	}
+    	return opponentUUID;
+    }
 
 }

@@ -14,10 +14,12 @@ import org.bukkit.*;
 public class ArenaCommand implements CommandExecutor {
 	
 	private Main main;
+	private final String[] help;
 	
-	public ArenaCommand(final Main main) { this.main = main; }
-	
-	private final String[] help = this.main.getConfig().getConfigurationSection("messages").getStringList("arena-help").toArray(new String[this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").size()]);
+	public ArenaCommand(final Main main) {
+		this.main = main;
+		this.help = this.main.getConfig().getConfigurationSection("messages").getStringList("arena-help").toArray(new String[this.main.getConfig().getConfigurationSection("messages").getStringList("ladder-help").size()]);
+	}
 	
     public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
         if (!(sender instanceof Player)) return false;

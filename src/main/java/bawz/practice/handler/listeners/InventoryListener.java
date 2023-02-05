@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 
 import bawz.practice.Main;
 import bawz.practice.ladder.Ladder;
+import bawz.practice.profile.ProfileState;
 import bawz.practice.queue.QueueType;
 
 public class InventoryListener implements Listener {
@@ -23,6 +24,7 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void inventoryInteraction(final InventoryClickEvent event) {
 		if (event.getWhoClicked().getGameMode().equals(GameMode.CREATIVE)) return;
+		if (this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getWhoClicked().getUniqueId()).getProfileState().equals(ProfileState.FIGHT)) return;
 		event.setCancelled(true);
 		if (event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[0].getName()) || event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[1].getName())) {
 			if (event.getCurrentItem() == null || event.getCurrentItem().equals(new ItemStack(Material.AIR))) return;

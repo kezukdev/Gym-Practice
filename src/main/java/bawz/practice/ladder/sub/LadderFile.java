@@ -42,6 +42,7 @@ public class LadderFile {
 				}
 			}	
 		}
+		System.out.println("[GYM] Ladders > Loaded");
 	}
 
 	public void save() {

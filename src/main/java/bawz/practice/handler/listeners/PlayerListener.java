@@ -1,5 +1,7 @@
 package bawz.practice.handler.listeners;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +20,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.google.common.collect.Lists;
 
@@ -39,6 +43,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.HIGH)
 	public void PlayerJoin(final PlayerJoinEvent event) {
 		event.setJoinMessage(null);
+		event.getPlayer().getInventory().setArmorContents(null);
 		if (Boolean.valueOf(this.main.getConfig().getString("join-message.enabled"))) {
 			String message = this.main.getConfig().getString("join-message.message");
 			event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName())));
@@ -47,6 +52,9 @@ public class PlayerListener implements Listener {
 		new Profile(event.getPlayer().getUniqueId());
 		event.getPlayer().setFoodLevel(20);
 		event.getPlayer().setHealth(event.getPlayer().getMaxHealth());
+		for (PotionEffect effect : event.getPlayer().getActivePotionEffects()) {
+			event.getPlayer().removePotionEffect(effect.getType());
+		}
 		this.main.getManagerHandler().getItemManager().giveItems(event.getPlayer(), "spawn-items");
 	}
 	
@@ -64,7 +72,7 @@ public class PlayerListener implements Listener {
 	public void PlayerInteract(final PlayerInteractEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			if (event.getItem().getType() != Material.AIR) {
+			if (event.getItem().getType() != Material.AIR && (profile.getProfileState().equals(ProfileState.FREE) || profile.getProfileState().equals(ProfileState.QUEUE))) {
 				event.getPlayer().chat(this.main.getConfig().getString((profile.getProfileState().equals(ProfileState.FREE) ? "spawn" : "queue") + "-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
 			}	
 		}
@@ -110,8 +118,29 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerDeathEvent(final PlayerDeathEvent event) {
+		event.setDeathMessage(null);
+		event.getDrops().clear();
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getMatchState().equals(MatchState.PLAYING)) {
+            new BukkitRunnable() {
+                public void run() {
+                    try {
+                        final Object nmsPlayer = event.getEntity().getClass().getMethod("getHandle", (Class<?>[])new Class[0]).invoke(event.getEntity(), new Object[0]);
+                        final Object con = nmsPlayer.getClass().getDeclaredField("playerConnection").get(nmsPlayer);
+                        final Class<?> EntityPlayer = Class.forName(nmsPlayer.getClass().getPackage().getName() + ".EntityPlayer");
+                        final Field minecraftServer = con.getClass().getDeclaredField("minecraftServer");
+                        minecraftServer.setAccessible(true);
+                        final Object mcserver = minecraftServer.get(con);
+                        final Object playerlist = mcserver.getClass().getDeclaredMethod("getPlayerList", (Class<?>[])new Class[0]).invoke(mcserver, new Object[0]);
+                        final Method moveToWorld = playerlist.getClass().getMethod("moveToWorld", EntityPlayer, Integer.TYPE, Boolean.TYPE);
+                        moveToWorld.invoke(playerlist, nmsPlayer, 0, false);
+                    }
+                    catch (Exception ex) {
+                    	event.getEntity().spigot().respawn();
+                        ex.printStackTrace();
+                    }
+                }
+            }.runTaskLaterAsynchronously(this.main, 2L);
 			final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
 			Integer teamID = matchEntry.getFirstList().contains(event.getEntity().getUniqueId()) ? 0 : 1;
 			matchEntry.getAlives().get(teamID).remove(event.getEntity().getUniqueId());

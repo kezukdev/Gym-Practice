@@ -2,10 +2,13 @@ package bawz.practice.board.sub;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.google.common.collect.Lists;
+
 import bawz.practice.Main;
-import bawz.practice.board.Adaptater;
 import lombok.Getter;
 
 public class ScoreboardFile {
@@ -16,8 +19,12 @@ public class ScoreboardFile {
 	public YamlConfiguration getConfig() { return config; }
 	private File file;
 	public File getFile() { return file; }
-	private Adaptater adaptater;
-	public Adaptater getAdaptater() { return adaptater; }
+	private List<List<String>> adaptaters = Lists.newArrayList();
+	public List<List<String>> getAdaptaters() { return adaptaters; }
+	private String name;
+	public String getName() { return name; }
+	private boolean queueInLobby;
+	public boolean isQueueInLobby() { return queueInLobby; }
 	
 	public ScoreboardFile(final Main main) {
 		this.main = main;
@@ -31,10 +38,13 @@ public class ScoreboardFile {
 		}
 		config = YamlConfiguration.loadConfiguration(file);
 		if (config.getKeys(true).size() > 2) {
+			this.name = this.getConfig().getString("global-name");
+			this.queueInLobby = Boolean.valueOf(this.getConfig().getString("queueboard-in-lobbyboard"));
 			for (String str : getConfig().getConfigurationSection("scoreboard").getKeys(false)) {
-				this.adaptater = new Adaptater(this.getConfig().getString("global-name"), str,this.getConfig().getBoolean("queueboard-in-lobbyboard"), this.getConfig().getConfigurationSection(str).getStringList(str));
+				this.adaptaters.add(getConfig().getConfigurationSection("scoreboard").getStringList("scoreboard." + str));
 			}
 		}
+		System.out.println("[GYM] Scoreboards > Loaded");
 	}
 
 	public void save() {
