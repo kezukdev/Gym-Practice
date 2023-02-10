@@ -2,13 +2,16 @@ package bawz.practice.handler.listeners;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,6 +23,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -31,6 +35,7 @@ import bawz.practice.Main;
 import bawz.practice.ladder.LadderType;
 import bawz.practice.match.MatchEntry;
 import bawz.practice.match.MatchState;
+import bawz.practice.match.sub.MatchStatistics;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
 
@@ -75,6 +80,29 @@ public class PlayerListener implements Listener {
 			if (event.getItem().getType() != Material.AIR && (profile.getProfileState().equals(ProfileState.FREE) || profile.getProfileState().equals(ProfileState.QUEUE))) {
 				event.getPlayer().chat(this.main.getConfig().getString((profile.getProfileState().equals(ProfileState.FREE) ? "spawn" : "queue") + "-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
 			}	
+			if (profile.getProfileState().equals(ProfileState.FIGHT)) {
+				final ItemStack item = event.getItem();
+				final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
+				if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && item.getType() == Material.ENDER_PEARL && event.getPlayer().getGameMode() != GameMode.CREATIVE && matchEntry.getLadder().isCooldownPearl()) {
+					if (matchEntry.getMatchState() != MatchState.PLAYING) {
+						event.setUseItemInHand(Result.DENY);
+						event.getPlayer().sendMessage(ChatColor.GRAY + " * " + ChatColor.AQUA + "Please wait until the fight is fully launched!");
+						event.getPlayer().updateInventory();
+						return;
+					}
+					MatchStatistics matchStats = matchEntry.getMatchStatistics().get(event.getPlayer().getUniqueId());
+					if (!matchStats.isEnderPearlCooldownActive()) {
+						matchStats.applyEnderPearlCooldown();
+						return;
+					}
+					event.setUseItemInHand(Result.DENY);
+					final double time = matchStats.getEnderPearlCooldown() / 1000.0D;
+					final DecimalFormat df = new DecimalFormat("#.#");
+					event.getPlayer().sendMessage(ChatColor.WHITE + "You can launch a pearl again in " + ChatColor.DARK_AQUA + df.format(time) + ChatColor.WHITE + " second" + (time > 1.0D ? "s" : ""));
+					event.getPlayer().updateInventory();
+					return;
+				}
+			}
 		}
 	}
 	
@@ -90,9 +118,11 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerPlaceBlockEvent(final BlockPlaceEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
-		final LadderType type = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
-		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC))) {
-			return;
+		if (this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()) != null) {
+			final LadderType type = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
+			if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC))) {
+				return;
+			}	
 		}
 		event.setCancelled(true);
 	}
@@ -100,9 +130,11 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerBreakBlockEvent(final BlockBreakEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
-		final LadderType type = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
-		if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC)|| type.equals(LadderType.SPLEEF))) {
-			return;
+		if (this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()) != null) {
+			final LadderType type = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getLadder().getLadderType();
+			if (profile.getProfileState().equals(ProfileState.FIGHT) && (type.equals(LadderType.BRIDGES) || type.equals(LadderType.UHC)|| type.equals(LadderType.SPLEEF))) {
+				return;
+			}	
 		}
 		event.setCancelled(true);
 	}
@@ -142,10 +174,10 @@ public class PlayerListener implements Listener {
                 }
             }.runTaskLater(this.main, 2L);
 			final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
-			Integer teamID = matchEntry.getFirstList().contains(event.getEntity().getUniqueId()) ? 0 : 1;
+			Integer teamID = matchEntry.getPlayersList().get(0).contains(event.getEntity().getUniqueId()) ? 0 : 1;
 			matchEntry.getAlives().get(teamID).remove(event.getEntity().getUniqueId());
-			List<UUID> players = Lists.newArrayList(matchEntry.getFirstList());
-			players.addAll(matchEntry.getSecondList());
+			List<UUID> players = Lists.newArrayList(matchEntry.getPlayersList().get(0));
+			players.addAll(matchEntry.getPlayersList().get(1));
 			for (UUID uuids : players) {
 				final Player player = Bukkit.getPlayer(uuids);
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.kill-message").replace("%killer%", event.getEntity().getKiller().getName()).replace("%killed%", event.getEntity().getName())));

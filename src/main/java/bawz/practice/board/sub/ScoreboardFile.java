@@ -41,7 +41,7 @@ public class ScoreboardFile {
 			this.name = this.getConfig().getString("global-name");
 			this.queueInLobby = Boolean.valueOf(this.getConfig().getString("queueboard-in-lobbyboard"));
 			for (String str : getConfig().getConfigurationSection("scoreboard").getKeys(false)) {
-				this.adaptaters.add(getConfig().getConfigurationSection("scoreboard").getStringList("scoreboard." + str));
+				this.adaptaters.add(getConfig().getConfigurationSection("scoreboard").getStringList(str));
 			}
 		}
 		System.out.println("[GYM] Scoreboards > Loaded");

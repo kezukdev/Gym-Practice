@@ -4,16 +4,14 @@ queueboard-in-lobbyboard: "true"
 scoreboard:
   spawn:
     - "&7&m----------------"
-    - " &3Online&7: &f%currentlyOnline%"
-    - " &3Queueing&7: &f%currentlyQueueing%"
-    - " &3Fighting&7: &f%currentlyFighting%"
-    - "&7&m----------------"
-    - "&3%laddersName%&7: &f%laddersElo%"
+    - " &3Online&r: %online%"
+    - " &3In Queue&r: %inQueue%"
+    - " &3In Fight&r: %inFight%"
     - "&7&m----------------"
   queue:
     - "&7&m----------------"
-    - " &3Ladder&7: &f%ladderName%"
-    - " &3Type&7: &f%queueType%"
+    - " &3Ladder&r: %ladderName%"
+    - " &3Type&r: %queueType%"
     - "&7&m----------------"
   start-fight:
     - "&7&m----------------"

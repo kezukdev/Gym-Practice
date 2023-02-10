@@ -74,8 +74,8 @@ public class MatchManager {
 	public void endMatch(final UUID winner, final UUID matchID) {
 		final MatchEntry matchEntry = this.getMatchs().get(matchID);
 		matchEntry.setMatchState(MatchState.ENDING);
-		final List<UUID> players = Lists.newArrayList(matchEntry.getFirstList());
-		players.addAll(matchEntry.getSecondList());
+		final List<UUID> players = Lists.newArrayList(matchEntry.getPlayersList().get(0));
+		players.addAll(matchEntry.getPlayersList().get(1));
 		for (UUID uuid : players) {
 			final Player player = Bukkit.getPlayer(uuid);
 			for (String str : this.main.getConfig().getStringList("messages.inventories-message")) {
@@ -106,13 +106,9 @@ public class MatchManager {
     	UUID opponentUUID = null;
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 		final MatchEntry matchEntry = this.getMatchs().get(profile.getProfileCache().getMatchID());
-    	if (matchEntry.getFirstList().contains(uuid)) {
-    		for (UUID uuid1 : matchEntry.getSecondList()) {
-    			opponentUUID = uuid1;
-    		}
-    	}
-    	if (matchEntry.getSecondList().contains(uuid)) {
-    		for (UUID uuid1 : matchEntry.getFirstList()) {
+		Integer teamID = matchEntry.getPlayersList().get(0).contains(uuid) ? 1 : 0;
+    	if (matchEntry != null) {
+    		for (UUID uuid1 : matchEntry.getPlayersList().get(teamID)) {
     			opponentUUID = uuid1;
     		}
     	}

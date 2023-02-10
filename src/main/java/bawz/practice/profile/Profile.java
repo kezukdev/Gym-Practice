@@ -32,13 +32,13 @@ public class Profile {
 		this.uuid = uuid;
 		this.profileState = ProfileState.FREE;
 		this.profileCache = new ProfileCache();
-		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
 		if (!this.main.getManagerHandler().getProfileManager().getProfileData().containsKey(uuid)) {
 			Integer[] elos = new Integer[this.main.getLadders().size()];
 	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getElosDefault();
 			this.profileData = new ProfileData(elos, true);	
 		}
 		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
+		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
 	}
 	
 	public void exit() {

@@ -1,6 +1,6 @@
 package bawz.practice.match;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,18 +8,17 @@ import com.google.common.collect.Lists;
 
 import bawz.practice.Main;
 import bawz.practice.ladder.Ladder;
+import bawz.practice.match.sub.MatchStatistics;
 import bawz.practice.queue.QueueType;
 
 public class MatchEntry {
 	
-	private final Main main = Main.getInstance();
+	private final Main main;
 	
 	private UUID matchID;
 	public UUID getMatchID() { return matchID; }
-	private List<UUID> firstList;
-	public List<UUID> getFirstList() { return firstList; }
-	private List<UUID> secondList;
-	public List<UUID> getSecondList() { return secondList; }
+	private List<List<UUID>> playersList;
+	public List<List<UUID>> getPlayersList() { return playersList; }
 	private Ladder ladder;
 	public Ladder getLadder() { return ladder; }
 	private QueueType queueType;
@@ -31,16 +30,24 @@ public class MatchEntry {
 	public List<List<UUID>> getAlives() { return alives; }
 	private List<UUID> spectator;
 	public List<UUID> getSpectator() { return spectator; }
+	private HashMap<UUID, MatchStatistics> matchStatistics;
+	public HashMap<UUID, MatchStatistics> getMatchStatistics() { return matchStatistics; }
 	
-	public MatchEntry(final List<UUID> firstList, final List<UUID> secondList, final Ladder ladder, final QueueType queueType) {
+	public MatchEntry(final List<List<UUID>> players, final Ladder ladder, final QueueType queueType, final Main main) {
+		this.main = main;
 		this.matchID = UUID.randomUUID();
-		this.firstList = firstList;
-		this.secondList = secondList;
+		this.playersList = players;
 		this.ladder = ladder;
 		this.queueType = queueType;
-		this.alives = Arrays.asList(Lists.newArrayList(firstList), Lists.newArrayList(secondList));
+		this.alives = Lists.newArrayList(players);
 		this.spectator = Lists.newArrayList();
+		this.matchStatistics = new HashMap<>();
 		this.main.getManagerHandler().getMatchManager().getMatchs().putIfAbsent(getMatchID(), this);
-		this.main.getManagerHandler().getMatchManager().startMatch(firstList, secondList, this.getMatchID());
+		for (List<UUID> listUUID : players) {
+			for (UUID uuid : listUUID) {
+				new MatchStatistics(uuid, this.matchID, this.main);
+			}
+		}
+		this.main.getManagerHandler().getMatchManager().startMatch(players.get(0), players.get(1), this.getMatchID());
 	}
 }

@@ -12,9 +12,11 @@ import com.bizarrealex.aether.scoreboard.BoardAdapter;
 import com.bizarrealex.aether.scoreboard.cooldown.BoardCooldown;
 
 import bawz.practice.Main;
-import bawz.practice.ladder.Ladder;
+import bawz.practice.match.MatchEntry;
+import bawz.practice.match.MatchState;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
+import bawz.practice.utils.StringUtils;
 
 public class PracticeBoard implements BoardAdapter {
 	
@@ -40,9 +42,15 @@ public class PracticeBoard implements BoardAdapter {
             return null;
         }
         if (pm.getProfileData().isScoreboard()) {
-        	if (pm.getProfileState().equals(ProfileState.FREE) || pm.getProfileState().equals(ProfileState.QUEUE)) {
+        	if (pm.getProfileState().equals(ProfileState.FREE) || (this.plugin.getScoreboardFile().isQueueInLobby() && pm.getProfileState().equals(ProfileState.QUEUE))) {
         		return getLobbyBoard(player);
         	}
+        	if (!this.plugin.getScoreboardFile().isQueueInLobby() && pm.getProfileState().equals(ProfileState.QUEUE)) {
+        		return getQueueBoard(player);
+        	}
+        	if (pm.getProfileState().equals(ProfileState.FIGHT)) {
+        		return getMatchBoard(player);
+        	}	
         }
 		return null;
     }
@@ -51,15 +59,35 @@ public class PracticeBoard implements BoardAdapter {
         final List<String> board = new LinkedList<String>();
         final Profile pm = this.plugin.getManagerHandler().getProfileManager().getProfiles().get(player.getUniqueId());
         for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(0)) {
-        	String string = str;
-        	for (Ladder ladder : this.plugin.getLadders()) {
-            	board.add(str.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%laddersName%", ChatColor.stripColor(ladder.getDisplayName()).replace("%laddersElo%", String.valueOf(pm.getProfileData().getElos()[ladder.getId()]))));
-        	}
+        	board.add(StringUtils.translate(str.replace("%online%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%inQueue%", String.valueOf(this.plugin.getManagerHandler().getQueueManager().getQueues().size()))).replace("%inFight%", String.valueOf(this.plugin.getManagerHandler().getMatchManager().getMatchs().size())));
         }
         if (this.plugin.getScoreboardFile().isQueueInLobby() && pm.getProfileState().equals(ProfileState.QUEUE)) {
             for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(1)) {
-            	board.add(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString())));
+            	board.add(StringUtils.translate(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString()))));
             }
+        }
+        return board;
+    }
+	
+	private List<String> getQueueBoard(final Player player) {
+        final List<String> board = new LinkedList<String>();
+        for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(1)) {
+        	board.add(StringUtils.translate(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString()))));
+        }
+        return board;
+    }
+	
+	private List<String> getMatchBoard(final Player player) {
+        final List<String> board = new LinkedList<String>();
+        final Profile pm = this.plugin.getManagerHandler().getProfileManager().getProfiles().get(player.getUniqueId());
+        final MatchEntry matchEntry = this.plugin.getManagerHandler().getMatchManager().getMatchs().get(pm.getProfileCache().getMatchID());
+        final String opponent = Bukkit.getPlayer(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())) != null ? Bukkit.getPlayer(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())).getName() : Bukkit.getOfflinePlayer(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())).getName();
+        final String type = matchEntry.getQueueType().toString();
+        final Integer opponentElo = Bukkit.getPlayer(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())) != null ? this.plugin.getManagerHandler().getProfileManager().getProfiles().get(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())).getProfileData().getElos()[matchEntry.getLadder().getId()] : this.plugin.getManagerHandler().getProfileManager().getProfileData().get(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())).getElos()[matchEntry.getLadder().getId()];
+        Integer index = matchEntry.getMatchState().equals(MatchState.STARTING) ? 2 : 3;
+        if (matchEntry.getMatchState().equals(MatchState.ENDING)) index = 4;
+        for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(index)) {
+        	board.add(StringUtils.translate(str.replace("%opponent%", opponent).replace("%type%", type).replace("%opponentElo%", String.valueOf(opponentElo))));
         }
         return board;
     }
