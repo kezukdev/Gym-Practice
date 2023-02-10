@@ -167,6 +167,8 @@ messages:
   arena-already-exist: "&cThis arena already exists!"
   enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"
   leave-queue: "&cYou have been left the queue!"
+  cannot-launch-enderpearl: "&cYou cannot use this now!"
+  cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bseconds"
   
   #################
   # MATCH MESSAGE #

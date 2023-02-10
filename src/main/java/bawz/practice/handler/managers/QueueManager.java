@@ -18,7 +18,6 @@ import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
 import bawz.practice.queue.QueueEntry;
 import bawz.practice.queue.QueueType;
-import net.md_5.bungee.api.ChatColor;
 
 public class QueueManager {
 	
@@ -36,7 +35,7 @@ public class QueueManager {
 	            this.getQueues().putIfAbsent(uuid, new QueueEntry(uuids, ladder, queueType));
 	            pm.setProfileState(ProfileState.QUEUE);	
 	            this.main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(uuid), "queue-items");
-	            Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.enter-in-queue").replace("%ladderName%", ladder.getDisplayName()).replace("%queueType%", queueType.toString().toLowerCase())));
+	            Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getEnterQueue().replace("%ladderName%", ladder.getDisplayName()).replace("%queueType%", queueType.toString().toLowerCase()));
 			}
 			if (!this.getQueues().isEmpty()) {
 				UUID possibleUUID;

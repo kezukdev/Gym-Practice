@@ -31,7 +31,7 @@ public class LadderCommand implements CommandExecutor {
 		if(!(sender instanceof Player)) return false;
 		final Player player = (Player) sender;
 		if (!sender.hasPermission(this.main.getConfig().getString("permissions.ladder"))) {
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.no-permissions")));
+			sender.sendMessage(this.main.getMessageLoader().getNoPermission());
 			return false;
 		}
 		if (args.length == 0 || args.length == 1 || args.length > 3) {
@@ -52,7 +52,7 @@ public class LadderCommand implements CommandExecutor {
 				return false;
 			}
 			final int slots = this.main.getLadders().isEmpty() ? 0 : this.main.getLadders().size();
-			final Ladder ladder = new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true, true, true);
+			final Ladder ladder = new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true, true, true, 16);
 			fileConfig.createSection("ladders." + args[1]);
 			fileConfig.createSection("ladders." + args[1] + ".type");
 			fileConfig.set("ladders." + args[1] + ".type", args[2]);
@@ -69,7 +69,9 @@ public class LadderCommand implements CommandExecutor {
 			fileConfig.createSection("ladders." + args[1] + ".ranked");
 			fileConfig.set("ladders." + args[1] + ".ranked", "true");
 			fileConfig.createSection("ladders." + args[1] + ".cooldownPearl");
-			fileConfig.set("ladders." + args[1] + ".ranked", "true");
+			fileConfig.set("ladders." + args[1] + ".cooldownPearl", "true");
+			fileConfig.createSection("ladders." + args[1] + ".cooldownPearl");
+			fileConfig.set("ladders." + args[1] + ".cooldownTime", 16);
 			fileConfig.createSection("ladders." + args[1] + ".displayname");
 			fileConfig.set("ladders." + args[1] + ".displayname", "&a" + args[1]);
 			fileConfig.createSection("ladders." + args[1] + ".id");
@@ -154,6 +156,22 @@ public class LadderCommand implements CommandExecutor {
 			}
 			fileConfig.set("ladders." + args[1] + ".cooldownPearl", args[2]);
 			sender.sendMessage(ChatColor.GREEN + "The cooldown enderpearl of " + args[1] + " has been defined to " + args[2]);
+		}
+		if (args[0].equalsIgnoreCase("setcooldowntime")) {
+			if (args.length < 3 || args.length > 3) {
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "/ladder setcooldowntime <name> <seconds>");
+				return false;
+			}
+			if (!fileConfig.contains("ladders." + args[1])) {
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.ladder-doesnt-exist").replace("%ladderName%", args[1])));
+				return false;
+			}
+			if (Integer.valueOf(args[2]) == null) {
+				sender.sendMessage(ChatColor.RED + "Please provide is true or false!");
+				return false;
+			}
+			fileConfig.set("ladders." + args[1] + ".cooldownTime", Integer.valueOf(args[2]));
+			sender.sendMessage(ChatColor.GREEN + "The cooldown time enderpearl of " + args[1] + " has been defined to " + args[2]);
 		}
 		if (args[0].equalsIgnoreCase("setranked")) {
 			if (args.length < 3 || args.length > 3) {

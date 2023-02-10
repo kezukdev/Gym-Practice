@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerListPingEvent;
 
 import bawz.practice.Main;
-import net.md_5.bungee.api.ChatColor;
 
 public class ServerListener implements Listener {
 	
@@ -17,12 +16,12 @@ public class ServerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPing(final ServerListPingEvent event) {
-		event.setMaxPlayers(this.main.getConfig().getInt("maxslots"));
+		event.setMaxPlayers(this.main.getMessageLoader().getMaxSlots());
 		if (Bukkit.hasWhitelist()) {
-			event.setMotd(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("motd.whitelist.1") + "\n" + this.main.getConfig().getString("motd.whitelist.2")));
+			event.setMotd(this.main.getMessageLoader().getMotdWhitelistOne() + "\n" + this.main.getMessageLoader().getMotdWhitelistTwo());
 			return;
 		}
-		event.setMotd(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("motd.unwhitelist.1") + "\n" + this.main.getConfig().getString("motd.unwhitelist.2")));
+		event.setMotd(this.main.getMessageLoader().getMotdUnwhitelistOne() + "\n" + this.main.getMessageLoader().getMotdUnwhitelistTwo());
 	}
 
 }

@@ -20,7 +20,7 @@ public class LocationsCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
 		if (!sender.hasPermission(this.main.getConfig().getString("permissions.locations"))) {
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.no-permissions")));
+			sender.sendMessage(this.main.getMessageLoader().getNoPermission());
 			return false;
 		}
 		if (args.length > 1 || args.length < 1) {

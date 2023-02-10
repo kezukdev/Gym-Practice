@@ -30,6 +30,7 @@ import bawz.practice.ladder.Ladder;
 import bawz.practice.ladder.sub.LadderFile;
 import bawz.practice.profile.Profile;
 import bawz.practice.utils.LocationSerializer;
+import bawz.practice.utils.StringLoader;
 
 public class Main extends JavaPlugin {
 	
@@ -58,26 +59,27 @@ public class Main extends JavaPlugin {
 	public LadderFile getLadderFile() { return ladderFile; }
 	private ScoreboardFile scoreboardFile;
 	public ScoreboardFile getScoreboardFile() { return scoreboardFile; }
+	private StringLoader messageLoader;
+	public StringLoader getMessageLoader() { return messageLoader; }
 	
 	public void onEnable() {
 		instance = this;
 		this.saveDefaultConfig();
+		this.messageLoader = new StringLoader(this);
 		this.elosDefault = this.getConfig().getInt("default-elos");
 		this.ladderFile = new LadderFile(this);
 		this.scoreboardFile = new ScoreboardFile(this);
-		if (!this.getConfig().getString("licence").equalsIgnoreCase("bypassdevkezukandfrivox")) {
-	        try {
-	            URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
-	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				if (connection.getResponseCode() != 200) {
-					System.out.println("[BAWZ-SERVICES] Your product key is wrong. Please contact our support to solve this problem.");
-					this.getPluginLoader().disablePlugin(this);
-					return;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}	
-		}
+        try {
+            URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			if (connection.getResponseCode() != 200) {
+				System.out.println("[BAWZ-SERVICES] Your product key is wrong. Please contact our support to solve this problem.");
+				this.getPluginLoader().disablePlugin(this);
+				return;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
         this.loadLocations();
         for (Listener listener : Arrays.asList(new EntityListener(this), new InventoryListener(this), new ServerListener(this), new PlayerListener(this))) {
         	this.getServer().getPluginManager().registerEvents(listener, this);

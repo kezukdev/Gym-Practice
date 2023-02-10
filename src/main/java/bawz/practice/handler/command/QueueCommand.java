@@ -22,10 +22,10 @@ public class QueueCommand implements CommandExecutor {
 		if (!(sender instanceof Player)) return false;
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(Bukkit.getPlayer(sender.getName()).getUniqueId());
 		if (profile.getProfileState() != ProfileState.QUEUE) {
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.not-in-queue")));
+			sender.sendMessage(this.main.getMessageLoader().getNotInQueue());
 			return false;
 		}
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.leave-queue").replace("%ladderName%", ChatColor.stripColor(this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getLadder().getDisplayName()))).replace("%queueType%", this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getQueueType().toString().toLowerCase()));
+		sender.sendMessage(this.main.getMessageLoader().getLeaveQueue().replace("%ladderName%", ChatColor.stripColor(this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", this.main.getManagerHandler().getQueueManager().getQueues().get(Bukkit.getPlayer(sender.getName()).getUniqueId()).getQueueType().toString().toLowerCase()));
 		profile.setProfileState(ProfileState.FREE);
 		this.main.getManagerHandler().getQueueManager().getQueues().remove(Bukkit.getPlayer(sender.getName()).getUniqueId());
 		this.main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(sender.getName()), "spawn-items");

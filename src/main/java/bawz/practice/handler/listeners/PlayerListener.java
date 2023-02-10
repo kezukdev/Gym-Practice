@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -38,6 +37,7 @@ import bawz.practice.match.MatchState;
 import bawz.practice.match.sub.MatchStatistics;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
+import bawz.practice.utils.StringUtils;
 
 public class PlayerListener implements Listener {
 	
@@ -49,9 +49,9 @@ public class PlayerListener implements Listener {
 	public void PlayerJoin(final PlayerJoinEvent event) {
 		event.setJoinMessage(null);
 		event.getPlayer().getInventory().setArmorContents(null);
-		if (Boolean.valueOf(this.main.getConfig().getString("join-message.enabled"))) {
-			String message = this.main.getConfig().getString("join-message.message");
-			event.setJoinMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName())));
+		if (this.main.getMessageLoader().isJoinMessageEnabled()) {
+			String message = this.main.getMessageLoader().getJoinMessage();
+			event.setJoinMessage(message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName()));
 		}
 		event.getPlayer().teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : event.getPlayer().getWorld().getSpawnLocation());
 		new Profile(event.getPlayer().getUniqueId());
@@ -66,9 +66,9 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.HIGH)
 	public void PlayerLeave(final PlayerQuitEvent event) {
 		event.setQuitMessage(null);
-		if (Boolean.valueOf(this.main.getConfig().getString("leave-message.enabled"))) {
-			String message = this.main.getConfig().getString("leave-message.message");
-			event.setQuitMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName())));
+		if (this.main.getMessageLoader().isLeaveMessageEnabled()) {
+			String message = this.main.getMessageLoader().getLeaveMessage();
+			event.setQuitMessage(message.replace("%currentlyOnline%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%maxSlots%", String.valueOf(Bukkit.getMaxPlayers())).replace("%player%", event.getPlayer().getDisplayName()));
 		}
 		this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId()).exit();
 	}
@@ -78,7 +78,7 @@ public class PlayerListener implements Listener {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (event.getItem().getType() != Material.AIR && (profile.getProfileState().equals(ProfileState.FREE) || profile.getProfileState().equals(ProfileState.QUEUE))) {
-				event.getPlayer().chat(this.main.getConfig().getString((profile.getProfileState().equals(ProfileState.FREE) ? "spawn" : "queue") + "-items." + String.valueOf(event.getPlayer().getInventory().getHeldItemSlot()) + ".command"));	
+				event.getPlayer().chat(this.main.getManagerHandler().getItemManager().getCommands().get(profile.getProfileState().equals(ProfileState.FREE) ? "spawn-items" : "queue-items").get(event.getPlayer().getInventory().getHeldItemSlot()));	
 			}	
 			if (profile.getProfileState().equals(ProfileState.FIGHT)) {
 				final ItemStack item = event.getItem();
@@ -86,7 +86,7 @@ public class PlayerListener implements Listener {
 				if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && item.getType() == Material.ENDER_PEARL && event.getPlayer().getGameMode() != GameMode.CREATIVE && matchEntry.getLadder().isCooldownPearl()) {
 					if (matchEntry.getMatchState() != MatchState.PLAYING) {
 						event.setUseItemInHand(Result.DENY);
-						event.getPlayer().sendMessage(ChatColor.GRAY + " * " + ChatColor.AQUA + "Please wait until the fight is fully launched!");
+						event.getPlayer().sendMessage(StringUtils.translate(null));
 						event.getPlayer().updateInventory();
 						return;
 					}
@@ -98,7 +98,7 @@ public class PlayerListener implements Listener {
 					event.setUseItemInHand(Result.DENY);
 					final double time = matchStats.getEnderPearlCooldown() / 1000.0D;
 					final DecimalFormat df = new DecimalFormat("#.#");
-					event.getPlayer().sendMessage(ChatColor.WHITE + "You can launch a pearl again in " + ChatColor.DARK_AQUA + df.format(time) + ChatColor.WHITE + " second" + (time > 1.0D ? "s" : ""));
+					event.getPlayer().sendMessage(this.main.getMessageLoader().getCooldownEnderpearl().replace("%cooldown%", df.format(time)));
 					event.getPlayer().updateInventory();
 					return;
 				}
@@ -180,7 +180,7 @@ public class PlayerListener implements Listener {
 			players.addAll(matchEntry.getPlayersList().get(1));
 			for (UUID uuids : players) {
 				final Player player = Bukkit.getPlayer(uuids);
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.kill-message").replace("%killer%", event.getEntity().getKiller().getName()).replace("%killed%", event.getEntity().getName())));
+				player.sendMessage(this.main.getMessageLoader().getKillMessage().replace("%killer%", event.getEntity().getKiller().getName()).replace("%killed%", event.getEntity().getName()));
 			}
 			if (matchEntry.getAlives().get(teamID).size() == 0) {
 				this.main.getManagerHandler().getMatchManager().endMatch(event.getEntity().getKiller().getUniqueId(), profile.getProfileCache().getMatchID());

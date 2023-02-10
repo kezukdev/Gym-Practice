@@ -17,6 +17,8 @@ public class ItemManager {
 	private Main main;
 	
 	private Map<String, Map<Integer, ItemStack>> inventory = new HashMap<>();
+	private Map<String, Map<Integer, String>> commands = new HashMap<>();
+	public Map<String, Map<Integer, String>> getCommands() { return commands; }
 	
 	public ItemManager(final Main main) { this.main = main; }
 	
@@ -40,9 +42,12 @@ public class ItemManager {
 	
 	public void loadItems(final String type) {
 		Map<Integer, ItemStack> items = new HashMap<>();
+		Map<Integer, String> command = new HashMap<>();
 		for (int i = 0; i < 9; i++) {
 			items.put(i, configToItem(type, String.valueOf(i)));
+			command.put(i, this.main.getConfig().getString(type + "." + i + ".commands"));
 			inventory.put(type, items);
+			commands.put(type, command);
 		}
 	}
 }

@@ -11,10 +11,11 @@ public class MatchStatistics {
 	
 	private Long enderpearlCooldown;
 	private Long nextHitTick;
+	private MatchEntry matchEntry;
 	
 	public MatchStatistics(final UUID player, final UUID matchID, final Main main) {
 		this.main = main;
-		final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(matchID);
+		this.matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(matchID);
         this.enderpearlCooldown = 0L;
         this.nextHitTick = 0L;
 		matchEntry.getMatchStatistics().putIfAbsent(player, this);
@@ -29,7 +30,7 @@ public class MatchStatistics {
 	}
 
 	public void applyEnderPearlCooldown() {
-		this.enderpearlCooldown = Long.valueOf(System.currentTimeMillis() + 16 * 1000);
+		this.enderpearlCooldown = Long.valueOf(System.currentTimeMillis() + this.matchEntry.getLadder().getCooldownTime() * 1000);
 	}
 
 	public void removeEnderPearlCooldown() {

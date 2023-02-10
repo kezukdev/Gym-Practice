@@ -41,7 +41,7 @@ public class MatchManager {
 			final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 			profile.getProfileCache().setMatchID(matchID);
 			final Player player = Bukkit.getPlayer(uuid);
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.match-found").replace("%opponent%", Bukkit.getPlayer(this.getOpponent(uuid)).getName())));
+			player.sendMessage(this.main.getMessageLoader().getMatchFound().replace("%opponent%", Bukkit.getPlayer(this.getOpponent(uuid)).getName()));
 			player.teleport(firstList.contains(uuid) ? arena.getLoc1().toBukkitLocation() : arena.getLoc2().toBukkitLocation());
 			profile.setProfileState(ProfileState.FIGHT);
 			player.getInventory().setArmorContents(ladder.getArmorContent());
@@ -57,14 +57,14 @@ public class MatchManager {
 				counter -= 1;
 				if (counter <= 0) {
 					for (UUID uuid : players) {
-						Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.match-started")));
+						Bukkit.getPlayer(uuid).sendMessage(main.getMessageLoader().getMatchStarted());
 					}
 					matchEntry.setMatchState(MatchState.PLAYING);
 					this.cancel();
 				}
 				if (counter > 0) {
 					for (UUID uuid : players) {
-						Bukkit.getPlayer(uuid).sendMessage(ChatColor.translateAlternateColorCodes('&', main.getConfig().getString("messages.countdown-message").replace("%countdown%", String.valueOf(counter))));
+						Bukkit.getPlayer(uuid).sendMessage(main.getMessageLoader().getMatchCountdown().replace("%countdown%", String.valueOf(counter)));
 					}	
 				}
 			}
@@ -78,7 +78,7 @@ public class MatchManager {
 		players.addAll(matchEntry.getPlayersList().get(1));
 		for (UUID uuid : players) {
 			final Player player = Bukkit.getPlayer(uuid);
-			for (String str : this.main.getConfig().getStringList("messages.inventories-message")) {
+			for (String str : this.main.getMessageLoader().getInventoriesMessage()) {
 				player.sendMessage(ChatColor.translateAlternateColorCodes('&', str.replace("%winner%", Bukkit.getPlayer(winner).getName())));
 			}
 		}
@@ -99,7 +99,7 @@ public class MatchManager {
 					main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
 				}
 			}
-		}.runTaskLaterAsynchronously(main, 20*this.main.getConfig().getInt("respawn-after-match-time"));
+		}.runTaskLaterAsynchronously(main, 20*this.main.getMessageLoader().getRespawnTime());
 	}
 	
     public UUID getOpponent(final UUID uuid) {
