@@ -22,6 +22,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -103,6 +105,15 @@ public class PlayerListener implements Listener {
 					return;
 				}
 			}
+		}
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void onTeleport(PlayerTeleportEvent event) {
+		if (event.getCause() == TeleportCause.ENDER_PEARL) {
+			final Player player = event.getPlayer();
+			final Profile pm = this.main.getManagerHandler().getProfileManager().getProfiles().get(player.getUniqueId());
+			if (pm.getProfileState() != ProfileState.FIGHT && (this.main.getManagerHandler().getMatchManager().getMatchs().get(pm.getProfileCache().getMatchID()) != null && this.main.getManagerHandler().getMatchManager().getMatchs().get(pm.getProfileCache().getMatchID()).getMatchState() != MatchState.PLAYING)) event.setCancelled(true);
 		}
 	}
 	

@@ -86,6 +86,7 @@ public class StringLoader {
 		this.matchStarted = StringUtils.translate(main.getConfig().getString("messages.match-started"));
 		this.matchCountdown = StringUtils.translate(main.getConfig().getString("messages.countdown-message"));
 		this.matchFound = StringUtils.translate(this.main.getConfig().getString("messages.match-found"));
+		System.out.println("[GYM] > String Loaded");
 	}
 
 }
