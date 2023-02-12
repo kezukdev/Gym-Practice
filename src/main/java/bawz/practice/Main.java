@@ -91,7 +91,7 @@ public class Main extends JavaPlugin {
         }
 		this.managerHandler = new ManagerHandler(this);
 		this.commandHandler = new CommandHandler(this);
-		new Aether(this, new PracticeBoard(this));
+		if (Boolean.valueOf(this.ladderFile.getConfig().getString("enabled"))) 	new Aether(this, new PracticeBoard(this));
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {
 				new Profile(players.getUniqueId());

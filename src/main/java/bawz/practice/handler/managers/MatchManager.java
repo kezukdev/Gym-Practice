@@ -3,6 +3,7 @@ package bawz.practice.handler.managers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -38,6 +39,7 @@ public class MatchManager {
 		final Arena arena = this.main.getManagerHandler().getArenaManager().getRandomArena(ladder.getLadderType().getArenaType());
 		matchEntry.setMatchState(MatchState.STARTING);
 		for (UUID uuid : players) {
+			this.hidingPlayers(uuid, matchID);
 			final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 			profile.getProfileCache().setMatchID(matchID);
 			final Player player = Bukkit.getPlayer(uuid);
@@ -115,4 +117,17 @@ public class MatchManager {
     	return opponentUUID;
     }
 
+    public void hidingPlayers(final UUID uuid, final UUID matchID) {
+    	for (Entry<UUID, MatchEntry> entry : this.getMatchs().entrySet()) {
+    		if (entry.getKey() == matchID) return;
+    		for (List<UUID> listUUID : entry.getValue().getPlayersList()) {
+    			for (UUID uuids : listUUID) {
+    				final Player player = Bukkit.getPlayer(uuid);
+    				final Player extPlayer = Bukkit.getPlayer(uuids);
+    				player.hidePlayer(extPlayer);
+    				extPlayer.hidePlayer(player);
+    			}
+    		}
+    	}
+    }
 }
