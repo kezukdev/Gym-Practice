@@ -25,7 +25,7 @@ public class Profile {
 	public File getFile() { return file; }
 	private YamlConfiguration configFile;
 	public YamlConfiguration getConfigFile() { return configFile; }
-	private ProfileData profileData;
+	public ProfileData profileData;
 	public ProfileData getProfileData() { return profileData; }
 	
 	public Profile(final UUID uuid) {
@@ -37,8 +37,8 @@ public class Profile {
 	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getElosDefault();
 			this.profileData = new ProfileData(elos, true);	
 		}
-		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
 		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
+		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
 	}
 	
 	public void exit() {

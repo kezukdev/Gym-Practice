@@ -1,5 +1,7 @@
 package bawz.practice.handler.command;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +34,11 @@ public class LocationsCommand implements CommandExecutor {
 			String loc = LocationSerializer.locationToString(location);
 			String bool = args[0].contains("spawn") ? "locations.spawn" : "locations.editor";
 			this.main.getConfig().set(bool, loc);
+			try {
+				this.main.getConfig().save("config.yml");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			sender.sendMessage(ChatColor.GREEN + "The location " + ChatColor.WHITE + (args[0].contains("spawn") ? "spawn" : "editor") + ChatColor.GREEN + " has been set!");
 		}
 		return false;

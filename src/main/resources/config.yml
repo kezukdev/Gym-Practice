@@ -155,6 +155,8 @@ messages:
     - "§d/ladder seteditable <name> <true/false>"
     - "§d/ladder setslots <name> <number>"
     - "§d/ladder setdisplay <name> <displayName>"
+    - "§d/ladder setcooldownpearl <name> <true/false>"
+    - "§d/ladder setcooldowntime <name> <seconds>"
   arena-help:
     - ""
     - "§5Arena Command:"
@@ -167,6 +169,7 @@ messages:
   arena-already-exist: "&cThis arena already exists!"
   enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"
   leave-queue: "&cYou have been left the queue!"
+  not-in-queue: "&cYou're not in queue at this moment!"
   cannot-launch-enderpearl: "&cYou cannot use this now!"
   cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bseconds"
   

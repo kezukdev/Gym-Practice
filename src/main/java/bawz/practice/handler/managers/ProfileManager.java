@@ -32,7 +32,7 @@ public class ProfileManager {
 				List<Integer> elos = configFile.getIntegerList("elos");
 				Integer[] elosArray = new Integer[this.main.getLadders().size()];
 				elos.toArray(elosArray);
-				final boolean scoreboard = configFile.getBoolean("scoreboard");
+				final boolean scoreboard = Boolean.valueOf(configFile.getString("scoreboard"));
 				this.profileData.putIfAbsent(UUID.fromString(str), new ProfileData(elosArray, scoreboard));
 			}	
 			System.out.println("[GYM] Data Player > Loaded!");
@@ -44,6 +44,7 @@ public class ProfileManager {
 			this.profileData.put(uuid, this.profiles.get(uuid).getProfileData());
 		}
 		if (!disconnecting && this.profileData.containsKey(uuid)) {
+			this.profiles.get(uuid).profileData = this.profileData.get(uuid);
 			this.profileData.remove(uuid);
 		}
 	}

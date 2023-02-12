@@ -45,7 +45,7 @@ public class ItemManager {
 		Map<Integer, String> command = new HashMap<>();
 		for (int i = 0; i < 9; i++) {
 			items.put(i, configToItem(type, String.valueOf(i)));
-			command.put(i, this.main.getConfig().getString(type + "." + i + ".commands"));
+			command.put(i, this.main.getConfig().getString(type + "." + i + ".command"));
 			inventory.put(type, items);
 			commands.put(type, command);
 		}
