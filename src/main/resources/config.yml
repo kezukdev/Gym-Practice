@@ -126,6 +126,31 @@ inventory:
       - "&3Queueing&7: &f%inQueue%"
       - "&5Fighting&7: &f%inFight%"
       
+  preview:
+    name: "&7Preview of: &c%playerName%"
+    size: 54
+    items:
+      player-infos:
+        material: "MELON"
+        data: 0
+        name: "&7* &3Player Informations&7:"
+        lore: 
+          - " "
+          - " &bFood level&7: &f%foodLevel%"
+          - " &bLife level&7: &f%lifeLevel%&4♥"
+          - " &bHits&7: &f%hits%"
+          - " &bLongest Combo&7: &f%longestCombo%"
+      potion:
+        material: "POTION"
+        data: 16421
+        name: "&7* &3Potion&7:"
+        lore:
+          - " "
+          - " &3Remaining&7: &f%amountPot%"
+          - " &3Accuracy&7: &f%accuracyPot%"
+          - " &3Missed&7: &f%missedPot%"
+      
+      
     ###############
     # PERMISSIONS #
     ###############
@@ -170,20 +195,20 @@ messages:
   enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"
   leave-queue: "&cYou have been left the queue!"
   not-in-queue: "&cYou're not in queue at this moment!"
-  cannot-launch-enderpearl: "&cYou cannot use this now!"
-  cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bseconds"
   
   #################
   # MATCH MESSAGE #
   #################
   
-  kill-message: "&3%killer% to kill &d%killed%"
-  match-found: "&7* &fA opponent was found! It's about &3%opponent%&f!"
-  countdown-message: "&3Match starting in &f%countdown% seconds!"
-  inventories-message: 
-    - ""
-    - "&3%winner% &fhave won the match! &dInventories&7: &a%winnerInventories%&7, &c%looserInventories%&7."
-  match-started: "&fThe match has been begin!"
+  match:
+    cannot-launch-enderpearl: "&cYou cannot use this now!"
+    cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bseconds"
+    found: "&7* &fA opponent was found! It's about &3%opponent%&f!"
+    countdown: "&3Match starting in &f%countdown% seconds!"
+    kill: "&3%killer% to kill &d%killed%"
+    winner: "&3%winner% &fhave won the match!"
+    inventories: "&bInventories &7(Click to open)&f:"
+    begin: "&fThe match has been begin!"
   
   #######################
   # MATCH CONFIGURATION #

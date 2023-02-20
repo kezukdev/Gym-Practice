@@ -1,8 +1,7 @@
-package bawz.practice.utils;
-
-import java.util.List;
+package bawz.practice.loader;
 
 import bawz.practice.Main;
+import bawz.practice.utils.StringUtils;
 
 public class StringLoader {
 	
@@ -50,8 +49,10 @@ public class StringLoader {
 	public Integer getMaxSlots() { return maxSlots; }
 	private Integer respawnTime;
 	public Integer getRespawnTime() { return respawnTime; }
-	private List<String> inventoriesMessage;
-	public List<String> getInventoriesMessage() { return inventoriesMessage; }
+	private String winnerMessage;
+	public String getWinnerMessage() { return winnerMessage; }
+	private String inventoriesMessage;
+	public String getInventoriesMessage() { return inventoriesMessage; }
 	private String matchStarted;
 	public String getMatchStarted() { return matchStarted; }
 	private String matchCountdown;
@@ -73,19 +74,20 @@ public class StringLoader {
 		if (joinMessageEnabled) this.joinMessage = StringUtils.translate(this.main.getConfig().getString("join-message.message"));
 		this.leaveMessageEnabled = Boolean.valueOf(this.main.getConfig().getString("leave-message.enabled"));
 		if (leaveMessageEnabled) this.leaveMessage = StringUtils.translate(this.main.getConfig().getString("leave-message.message"));
-		this.cannotLaunchPearl = StringUtils.translate(this.main.getConfig().getString("messages.cannot-launch-enderpearl"));
-		this.cooldownEnderpearl = StringUtils.translate(this.main.getConfig().getString("messages.cooldown-enderpearl"));
-		this.killMessage = StringUtils.translate(this.main.getConfig().getString("messages.kill-message"));
+		this.cannotLaunchPearl = StringUtils.translate(this.main.getConfig().getString("messages.match.cannot-launch-enderpearl"));
+		this.cooldownEnderpearl = StringUtils.translate(this.main.getConfig().getString("messages.match.cooldown-enderpearl"));
+		this.killMessage = StringUtils.translate(this.main.getConfig().getString("messages.match.kill"));
 		this.motdWhitelistOne = StringUtils.translate(this.main.getConfig().getString("motd.whitelist.1"));
 		this.motdWhitelistTwo = StringUtils.translate(this.main.getConfig().getString("motd.whitelist.2"));
 		this.motdUnwhitelistOne = StringUtils.translate(this.main.getConfig().getString("motd.unwhitelist.1"));
 		this.motdUnwhitelistTwo = StringUtils.translate(this.main.getConfig().getString("motd.unwhitelist.2"));
 		this.maxSlots = this.main.getConfig().getInt("maxslots");
 		this.respawnTime = this.main.getConfig().getInt("respawn-after-match-time");
-		this.inventoriesMessage = this.main.getConfig().getStringList("messages.inventories-message");
-		this.matchStarted = StringUtils.translate(main.getConfig().getString("messages.match-started"));
-		this.matchCountdown = StringUtils.translate(main.getConfig().getString("messages.countdown-message"));
-		this.matchFound = StringUtils.translate(this.main.getConfig().getString("messages.match-found"));
+		this.winnerMessage = StringUtils.translate(this.main.getConfig().getString("messages.match.winner"));
+		this.inventoriesMessage = StringUtils.translate(this.main.getConfig().getString("messages.match.inventories"));
+		this.matchStarted = StringUtils.translate(main.getConfig().getString("messages.match.begin"));
+		this.matchCountdown = StringUtils.translate(main.getConfig().getString("messages.match.countdown"));
+		this.matchFound = StringUtils.translate(this.main.getConfig().getString("messages.match.found"));
 		System.out.println("[GYM] Stringer > Loaded");
 	}
 

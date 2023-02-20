@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ import bawz.practice.match.MatchState;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class MatchManager {
 	
@@ -78,16 +80,27 @@ public class MatchManager {
 		matchEntry.setMatchState(MatchState.ENDING);
 		final List<UUID> players = Lists.newArrayList(matchEntry.getPlayersList().get(0));
 		players.addAll(matchEntry.getPlayersList().get(1));
-		for (UUID uuid : players) {
-			final Player player = Bukkit.getPlayer(uuid);
-			for (String str : this.main.getMessageLoader().getInventoriesMessage()) {
-				player.sendMessage(ChatColor.translateAlternateColorCodes('&', str.replace("%winner%", Bukkit.getPlayer(winner).getName())));
-			}
+		TextComponent inventoriesMsg = new TextComponent(this.main.getMessageLoader().getInventoriesMessage());
+		final List<StringBuilder> builder = Lists.newArrayList();
+		for (int i = 0; i < 2; i++) {
+			builder.add(new StringBuilder());
 		}
+        matchEntry.getPlayersList().get(0).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(0).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(0).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
+        matchEntry.getPlayersList().get(1).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(0).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(1).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
+		players.forEach(uuid -> {
+			final TextComponent winnerComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builder.get(0).toString() : builder.get(1).toString());
+			final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(1).contains(winner) ? builder.get(1).toString() : builder.get(0).toString());
+			inventoriesMsg.addExtra(winnerComponent);
+			inventoriesMsg.addExtra(ChatColor.GRAY + ", ");
+			inventoriesMsg.addExtra(looserComponent);
+			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
+			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
+		});
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				for (UUID uuid : players) {
+					showPlayers(uuid);
 					final Player player = Bukkit.getPlayer(uuid);
 					final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 					player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
@@ -126,6 +139,19 @@ public class MatchManager {
     				final Player extPlayer = Bukkit.getPlayer(uuids);
     				player.hidePlayer(extPlayer);
     				extPlayer.hidePlayer(player);
+    			}
+    		}
+    	}
+    }
+    
+    public void showPlayers(final UUID uuid) {
+    	for (Entry<UUID, MatchEntry> entry : this.getMatchs().entrySet()) {
+    		for (List<UUID> listUUID : entry.getValue().getPlayersList()) {
+    			for (UUID uuids : listUUID) {
+    				final Player player = Bukkit.getPlayer(uuid);
+    				final Player extPlayer = Bukkit.getPlayer(uuids);
+    				player.showPlayer(extPlayer);
+    				extPlayer.showPlayer(player);
     			}
     		}
     	}

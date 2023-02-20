@@ -28,9 +28,9 @@ import bawz.practice.handler.listeners.PlayerListener;
 import bawz.practice.handler.listeners.ServerListener;
 import bawz.practice.ladder.Ladder;
 import bawz.practice.ladder.sub.LadderFile;
+import bawz.practice.loader.StringLoader;
 import bawz.practice.profile.Profile;
 import bawz.practice.utils.LocationSerializer;
-import bawz.practice.utils.StringLoader;
 
 public class Main extends JavaPlugin {
 	
@@ -100,7 +100,10 @@ public class Main extends JavaPlugin {
 	}
 	
 	private void loadLocations() {
-		this.spawnLocation = getConfig().getString("locations.spawn") != null ? LocationSerializer.stringToLocation(getConfig().getString("locations.spawn")).toBukkitLocation() : Bukkit.getWorld("world").getSpawnLocation();
+		this.spawnLocation = Bukkit.getWorld("world").getSpawnLocation();
+		if (getConfig().getString("locations.spawn") != null) {
+			this.spawnLocation = LocationSerializer.stringToLocation(getConfig().getString("locations.spawn")).toBukkitLocation();
+		}
 		if (getConfig().getString("editor") != null) {
 			this.editorLocation = LocationSerializer.stringToLocation(getConfig().getString("editor")).toBukkitLocation();
 		}
