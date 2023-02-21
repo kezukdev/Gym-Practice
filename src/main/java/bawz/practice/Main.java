@@ -28,9 +28,11 @@ import bawz.practice.handler.listeners.PlayerListener;
 import bawz.practice.handler.listeners.ServerListener;
 import bawz.practice.ladder.Ladder;
 import bawz.practice.ladder.sub.LadderFile;
+import bawz.practice.loader.InventoryLoader;
 import bawz.practice.loader.StringLoader;
 import bawz.practice.profile.Profile;
 import bawz.practice.utils.LocationSerializer;
+import bawz.practice.utils.hook.SpigotHook;
 
 public class Main extends JavaPlugin {
 	
@@ -64,11 +66,17 @@ public class Main extends JavaPlugin {
 	public ScoreboardFile getScoreboardFile() { return scoreboardFile; }
 	private StringLoader messageLoader;
 	public StringLoader getMessageLoader() { return messageLoader; }
+	private InventoryLoader inventoryLoader;
+	public InventoryLoader getInventoryLoader() { return inventoryLoader; }
+	
+	private SpigotHook spigotHook;
+	public SpigotHook getSpigotHook() { return spigotHook; }
 	
 	public void onEnable() {
 		instance = this;
 		this.saveDefaultConfig();
 		this.messageLoader = new StringLoader(this);
+		this.inventoryLoader = new InventoryLoader(this);
 		this.elosDefault = this.getConfig().getInt("default-elos");
 		this.ladderFile = new LadderFile(this);
 		this.scoreboardFile = new ScoreboardFile(this);
@@ -97,6 +105,7 @@ public class Main extends JavaPlugin {
 				new Profile(players.getUniqueId());
 			}
 		}
+		this.spigotHook = new SpigotHook();
 	}
 	
 	private void loadLocations() {

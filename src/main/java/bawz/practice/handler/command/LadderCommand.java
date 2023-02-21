@@ -52,7 +52,7 @@ public class LadderCommand implements CommandExecutor {
 				return false;
 			}
 			final int slots = this.main.getLadders().isEmpty() ? 0 : this.main.getLadders().size();
-			final Ladder ladder = new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true, true, true, 16);
+			final Ladder ladder = new Ladder(args[1], player.getItemInHand(), player.getInventory().getContents(), player.getInventory().getArmorContents(), "&a" + args[1], LadderType.valueOf(args[2]), slots, true, true, true, 16, false, "default");
 			fileConfig.createSection("ladders." + args[1]);
 			fileConfig.createSection("ladders." + args[1] + ".type");
 			fileConfig.set("ladders." + args[1] + ".type", args[2]);
@@ -70,10 +70,14 @@ public class LadderCommand implements CommandExecutor {
 			fileConfig.set("ladders." + args[1] + ".ranked", "true");
 			fileConfig.createSection("ladders." + args[1] + ".cooldownPearl");
 			fileConfig.set("ladders." + args[1] + ".cooldownPearl", "true");
-			fileConfig.createSection("ladders." + args[1] + ".cooldownPearl");
+			fileConfig.createSection("ladders." + args[1] + ".cooldownTime");
 			fileConfig.set("ladders." + args[1] + ".cooldownTime", 16);
 			fileConfig.createSection("ladders." + args[1] + ".displayname");
 			fileConfig.set("ladders." + args[1] + ".displayname", "&a" + args[1]);
+			fileConfig.createSection("ladders." + args[1] + ".knockbackProfile");
+			fileConfig.set("ladders." + args[1] + ".displayname", "false");
+			fileConfig.createSection("ladders." + args[1] + ".knockbackTypeProfile");
+			fileConfig.set("ladders." + args[1] + ".displayname", "default");
 			fileConfig.createSection("ladders." + args[1] + ".id");
 			fileConfig.set("ladders." + args[1] + ".id", ladder.getId());
 			this.save();
@@ -188,6 +192,19 @@ public class LadderCommand implements CommandExecutor {
 			}
 			fileConfig.set("ladders." + args[1] + ".ranked", args[2]);
 			sender.sendMessage(ChatColor.GREEN + "The ladder: " + args[1] + " has been defined to " + args[2] + " for ranked match!");
+		}
+		if (args[0].equalsIgnoreCase("setknockbackprofile")) {
+			if (args.length < 3 || args.length > 3) {
+				sender.sendMessage(ChatColor.LIGHT_PURPLE + "/ladder setknockbackprofile <name> <profile>");
+				return false;
+			}
+			if (!fileConfig.contains("ladders." + args[1])) {
+				sender.sendMessage(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("messages.ladder-doesnt-exist").replace("%ladderName%", args[1])));
+				return false;
+			}
+			fileConfig.set("ladders." + args[1] + ".knockbackProfile", args[2].equalsIgnoreCase("default") ? "false" : "true");
+			fileConfig.set("ladders." + args[1] + ".knockbackTypeProfile", args[2]);
+			sender.sendMessage(ChatColor.GREEN + "The ladder: " + args[1] + " has been defined to " + args[2] + " for knockback profile!");
 		}
 		if (args[0].equalsIgnoreCase("setdisplay")) {
 			if (args.length < 3 || args.length > 3) {

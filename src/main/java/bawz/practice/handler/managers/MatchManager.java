@@ -13,8 +13,6 @@ import java.util.concurrent.TimeoutException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import com.google.common.collect.Lists;
 
 import bawz.practice.Main;
@@ -54,6 +52,7 @@ public class MatchManager {
 			profile.setProfileState(ProfileState.FIGHT);
 			player.getInventory().setArmorContents(ladder.getArmorContent());
 			player.getInventory().setContents(ladder.getContent());
+			this.main.getSpigotHook().applyKitKnockback(player, ladder);
 		});
 		new CountdownRunnable(matchEntry, players, main).runTaskTimerAsynchronously(main, 20L, 20L);
 	}
@@ -79,6 +78,7 @@ public class MatchManager {
 			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
 			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
 		});
+		@SuppressWarnings("rawtypes")
 		CompletableFuture completable = CompletableFuture.runAsync(() -> {
 			players.forEach(uuid -> {
 				showPlayers(uuid);

@@ -19,9 +19,11 @@ public class Ladder {
 	private boolean editable;
 	private boolean cooldownPearl;
 	private Integer cooldownTime;
+	private boolean knockbackProfile;
+	private String knockbackTypeProfile;
 	private Integer id;
 	
-	public Ladder(final String name, final ItemStack icon, final ItemStack[] content, final ItemStack[] armorContent,final String displayName, final LadderType ladderType, final Integer slots, final boolean editable, final boolean ranked, final boolean cooldownPearl, final Integer cooldownTime) {
+	public Ladder(final String name, final ItemStack icon, final ItemStack[] content, final ItemStack[] armorContent,final String displayName, final LadderType ladderType, final Integer slots, final boolean editable, final boolean ranked, final boolean cooldownPearl, final Integer cooldownTime, final boolean knockbackProfile, final String knockbackTypeProfile) {
 		this.name = name;
 		this.icon = icon;
 		this.content = content;
@@ -33,6 +35,8 @@ public class Ladder {
 		this.ranked = ranked;
 		this.cooldownPearl = cooldownPearl;
 		this.cooldownTime = cooldownTime;
+		this.knockbackProfile = knockbackProfile;
+		this.knockbackTypeProfile = knockbackTypeProfile == null ? "default" : knockbackTypeProfile;
 		this.id = this.main.getLadders().size() == 0 ? 0 : this.main.getLadders().size() + 1;
 		this.main.getLadders().add(this);
 	}
@@ -83,6 +87,14 @@ public class Ladder {
 	
 	public Integer getCooldownTime() {
 		return cooldownTime;
+	}
+	
+	public String getKnockbackTypeProfile() {
+		return knockbackTypeProfile;
+	}
+	
+	public boolean isKnockbackProfile() {
+		return knockbackProfile;
 	}
 	
     public static Ladder getLadderBySlots(Integer slots) {

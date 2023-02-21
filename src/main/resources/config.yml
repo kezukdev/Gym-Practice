@@ -130,25 +130,25 @@ inventory:
     name: "&7Preview of: &c%playerName%"
     size: 54
     items:
-      player-infos:
+      playerinformation:
         material: "MELON"
         data: 0
         name: "&7* &3Player Informations&7:"
         lore: 
           - " "
-          - " &bFood level&7: &f%foodLevel%"
-          - " &bLife level&7: &f%lifeLevel%&4♥"
-          - " &bHits&7: &f%hits%"
-          - " &bLongest Combo&7: &f%longestCombo%"
+          - " §bFood level§7: §f%foodLevel%"
+          - " §bLife level§7: §f%lifeLevel%&4♥"
+          - " §bHits§7: §f%hits%"
+          - " §bLongest Combo§7: §f%longestCombo%"
       potion:
         material: "POTION"
         data: 16421
         name: "&7* &3Potion&7:"
         lore:
           - " "
-          - " &3Remaining&7: &f%amountPot%"
-          - " &3Accuracy&7: &f%accuracyPot%"
-          - " &3Missed&7: &f%missedPot%"
+          - " §3Remaining§7: §f%amountPot%"
+          - " §3Accuracy§7: §f%accuracyPot%"
+          - " §3Missed§7: §f%missedPot%"
       
       
     ###############
