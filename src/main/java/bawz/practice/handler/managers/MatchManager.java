@@ -6,10 +6,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.google.common.collect.Lists;
@@ -21,6 +24,7 @@ import bawz.practice.match.MatchEntry;
 import bawz.practice.match.MatchState;
 import bawz.practice.profile.Profile;
 import bawz.practice.profile.ProfileState;
+import bawz.practice.runnable.CountdownRunnable;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -40,7 +44,7 @@ public class MatchManager {
 		final Ladder ladder = matchEntry.getLadder();
 		final Arena arena = this.main.getManagerHandler().getArenaManager().getRandomArena(ladder.getLadderType().getArenaType());
 		matchEntry.setMatchState(MatchState.STARTING);
-		for (UUID uuid : players) {
+		players.forEach(uuid -> {
 			this.hidingPlayers(uuid, matchID);
 			final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 			profile.getProfileCache().setMatchID(matchID);
@@ -50,29 +54,8 @@ public class MatchManager {
 			profile.setProfileState(ProfileState.FIGHT);
 			player.getInventory().setArmorContents(ladder.getArmorContent());
 			player.getInventory().setContents(ladder.getContent());
-		}
-		new BukkitRunnable() {
-			Integer counter = 5;
-			@Override
-			public void run() {
-				if (matchEntry.getMatchState().equals(MatchState.ENDING) || matchEntry.getMatchState().equals(MatchState.PLAYING)) {
-					this.cancel();
-				}
-				counter -= 1;
-				if (counter <= 0) {
-					for (UUID uuid : players) {
-						Bukkit.getPlayer(uuid).sendMessage(main.getMessageLoader().getMatchStarted());
-					}
-					matchEntry.setMatchState(MatchState.PLAYING);
-					this.cancel();
-				}
-				if (counter > 0) {
-					for (UUID uuid : players) {
-						Bukkit.getPlayer(uuid).sendMessage(main.getMessageLoader().getMatchCountdown().replace("%countdown%", String.valueOf(counter)));
-					}	
-				}
-			}
-		}.runTaskTimerAsynchronously(main, 20L, 20L);
+		});
+		new CountdownRunnable(matchEntry, players, main).runTaskTimerAsynchronously(main, 20L, 20L);
 	}
 	
 	public void endMatch(final UUID winner, final UUID matchID) {
@@ -86,7 +69,7 @@ public class MatchManager {
 			builder.add(new StringBuilder());
 		}
         matchEntry.getPlayersList().get(0).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(0).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(0).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
-        matchEntry.getPlayersList().get(1).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(0).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(1).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
+        matchEntry.getPlayersList().get(1).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(1).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(1).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
 		players.forEach(uuid -> {
 			final TextComponent winnerComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builder.get(0).toString() : builder.get(1).toString());
 			final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(1).contains(winner) ? builder.get(1).toString() : builder.get(0).toString());
@@ -96,10 +79,10 @@ public class MatchManager {
 			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
 			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
 		});
-		new BukkitRunnable() {
+		CompletableFuture completable = CompletableFuture.runAsync(new Runnable() {
 			@Override
 			public void run() {
-				for (UUID uuid : players) {
+				players.forEach(uuid -> {
 					showPlayers(uuid);
 					final Player player = Bukkit.getPlayer(uuid);
 					final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
@@ -107,14 +90,13 @@ public class MatchManager {
 					profile.getProfileCache().setMatchID(null);
 					profile.setProfileState(ProfileState.FREE);
 					player.getInventory().setArmorContents(null);
-					for (PotionEffect effect : player.getActivePotionEffects()) {
-						player.removePotionEffect(effect.getType());
-					}
+					player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
 					player.updateInventory();
 					main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
-				}
+				});
 			}
-		}.runTaskLaterAsynchronously(main, 20*this.main.getMessageLoader().getRespawnTime());
+		});
+		try { completable.get(this.main.getMessageLoader().getRespawnTime(), TimeUnit.SECONDS); } catch (InterruptedException | ExecutionException | TimeoutException e) { e.printStackTrace(); }
 	}
 	
     public UUID getOpponent(final UUID uuid) {
