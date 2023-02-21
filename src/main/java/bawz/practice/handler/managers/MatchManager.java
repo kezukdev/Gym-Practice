@@ -79,22 +79,19 @@ public class MatchManager {
 			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
 			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
 		});
-		CompletableFuture completable = CompletableFuture.runAsync(new Runnable() {
-			@Override
-			public void run() {
-				players.forEach(uuid -> {
-					showPlayers(uuid);
-					final Player player = Bukkit.getPlayer(uuid);
-					final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
-					player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
-					profile.getProfileCache().setMatchID(null);
-					profile.setProfileState(ProfileState.FREE);
-					player.getInventory().setArmorContents(null);
-					player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-					player.updateInventory();
-					main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
-				});
-			}
+		CompletableFuture completable = CompletableFuture.runAsync(() -> {
+			players.forEach(uuid -> {
+				showPlayers(uuid);
+				final Player player = Bukkit.getPlayer(uuid);
+				final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
+				player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
+				profile.getProfileCache().setMatchID(null);
+				profile.setProfileState(ProfileState.FREE);
+				player.getInventory().setArmorContents(null);
+				player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+				player.updateInventory();
+				main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
+			});
 		});
 		try { completable.get(this.main.getMessageLoader().getRespawnTime(), TimeUnit.SECONDS); } catch (InterruptedException | ExecutionException | TimeoutException e) { e.printStackTrace(); }
 	}
