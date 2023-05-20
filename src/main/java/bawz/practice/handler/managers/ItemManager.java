@@ -48,7 +48,7 @@ public class ItemManager {
 	public void loadItems(final String type) {
 		Map<Integer, ItemStack> items = new HashMap<>();
 		Map<Integer, String> command = new HashMap<>();
-		for (int i = 0; i < 54; i++) {
+		for (int i = 0; i < (type == "settings" ? main.getInventoryLoader().getSettingsSize() : 9); i++) {
 			items.put(i, configToItem(type, String.valueOf(i)));
 			command.put(i, this.main.getConfig().getString(type + "." + i + ".command"));
 			inventory.put(type, items);

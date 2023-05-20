@@ -38,7 +38,7 @@ public class Profile {
 	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getElosDefault();
 			this.profileData = new ProfileData(elos, true);	
 		}
-		this.profileCache.setSettingsCache(new SettingsCache(main, this.profileData.isScoreboard()));
+		this.profileCache.settingsCache = new SettingsCache(this.main, this.profileData.isScoreboard());
 		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
 		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
 	}
