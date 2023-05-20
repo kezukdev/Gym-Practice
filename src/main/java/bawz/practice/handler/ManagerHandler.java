@@ -27,6 +27,7 @@ public class ManagerHandler {
 		this.itemManager = new ItemManager(main);
 		this.itemManager.loadItems("spawn-items");
 		this.itemManager.loadItems("queue-items");
+		this.itemManager.loadItems("inventory.settings.items");
 		System.out.println("[GYM] Items > Loaded");
 		this.inventoryManager = new InventoryManager(main);
 		this.arenaManager = new ArenaManager(main);

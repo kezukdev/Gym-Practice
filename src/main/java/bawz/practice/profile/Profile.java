@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import bawz.practice.Main;
 import bawz.practice.profile.cache.ProfileCache;
+import bawz.practice.profile.cache.SettingsCache;
 import bawz.practice.profile.data.ProfileData;
 import lombok.Getter;
 
@@ -37,6 +38,7 @@ public class Profile {
 	        for(int i = 0; i <= elos.length-1; i++) elos[i] = this.main.getElosDefault();
 			this.profileData = new ProfileData(elos, true);	
 		}
+		this.profileCache.setSettingsCache(new SettingsCache(main, this.profileData.isScoreboard()));
 		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
 		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
 	}

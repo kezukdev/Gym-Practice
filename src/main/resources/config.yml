@@ -38,76 +38,34 @@ color:
 spawn-items:
   0:
     material: "IRON_SWORD"
+    material-id: 0
     displayname: "&3Casual"
     command: "/casual"
   1:
     material: "DIAMOND_SWORD"
+    material-id: 0
     displayname: "&5Ranked"
     command: "/ranked"
-  2:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  3:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
   4:
     material: "NAME_TAG"
+    material-id: 0
     displayname: "&3Party"
     command: "/party create"
-  5:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  6:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
   7:
     material: "REDSTONE"
+    material-id: 0
     displayname: "&3Settings"
     command: "/settings"
   8:
     material: "BOOK"
+    material-id: 0
     displayname: "&3Editor"
     command: "/editor"
 
 queue-items:
-  0:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  1:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  2:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  3:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  4:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  5:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  6:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
-  7:
-    material: "AIR"
-    displayname: "null"
-    command: "null"
   8:
     material: "PACKED_ICE"
+    material-id: 0
     displayname: "&cLeave queue."
     command: "/leavequeue"
     
@@ -133,6 +91,16 @@ inventory:
   settings:
     name: "&8Settings:"
     size: 9
+    items:
+      0:
+       name: "&dScoreboard &7[%sbStatus%&7]"
+       material: "PAINTING"
+       material-id: 0
+       command: "/scoreboard"
+       lore:
+        - ""
+        - "&7Change the scoreboard display according to your mood!"
+        - ""
       
   preview:
     name: "&7Preview of: &c%playerName%"

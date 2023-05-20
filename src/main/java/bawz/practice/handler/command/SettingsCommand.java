@@ -18,7 +18,7 @@ public class SettingsCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!(sender instanceof Player)) return false;
 		final Player player = (Player) sender;
-		player.openInventory(this.main.getManagerHandler().getInventoryManager().getSettings()[0]);
+		player.openInventory(this.main.getManagerHandler().getProfileManager().getProfiles().get(player.getUniqueId()).getProfileCache().getSettingsCache().getInventory()[0]);
 		return false;
 	}
 
