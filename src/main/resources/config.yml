@@ -26,6 +26,10 @@ motd:
     1: "&3bawz &7| &bPractice"
     2: "&aFollow @BawzNet!"
 maxslots: 2023
+
+color:
+  enable: "GREEN"
+  disable: "RED"
   
   #########
   # ITEMS #
@@ -125,6 +129,10 @@ inventory:
     lore:
       - "&3Queueing&7: &f%inQueue%"
       - "&5Fighting&7: &f%inFight%"
+      
+  settings:
+    name: "&8Settings:"
+    size: 9
       
   preview:
     name: "&7Preview of: &c%playerName%"

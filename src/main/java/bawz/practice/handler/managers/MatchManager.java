@@ -13,6 +13,8 @@ import java.util.concurrent.TimeoutException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import com.google.common.collect.Lists;
 
 import bawz.practice.Main;
@@ -71,17 +73,16 @@ public class MatchManager {
         matchEntry.getPlayersList().get(1).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(1).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(1).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
 		players.forEach(uuid -> {
 			final TextComponent winnerComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builder.get(0).toString() : builder.get(1).toString());
-			final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(1).contains(winner) ? builder.get(1).toString() : builder.get(0).toString());
+			final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builder.get(1).toString() : builder.get(0).toString());
 			inventoriesMsg.addExtra(winnerComponent);
 			inventoriesMsg.addExtra(ChatColor.GRAY + ", ");
 			inventoriesMsg.addExtra(looserComponent);
 			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
 			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
 		});
-		@SuppressWarnings("rawtypes")
-		CompletableFuture completable = CompletableFuture.runAsync(() -> {
-			players.forEach(uuid -> {
-				showPlayers(uuid);
+		players.parallelStream().forEach(uuid -> this.showPlayers(uuid));
+		CompletableFuture<Void> completable = CompletableFuture.runAsync(() -> {
+			players.parallelStream().forEach(uuid -> {
 				final Player player = Bukkit.getPlayer(uuid);
 				final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 				player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
@@ -93,7 +94,7 @@ public class MatchManager {
 				main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
 			});
 		});
-		try { completable.get(this.main.getMessageLoader().getRespawnTime(), TimeUnit.SECONDS); } catch (InterruptedException | ExecutionException | TimeoutException e) { e.printStackTrace(); }
+		try { completable.get(this.main.getMessageLoader().getRespawnTime()*1000L, TimeUnit.MILLISECONDS); } catch (InterruptedException | ExecutionException | TimeoutException e) { e.printStackTrace(); }
 	}
 	
     public UUID getOpponent(final UUID uuid) {
@@ -124,15 +125,20 @@ public class MatchManager {
     }
     
     public void showPlayers(final UUID uuid) {
-    	for (Entry<UUID, MatchEntry> entry : this.getMatchs().entrySet()) {
-    		for (List<UUID> listUUID : entry.getValue().getPlayersList()) {
-    			for (UUID uuids : listUUID) {
-    				final Player player = Bukkit.getPlayer(uuid);
-    				final Player extPlayer = Bukkit.getPlayer(uuids);
-    				player.showPlayer(extPlayer);
-    				extPlayer.showPlayer(player);
-    			}
-    		}
-    	}
+    	new BukkitRunnable() {		
+			@Override
+			public void run() {
+		    	for (Entry<UUID, MatchEntry> entry : getMatchs().entrySet()) {
+		    		for (List<UUID> listUUID : entry.getValue().getPlayersList()) {
+		    			for (UUID uuids : listUUID) {
+		    				final Player player = Bukkit.getPlayer(uuid);
+		    				final Player extPlayer = Bukkit.getPlayer(uuids);
+		    				player.showPlayer(extPlayer);
+		    				extPlayer.showPlayer(player);
+		    			}
+		    		}
+		    	}
+			}
+		}.runTaskLater(this.main, this.main.getMessageLoader().getRespawnTime()*20L);
     }
 }

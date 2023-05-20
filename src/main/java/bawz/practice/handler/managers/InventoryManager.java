@@ -14,11 +14,14 @@ public class InventoryManager {
 	private final Main main;
 	private Inventory[] queue = new Inventory[2];
 	public Inventory[] getQueue() { return queue; }
+	private Inventory[] settings = new Inventory[1];
+	public Inventory[] getSettings() { return settings; }
 	
 	public InventoryManager(final Main main) {
 		this.main = main;
 		this.queue[0] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.casual.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name")));
 		this.queue[1] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.ranked.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name")));
+		this.settings[0] = Bukkit.createInventory(null, this.main.getConfig().getInt("inventory.settings.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.settings.name")));
 		this.refreshInventory();
 	}
 	

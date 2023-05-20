@@ -2,8 +2,6 @@ package bawz.practice;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -38,9 +36,6 @@ public class Main extends JavaPlugin {
 	
 	private static Main instance;
 	public static Main getInstance() { return instance; }
-	
-	private boolean checked;
-	public boolean isChecked() { return checked; }
 	
 	private ManagerHandler managerHandler;
 	public ManagerHandler getManagerHandler() { return managerHandler; }
@@ -80,19 +75,6 @@ public class Main extends JavaPlugin {
 		this.elosDefault = this.getConfig().getInt("default-elos");
 		this.ladderFile = new LadderFile(this);
 		this.scoreboardFile = new ScoreboardFile(this);
-        try {
-            URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence"));
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			if (connection.getResponseCode() != 200) {
-				System.out.println("[BAWZ-SERVICES] Your product key is wrong. Please contact our support to solve this problem.");
-				this.checked = false;
-				this.getPluginLoader().disablePlugin(this);
-				return;
-			}
-		} catch (IOException e) {
-			return;
-		}	
-        this.checked = true;
         this.loadLocations();
         for (Listener listener : Arrays.asList(new EntityListener(this), new InventoryListener(this), new ServerListener(this), new PlayerListener(this))) {
         	this.getServer().getPluginManager().registerEvents(listener, this);
@@ -119,42 +101,40 @@ public class Main extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		if (this.checked) {
-			if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
-				for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
-					File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");
-					if (!file.exists()) {
-						try {
-			                file.getParentFile().mkdirs();
-							file.createNewFile();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-					configFile.createSection("elos");
-					configFile.createSection("scoreboard");
-					Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
-					List<Integer> eloList = Arrays.asList(elos);
-					configFile.set("elos", eloList);
-					configFile.set("scoreboard", String.valueOf(this.getManagerHandler().getProfileManager().getProfileData().get(uuid).isScoreboard()));
+		if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
+			for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
+				File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");
+				if (!file.exists()) {
 					try {
-						configFile.save(file);
+		                file.getParentFile().mkdirs();
+						file.createNewFile();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}	
-				System.out.println("[GYM] Data Player > Saved!");
-			}
-			if (Bukkit.getOnlinePlayers().size() != 0) {
-				this.managerHandler.getProfileManager().getProfiles().clear();
-			}
-			try {
-				this.getLadderFile().getConfig().save(this.getLadderFile().getFile());
-				this.managerHandler.getArenaManager().saveArenas();
-			} catch (IOException e) {
-				e.printStackTrace();
+				}
+				YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+				configFile.createSection("elos");
+				configFile.createSection("scoreboard");
+				Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
+				List<Integer> eloList = Arrays.asList(elos);
+				configFile.set("elos", eloList);
+				configFile.set("scoreboard", String.valueOf(this.getManagerHandler().getProfileManager().getProfileData().get(uuid).isScoreboard()));
+				try {
+					configFile.save(file);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}	
+			System.out.println("[GYM] Data Player > Saved!");
+		}
+		if (Bukkit.getOnlinePlayers().size() != 0) {
+			this.managerHandler.getProfileManager().getProfiles().clear();
+		}
+		try {
+			this.getLadderFile().getConfig().save(this.getLadderFile().getFile());
+			this.managerHandler.getArenaManager().saveArenas();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
