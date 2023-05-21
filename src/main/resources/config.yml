@@ -93,7 +93,7 @@ inventory:
     size: 9
     items:
       0:
-       name: "&dScoreboard &7[%sbStatus%&7]"
+       displayname: "&dScoreboard &7[%sbStatus%&7]"
        material: "PAINTING"
        material-id: 0
        command: "/scoreboard"

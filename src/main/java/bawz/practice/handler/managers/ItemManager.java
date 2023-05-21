@@ -32,15 +32,11 @@ public class ItemManager {
 	}
 	
 	private ItemStack configToItem(final String type, final String number) {
-		ItemStack item = new ItemStack(Material.AIR);
-		if (this.main.getConfig().getString(type + "." + number) != null) {
-			ItemStack item2 = new ItemStack(Material.valueOf(this.main.getConfig().getString(type + "." + number + ".material")), 1,(byte)this.main.getConfig().getInt(type + "." + number + ".material-id"));
-			if (item.getType() != Material.AIR) {
-				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString(type + "." + number + ".displayname")));
-				item.setItemMeta(meta);	
-			}
-			return item2;
+		ItemStack item = new ItemStack(this.main.getConfig().get(type + "." + number) != null ? Material.valueOf(this.main.getConfig().getString(type + "." + number + ".material")) : Material.AIR, 1,(byte)(this.main.getConfig().get(type + "." + number) != null ? this.main.getConfig().getInt(type + "." + number + ".material-id") : 0));
+		if (item.getType() != Material.AIR) {
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName(this.main.getConfig().get(type + "." + number) != null ? ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString(type + "." + number + ".displayname")) : "");
+			item.setItemMeta(meta);	
 		}
 		return item;
 	}
