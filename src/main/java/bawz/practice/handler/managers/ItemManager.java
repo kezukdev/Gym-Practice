@@ -1,6 +1,8 @@
 package bawz.practice.handler.managers;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import bawz.practice.Main;
+import net.minecraft.util.com.google.common.collect.Lists;
 
 public class ItemManager {
 	
@@ -36,6 +39,13 @@ public class ItemManager {
 		if (item.getType() != Material.AIR) {
 			ItemMeta meta = item.getItemMeta();
 			meta.setDisplayName(this.main.getConfig().get(type + "." + number) != null ? ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString(type + "." + number + ".displayname")) : "");
+			if (this.main.getConfig().get(type + "." + number) != null && this.main.getConfig().get(type + "." + number + ".lore") != null) {
+				List<String> lores = Lists.newArrayList();
+				 for (String lore : this.main.getConfig().getStringList(type + "." + number + ".lore")) {
+					  lores.add(ChatColor.translateAlternateColorCodes('&', lore.toString()));
+				}
+				meta.setLore(lores);
+			}
 			item.setItemMeta(meta);	
 		}
 		return item;
