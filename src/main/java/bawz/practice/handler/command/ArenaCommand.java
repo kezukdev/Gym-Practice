@@ -46,7 +46,6 @@ public class ArenaCommand implements CommandExecutor {
         		return false;
         	}
             sender.sendMessage(this.main.getMessageLoader().getArenaCreated().replace("%arenaName%", args[1]).replace("%arenaType%", args[2]));
-            this.main.getManagerHandler().getArenaManager().createArena(args[1]);
             final Location location = Bukkit.getServer().getPlayer(sender.getName()).getLocation();
             this.main.getManagerHandler().getArenaManager().getArena(args[1]).setLoc1(LocationSerializer.fromBukkitLocation(location));
             this.main.getManagerHandler().getArenaManager().getArena(args[1]).setLoc2(LocationSerializer.fromBukkitLocation(location));

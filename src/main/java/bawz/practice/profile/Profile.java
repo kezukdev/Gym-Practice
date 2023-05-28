@@ -33,7 +33,7 @@ public class Profile {
 		}
 		this.main.getManagerHandler().getProfileManager().getProfiles().putIfAbsent(uuid, this);
 		this.main.getManagerHandler().getProfileManager().dataManagement(uuid, false);
-		this.profileCache.settingsCache = new Settings(this.main, this.profileData.isScoreboard());
+		this.profileCache.settingsCache = new Settings(this.main, uuid);
 	}
 	
 	public void exit() {

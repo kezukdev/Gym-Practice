@@ -18,6 +18,7 @@ public class Arena {
         this.loc2 = loc2;
         this.arenaType = arenaType;
         this.main.getArenas().add(this);
+        this.main.getArenasMap().putIfAbsent(name, this);
     }
     
     public Arena(final String name) {

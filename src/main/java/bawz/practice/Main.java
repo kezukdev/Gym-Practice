@@ -3,6 +3,7 @@ package bawz.practice;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -42,8 +43,10 @@ public class Main extends JavaPlugin {
 	private CommandHandler commandHandler;
 	public CommandHandler getCommandHandler() { return commandHandler; }
 	
-	private List<Arena> arenas = Lists.newArrayList();
+	private List<Arena> arenas = Lists.newArrayList();;
 	public List<Arena> getArenas() { return arenas; }
+	private HashMap<String, Arena> arenasMap = new HashMap<>();
+	public HashMap<String, Arena> getArenasMap() { return arenasMap; }
 	private List<Ladder> ladders = Lists.newArrayList();
 	public List<Ladder> getLadders() { return ladders; }
 	
@@ -67,6 +70,7 @@ public class Main extends JavaPlugin {
 	private SpigotHook spigotHook;
 	public SpigotHook getSpigotHook() { return spigotHook; }
 	private boolean scoreboardEnable;
+	public boolean isScoreboardEnable() { return scoreboardEnable; }
 	
 	public void onEnable() {
 		instance = this;

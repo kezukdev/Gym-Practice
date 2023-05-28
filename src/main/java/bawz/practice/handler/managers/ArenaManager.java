@@ -16,12 +16,10 @@ import bawz.practice.utils.config.Config;
 public class ArenaManager {
 	
 	private Main main;
-	private HashMap<String, Arena> arenas;
 	private final Config config;
 	
 	public ArenaManager(final Main main) { 
 		this.main = main;
-		this.arenas = new HashMap<>();
 		this.config = new Config("arenas", this.main);
 		this.loadArenas();
 	}
@@ -43,7 +41,7 @@ public class ArenaManager {
 	public void saveArenas() {
 		FileConfiguration fileConfig = this.config.getConfig();
 		fileConfig.set("arenas", null);
-		this.arenas.forEach((arenaName, arena) -> {
+		this.main.getArenasMap().forEach((arenaName, arena) -> {
 			String first = LocationSerializer.locationToString(arena.getLoc1());
 			String second = LocationSerializer.locationToString(arena.getLoc2());
 			String type = arena.getArenaType().toString();
@@ -57,7 +55,7 @@ public class ArenaManager {
 
 	public void reloadArenas() {
 		saveArenas();
-		this.arenas.clear();
+		this.main.getArenasMap().clear();
 		loadArenas();
 	}
 
@@ -67,11 +65,7 @@ public class ArenaManager {
         return availableArena.get(0);
     }
 
-	public void createArena(String name) {
-		this.arenas.put(name, new Arena(name));
-	}
-
 	public Arena getArena(String name) {
-		return this.arenas.get(name);
+		return this.main.getArenasMap().get(name);
 	}
 }
