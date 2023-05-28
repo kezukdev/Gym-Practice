@@ -11,7 +11,7 @@ database:
     enable: "false"
     
 default-elos: 1200
- 
+
 join-message:
   enabled: "true"
   message: "&a%player% &bis now online. &a%currentlyOnline%&7/&c%maxSlots%"
@@ -31,6 +31,10 @@ color:
   enable: "GREEN"
   disable: "RED"
   
+displayer:
+  enable: "ON"
+  disable: "OFF" 
+   
   #########
   # ITEMS #
   #########

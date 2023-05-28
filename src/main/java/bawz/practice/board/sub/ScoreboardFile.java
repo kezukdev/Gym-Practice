@@ -38,8 +38,8 @@ public class ScoreboardFile {
 		}
 		config = YamlConfiguration.loadConfiguration(file);
 		if (config.getKeys(true).size() > 2) {
-			this.name = this.getConfig().getString("global-name");
-			this.queueInLobby = Boolean.valueOf(this.getConfig().getString("queueboard-in-lobbyboard"));
+			this.name = this.getConfig().getString("configuration.global-name");
+			this.queueInLobby = Boolean.valueOf(this.getConfig().getString("configuration.queueboard-in-lobbyboard"));
 			for (String str : getConfig().getConfigurationSection("scoreboard").getKeys(false)) {
 				this.adaptaters.add(getConfig().getConfigurationSection("scoreboard").getStringList(str));
 			}

@@ -59,9 +59,15 @@ public class StringLoader {
 	public String getMatchCountdown() { return matchCountdown; }
 	private String matchFound;
 	public String getMatchFound() { return matchFound; }
+	private String disableColor;
+	public String getDisableColor() { return disableColor; }
+	private String enableColor;
+	public String getEnableColor() { return enableColor; }
 	
 	public StringLoader(final Main main) {
 		this.main = main;
+		this.enableColor = StringUtils.translate(this.main.getConfig().getString("color.enable"));
+		this.disableColor = StringUtils.translate(this.main.getConfig().getString("color.disable"));
 		this.enterQueue = StringUtils.translate(this.main.getConfig().getString("messages.enter-in-queue"));
 		this.leaveQueue = StringUtils.translate(this.main.getConfig().getString("messages.leave-queue"));
 		this.notInQueue = StringUtils.translate(this.main.getConfig().getString("messages.not-in-queue"));

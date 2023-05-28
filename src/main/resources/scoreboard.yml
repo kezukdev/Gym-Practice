@@ -1,7 +1,8 @@
-enabled: "true"
-global-name: "&3Bawz &7[&bServices&7]"
-queueboard-in-lobbyboard: "true"
-
+configuration:
+  enabled: "true"
+  global-name: "&3Bawz"
+  queueboard-in-lobbyboard: "true"
+  
 scoreboard:
   spawn:
     - "&7&m----------------"

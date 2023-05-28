@@ -66,6 +66,7 @@ public class Main extends JavaPlugin {
 	
 	private SpigotHook spigotHook;
 	public SpigotHook getSpigotHook() { return spigotHook; }
+	private boolean scoreboardEnable;
 	
 	public void onEnable() {
 		instance = this;
@@ -81,7 +82,8 @@ public class Main extends JavaPlugin {
         }
 		this.managerHandler = new ManagerHandler(this);
 		this.commandHandler = new CommandHandler(this);
-		if (Boolean.valueOf(this.ladderFile.getConfig().getString("enabled"))) 	new Aether(this, new PracticeBoard(this));
+		this.scoreboardEnable = Boolean.valueOf(this.scoreboardFile.getConfig().getString("configuration.enabled"));
+		if (scoreboardEnable) 	new Aether(this, new PracticeBoard(this));
 		if (Bukkit.getOnlinePlayers().size() != 0) {
 			for (Player players : Bukkit.getOnlinePlayers()) {
 				new Profile(players.getUniqueId());
