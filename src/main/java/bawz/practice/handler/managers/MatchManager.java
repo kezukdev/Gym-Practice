@@ -6,11 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -65,36 +60,36 @@ public class MatchManager {
 		final List<UUID> players = Lists.newArrayList(matchEntry.getPlayersList().get(0));
 		players.addAll(matchEntry.getPlayersList().get(1));
 		TextComponent inventoriesMsg = new TextComponent(this.main.getMessageLoader().getInventoriesMessage());
-		final List<StringBuilder> builder = Lists.newArrayList();
-		for (int i = 0; i < 2; i++) {
-			builder.add(new StringBuilder());
-		}
-        matchEntry.getPlayersList().get(0).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(0).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(0).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
-        matchEntry.getPlayersList().get(1).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builder.get(1).append(ChatColor.GRAY).append((matchEntry.getPlayersList().get(1).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(","));
+		final StringBuilder builderOne =  new StringBuilder();
+		final StringBuilder builderTwo =  new StringBuilder();
+        matchEntry.getPlayersList().get(0).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builderOne.append((matchEntry.getPlayersList().get(0).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append(ChatColor.GRAY + ","));
+        matchEntry.getPlayersList().get(1).stream().map(this.main.getServer()::getPlayer).filter(Objects::nonNull).forEach(member -> builderTwo.append((matchEntry.getPlayersList().get(1).contains(winner) ? ChatColor.GREEN : ChatColor.RED) + member.getName()).append( ChatColor.GRAY + ","));
+		final TextComponent winnerComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builderOne.toString() : builderTwo.toString());
+		final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builderTwo.toString() : builderOne.toString());
+		inventoriesMsg.addExtra(winnerComponent);
+		inventoriesMsg.addExtra(ChatColor.GRAY + ", ");
+		inventoriesMsg.addExtra(looserComponent);
 		players.forEach(uuid -> {
-			final TextComponent winnerComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builder.get(0).toString() : builder.get(1).toString());
-			final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builder.get(1).toString() : builder.get(0).toString());
-			inventoriesMsg.addExtra(winnerComponent);
-			inventoriesMsg.addExtra(ChatColor.GRAY + ", ");
-			inventoriesMsg.addExtra(looserComponent);
 			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
 			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
+			final Player player = Bukkit.getPlayer(uuid);
+			player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+			player.getInventory().setArmorContents(null);
+			player.updateInventory();
 		});
-		players.parallelStream().forEach(uuid -> this.showPlayers(uuid));
-		CompletableFuture<Void> completable = CompletableFuture.runAsync(() -> {
-			players.parallelStream().forEach(uuid -> {
-				final Player player = Bukkit.getPlayer(uuid);
-				final Profile profile = main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
-				player.teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : player.getWorld().getSpawnLocation());
-				profile.getProfileCache().setMatchID(null);
-				profile.setProfileState(ProfileState.FREE);
-				player.getInventory().setArmorContents(null);
-				player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-				player.updateInventory();
-				main.getManagerHandler().getItemManager().giveItems(player, "spawn-items");
-			});
-		});
-		try { completable.get(this.main.getMessageLoader().getRespawnTime()*1000L, TimeUnit.MILLISECONDS); } catch (InterruptedException | ExecutionException | TimeoutException e) { e.printStackTrace(); }
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				players.forEach(uuid -> {
+					showPlayers(uuid);
+					main.getManagerHandler().getProfileManager().getProfiles().get(uuid).getProfileCache().setMatchID(null);
+					Bukkit.getPlayer(uuid).teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : Bukkit.getPlayer(uuid).getWorld().getSpawnLocation());
+					main.getManagerHandler().getProfileManager().getProfiles().get(uuid).setProfileState(ProfileState.FREE);
+					main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(uuid), "spawn-items");
+				});
+			}
+		}.runTaskLaterAsynchronously(this.main, this.main.getMessageLoader().getRespawnTime()*20L);
 	}
 	
     public UUID getOpponent(final UUID uuid) {

@@ -31,6 +31,7 @@ public class EntityListener implements Listener {
 
 	@EventHandler(priority=EventPriority.LOW)
 	public void onDamageOnAnotherEntity(final EntityDamageByEntityEvent event) {
+		if (!(event.getDamager() instanceof Player)) return;
 		final Profile profileDamaged = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		final Profile profileDamager = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getDamager().getUniqueId());
 		if (event.getEntity() instanceof Player) {

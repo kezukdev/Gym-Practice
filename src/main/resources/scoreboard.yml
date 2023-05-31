@@ -21,8 +21,7 @@ scoreboard:
     - "&7&m----------------"
   fight:
     - "&7&m----------------"
-    - " &3Opponent&7: &f%opponentName%"
-    - " &3Their Ping&7: &f%opponentPing%"
+    - " &3Opponent&7: &f%opponent%"
     - " &3Their Elos&7: &f%opponentElo%"
     - "&7&m----------------"
   end-fight:

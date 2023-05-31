@@ -54,6 +54,7 @@ public class QueueManager {
 	                    	return;
 	                    }
 	                    final List<List<UUID>> list = Arrays.asList(Lists.newArrayList(uuid), Lists.newArrayList(possibleUUID));
+	                    System.out.println(list);
                         new MatchEntry(list, ladder, queueType, this.main);
 	                    this.getQueues().remove(uuid);
 	                    this.getQueues().remove(possibleUUID);

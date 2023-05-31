@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -79,6 +80,7 @@ public class PlayerListener implements Listener {
 	public void PlayerInteract(final PlayerInteractEvent event) {
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getPlayer().getUniqueId());
 		if (event.getAction().equals(Action.RIGHT_CLICK_AIR) || event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+			if (event.getItem() == null || event.getItem().getType().equals(Material.AIR)) return;
 			if (event.getItem().getType() != Material.AIR && (profile.getProfileState().equals(ProfileState.FREE) || profile.getProfileState().equals(ProfileState.QUEUE))) {
 				event.getPlayer().chat(this.main.getManagerHandler().getItemManager().getCommands().get(profile.getProfileState().equals(ProfileState.FREE) ? "spawn-items" : "queue-items").get(event.getPlayer().getInventory().getHeldItemSlot()));	
 			}	
@@ -162,6 +164,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW)
 	public void PlayerDeathEvent(final PlayerDeathEvent event) {
 		event.setDeathMessage(null);
+		final Location deathLoc = event.getEntity().getLocation();
 		event.getDrops().clear();
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(event.getEntity().getUniqueId());
 		if (profile.getProfileState().equals(ProfileState.FIGHT) && this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID()).getMatchState().equals(MatchState.PLAYING)) {
@@ -177,6 +180,7 @@ public class PlayerListener implements Listener {
                         final Object playerlist = mcserver.getClass().getDeclaredMethod("getPlayerList", (Class<?>[])new Class[0]).invoke(mcserver, new Object[0]);
                         final Method moveToWorld = playerlist.getClass().getMethod("moveToWorld", EntityPlayer, Integer.TYPE, Boolean.TYPE);
                         moveToWorld.invoke(playerlist, nmsPlayer, 0, false);
+            			event.getEntity().teleport(deathLoc);
                     }
                     catch (Exception ex) {
                     	event.getEntity().spigot().respawn();
@@ -185,17 +189,14 @@ public class PlayerListener implements Listener {
                 }
             }.runTaskLater(this.main, 2L);
 			final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
-			Integer teamID = matchEntry.getPlayersList().get(0).contains(event.getEntity().getUniqueId()) ? 0 : 1;
-			matchEntry.getAlives().get(teamID).remove(event.getEntity().getUniqueId());
-			List<UUID> players = Lists.newArrayList(matchEntry.getPlayersList().get(0));
+			List<UUID> players = Lists.newArrayList();
+			players.addAll(matchEntry.getPlayersList().get(0));
 			players.addAll(matchEntry.getPlayersList().get(1));
 			for (UUID uuids : players) {
 				final Player player = Bukkit.getPlayer(uuids);
 				player.sendMessage(this.main.getMessageLoader().getKillMessage().replace("%killer%", event.getEntity().getKiller().getName()).replace("%killed%", event.getEntity().getName()));
 			}
-			if (matchEntry.getAlives().get(teamID).size() == 0) {
-				this.main.getManagerHandler().getMatchManager().endMatch(event.getEntity().getKiller().getUniqueId(), profile.getProfileCache().getMatchID());
-			}
+			this.main.getManagerHandler().getMatchManager().endMatch(event.getEntity().getKiller().getUniqueId(), profile.getProfileCache().getMatchID());
 		}
 	}
 }

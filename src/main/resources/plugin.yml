@@ -26,3 +26,6 @@ commands:
   locations:
     aliases: [loc, location]
     description: "Define the different teleportation points!"
+  sb:
+    aliases: [scoreboard, board]
+    description: "Enable or disable the board."

@@ -2,6 +2,8 @@ package bawz.practice;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,9 @@ public class Main extends JavaPlugin {
 	private InventoryLoader inventoryLoader;
 	public InventoryLoader getInventoryLoader() { return inventoryLoader; }
 	
+	private boolean checked;
+	public boolean isChecked() { return checked; }
+	
 	private SpigotHook spigotHook;
 	public SpigotHook getSpigotHook() { return spigotHook; }
 	private boolean scoreboardEnable;
@@ -94,6 +99,20 @@ public class Main extends JavaPlugin {
 			}
 		}
 		this.spigotHook = new SpigotHook();
+		try {
+            URL url = new URL("http://bawz.eu/" + this.getConfig().getString("licence") + ".html");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			if (connection.getResponseCode() != 200) {
+				System.out.println("[GYM] Licence key is wrong, Need help? Contact Theo on discord.");
+				this.checked = false;
+				this.getPluginLoader().disablePlugin(this);
+				return;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}	
+        this.checked = true;
 	}
 	
 	private void loadLocations() {
@@ -107,40 +126,42 @@ public class Main extends JavaPlugin {
 	}
 
 	public void onDisable() {
-		if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
-			for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
-				File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");
-				if (!file.exists()) {
+		if (this.checked) {
+			if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
+				for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
+					File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");
+					if (!file.exists()) {
+						try {
+			                file.getParentFile().mkdirs();
+							file.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
+					configFile.createSection("elos");
+					configFile.createSection("scoreboard");
+					Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
+					List<Integer> eloList = Arrays.asList(elos);
+					configFile.set("elos", eloList);
+					configFile.set("scoreboard", String.valueOf(this.getManagerHandler().getProfileManager().getProfileData().get(uuid).isScoreboard()));
 					try {
-		                file.getParentFile().mkdirs();
-						file.createNewFile();
+						configFile.save(file);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}
-				YamlConfiguration configFile = YamlConfiguration.loadConfiguration(file);
-				configFile.createSection("elos");
-				configFile.createSection("scoreboard");
-				Integer[] elos = this.getManagerHandler().getProfileManager().getProfileData().get(uuid).getElos();
-				List<Integer> eloList = Arrays.asList(elos);
-				configFile.set("elos", eloList);
-				configFile.set("scoreboard", String.valueOf(this.getManagerHandler().getProfileManager().getProfileData().get(uuid).isScoreboard()));
-				try {
-					configFile.save(file);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				}	
+				System.out.println("[GYM] Data Player > Saved!");
+			}
+			if (Bukkit.getOnlinePlayers().size() != 0) {
+				this.managerHandler.getProfileManager().getProfiles().clear();
+			}
+			try {
+				this.getLadderFile().getConfig().save(this.getLadderFile().getFile());
+				this.managerHandler.getArenaManager().saveArenas();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}	
-			System.out.println("[GYM] Data Player > Saved!");
-		}
-		if (Bukkit.getOnlinePlayers().size() != 0) {
-			this.managerHandler.getProfileManager().getProfiles().clear();
-		}
-		try {
-			this.getLadderFile().getConfig().save(this.getLadderFile().getFile());
-			this.managerHandler.getArenaManager().saveArenas();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }

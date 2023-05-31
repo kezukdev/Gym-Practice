@@ -1,4 +1,4 @@
-licence: "LICENCE_KEY"  
+licence: "kezuk"  
 
   ########################
   # SERVER CONFIGURATION #
@@ -13,18 +13,18 @@ database:
 default-elos: 1200
 
 join-message:
-  enabled: "true"
-  message: "&a%player% &bis now online. &a%currentlyOnline%&7/&c%maxSlots%"
+  enabled: "false"
+  message: "&e%player% &fis now online. &6%currentlyOnline%&7/&6%maxSlots%"
 leave-message:
-  enabled: "true"
+  enabled: "false"
   message: "&c%player% &bis now offline."
 motd: 
   whitelist:
-    1: "&3Bawz &7| &bPractice"
-    2: "&cCurrently under whitelist!"
+    1: " &e&lOGPOT.GG &7│ &6Practice"
+    2: " &cCurrently whitelisted!"
   unwhitelist:
-    1: "&3bawz &7| &bPractice"
-    2: "&aFollow @BawzNet!"
+    1: "&eOGPOT &7│ &6Practice"
+    2: "&eFollow @OGPOTGG!"
 maxslots: 2023
 
 color:
@@ -43,27 +43,27 @@ spawn-items:
   0:
     material: "IRON_SWORD"
     material-id: 0
-    displayname: "&3Casual"
+    displayname: "&eCasual"
     command: "/casual"
   1:
     material: "DIAMOND_SWORD"
     material-id: 0
-    displayname: "&5Ranked"
+    displayname: "&eRanked"
     command: "/ranked"
   4:
     material: "NAME_TAG"
     material-id: 0
-    displayname: "&3Party"
+    displayname: "&eParty"
     command: "/party create"
   7:
     material: "REDSTONE"
     material-id: 0
-    displayname: "&3Settings"
+    displayname: "&eSettings"
     command: "/settings"
   8:
     material: "BOOK"
     material-id: 0
-    displayname: "&3Editor"
+    displayname: "&eEditor"
     command: "/editor"
 
 queue-items:
@@ -80,20 +80,20 @@ queue-items:
 inventory:
   automatic-calcul-size: "true"
   casual:
-    name: "&8Casual Queue:"
+    name: "&eCasual Queue:"
     size: 9
     lore:
-      - "&3Queueing&7: &f%inQueue%"
-      - "&5Fighting&7: &f%inFight%"
+      - "&7⚠ │&eQueueing: &f%inQueue%"
+      - "&7⚠ │&eFighting: &f%inFight%"
   ranked:
-    name: "&8Ranked Queue:"
+    name: "&eRanked Queue:"
     size: 9
     lore:
-      - "&3Queueing&7: &f%inQueue%"
-      - "&5Fighting&7: &f%inFight%"
+      - "&7? │&eQueueing: &f%inQueue%"
+      - "&7? │&eFighting: &f%inFight%"
       
   settings:
-    name: "&8Settings:"
+    name: "&eSettings:"
     size: 9
     items:
       0:
@@ -103,7 +103,7 @@ inventory:
        command: "/scoreboard"
        lore:
         - ""
-        - "&7Change the scoreboard display according to your mood!"
+        - "&7Change the scoreboard display!"
         - ""
       
   preview:
@@ -113,22 +113,22 @@ inventory:
       playerinformation:
         material: "MELON"
         data: 0
-        name: "&7* &3Player Informations&7:"
+        name: "&7⚠ │ &ePlayer Informations"
         lore: 
           - " "
-          - " §bFood level§7: §f%foodLevel%"
-          - " §bLife level§7: §f%lifeLevel%&4♥"
-          - " §bHits§7: §f%hits%"
-          - " §bLongest Combo§7: §f%longestCombo%"
+          - " §eFood: f%foodLevel%"
+          - " §eHearts: f%lifeLevel%"
+          - " §eHits: §f%hits%"
+          - " §eLongest Combo: f%longestCombo%"
       potion:
         material: "POTION"
         data: 16421
-        name: "&7* &3Potion&7:"
+        name: "&7⚠ │ &ePotion:"
         lore:
           - " "
-          - " §3Remaining§7: §f%amountPot%"
-          - " §3Accuracy§7: §f%accuracyPot%"
-          - " §3Missed§7: §f%missedPot%"
+          - " §eRemaining: §f%amountPot%"
+          - " §eAccuracy: §f%accuracyPot%"
+          - " §eMissed: §f%missedPot%"
       
       
     ###############
@@ -152,22 +152,22 @@ messages:
   ladder-type-doesnt-exist: "&cThe ladder types currently available are: &3normal&7, &3uhc&7, &3sumo&7, &3hcf&7, &3spleef&7, &3bridges&7, &3combo!"
   ladder-help:
     - ""
-    - "§5Ladders Command:"
+    - "§eLadders Command:"
     - ""
-    - "§d/ladder create <name> <type>"
-    - "§d/ladder setinv <name>"
-    - "§d/ladder seticon <name>"
-    - "§d/ladder seteditable <name> <true/false>"
-    - "§d/ladder setslots <name> <number>"
-    - "§d/ladder setdisplay <name> <displayName>"
-    - "§d/ladder setcooldownpearl <name> <true/false>"
-    - "§d/ladder setcooldowntime <name> <seconds>"
+    - "§e/ladder create <name> <type>"
+    - "§e/ladder setinv <name>"
+    - "§e/ladder seticon <name>"
+    - "§e/ladder seteditable <name> <true/false>"
+    - "§e/ladder setslots <name> <number>"
+    - "§e/ladder setdisplay <name> <displayName>"
+    - "§e/ladder setcooldownpearl <name> <true/false>"
+    - "§e/ladder setcooldowntime <name> <seconds>"
   arena-help:
     - ""
-    - "§5Arena Command:"
+    - "§eArena Command:"
     - ""
-    - "§d/arena create <name> <type>"
-    - "§d/arena setloc<1/2> <name>"
+    - "§e/arena create <name> <type>"
+    - "§e/arena setloc<1/2> <name>"
   arena-not-exist: "&cThis arena does not exist!"
   arena-location: "&aYou have well defined the %locationSet% position"
   arena-created: "&aYou have created the arena: %arenaName% in the type: %arenaType%"
@@ -183,12 +183,12 @@ messages:
   match:
     cannot-launch-enderpearl: "&cYou cannot use this now!"
     cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bseconds"
-    found: "&7* &fA opponent was found! It's about &3%opponent%&f!"
-    countdown: "&3Match starting in &f%countdown% seconds!"
-    kill: "&3%killer% to kill &d%killed%"
-    winner: "&3%winner% &fhave won the match!"
-    inventories: "&bInventories &7(Click to open)&f:"
-    begin: "&fThe match has been begin!"
+    found: "&7⚠│ &fopponent found: &4%opponent%!"
+    countdown: "&eMatch starting in &f%countdown% seconds!"
+    kill: "&e%killer% &fkilled &e%killed%"
+    winner: "&e%winner% &fwon!"
+    inventories: "&eInventories:"
+    begin: "&fThe match start!"
   
   #######################
   # MATCH CONFIGURATION #

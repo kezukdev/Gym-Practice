@@ -62,6 +62,8 @@ public class LadderCommand implements CommandExecutor {
 			fileConfig.set("ladders." + args[1] + ".armorContent", BukkitSerialization.itemStackArrayToBase64(player.getInventory().getArmorContents()));
 			fileConfig.createSection("ladders." + args[1] + ".icon");
 			fileConfig.set("ladders." + args[1] + ".icon", player.getItemInHand().getType().toString());
+			fileConfig.createSection("ladders." + args[1] + ".icon-id");
+			fileConfig.set("ladders." + args[1] + ".icon-id", player.getItemInHand().getData().getData());
 			fileConfig.createSection("ladders." + args[1] + ".slots");
 			fileConfig.set("ladders." + args[1] + ".slots", slots);
 			fileConfig.createSection("ladders." + args[1] + ".editable");
@@ -75,9 +77,9 @@ public class LadderCommand implements CommandExecutor {
 			fileConfig.createSection("ladders." + args[1] + ".displayname");
 			fileConfig.set("ladders." + args[1] + ".displayname", "&a" + args[1]);
 			fileConfig.createSection("ladders." + args[1] + ".knockbackProfile");
-			fileConfig.set("ladders." + args[1] + ".displayname", "false");
+			fileConfig.set("ladders." + args[1] + ".knockbackProfile", "default");
 			fileConfig.createSection("ladders." + args[1] + ".knockbackTypeProfile");
-			fileConfig.set("ladders." + args[1] + ".displayname", "default");
+			fileConfig.set("ladders." + args[1] + ".knockbackTypeProfile", "default");
 			fileConfig.createSection("ladders." + args[1] + ".id");
 			fileConfig.set("ladders." + args[1] + ".id", ladder.getId());
 			this.save();
@@ -109,6 +111,7 @@ public class LadderCommand implements CommandExecutor {
 				return false;
 			}
 			fileConfig.set("ladders." + args[1] + ".icon", player.getItemInHand().getType().toString());
+			fileConfig.set("ladders." + args[1] + ".icon-id", player.getItemInHand().getData().getData());
 			this.save();
 			sender.sendMessage(ChatColor.GREEN + "The icon has been defined to " + player.getItemInHand().getType().toString());
 		}

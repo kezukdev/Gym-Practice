@@ -7,6 +7,7 @@ import bawz.practice.handler.command.LadderCommand;
 import bawz.practice.handler.command.LocationsCommand;
 import bawz.practice.handler.command.QueueCommand;
 import bawz.practice.handler.command.RankedCommand;
+import bawz.practice.handler.command.ScoreboardCommand;
 import bawz.practice.handler.command.SettingsCommand;
 
 public class CommandHandler {
@@ -19,6 +20,7 @@ public class CommandHandler {
 		main.getCommand("arena").setExecutor(new ArenaCommand(main));
 		main.getCommand("leavequeue").setExecutor(new QueueCommand(main));
 		main.getCommand("location").setExecutor(new LocationsCommand(main));
+		main.getCommand("sb").setExecutor(new ScoreboardCommand(main));
 	}
 
 }

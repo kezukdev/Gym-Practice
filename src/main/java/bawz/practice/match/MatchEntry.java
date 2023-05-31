@@ -36,10 +36,12 @@ public class MatchEntry {
 	public MatchEntry(final List<List<UUID>> players, final Ladder ladder, final QueueType queueType, final Main main) {
 		this.main = main;
 		this.matchID = UUID.randomUUID();
+		System.out.println(players);
 		this.playersList = players;
 		this.ladder = ladder;
 		this.queueType = queueType;
-		this.alives = Lists.newArrayList(players);
+		this.alives = Lists.newArrayList();
+		this.alives.addAll(players);
 		this.spectator = Lists.newArrayList();
 		this.matchStatistics = new HashMap<>();
 		this.main.getManagerHandler().getMatchManager().getMatchs().putIfAbsent(getMatchID(), this);

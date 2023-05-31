@@ -26,7 +26,7 @@ public class Settings {
 	public void loadSettingsInventory(final UUID uuid) {
 		for (Entry<Integer, ItemStack> item : main.getManagerHandler().getItemManager().getInventory().get("inventory.settings.items").entrySet()) {
 			if (item.getValue().getType().equals(Material.AIR)) return;
-			item.getValue().getItemMeta().setDisplayName(item.getValue().getItemMeta().getDisplayName().replace("%sbStatus%", this.main.getManagerHandler().getProfileManager().getProfileData().get(uuid).isScoreboard() ? ChatColor.valueOf(main.getInventoryLoader().getEnableColor()) + main.getInventoryLoader().getDisplayerEnable() : ChatColor.valueOf(main.getInventoryLoader().getDisableColor()) + main.getInventoryLoader().getDisplayerDisable()));
+			item.getValue().getItemMeta().setDisplayName(item.getValue().getItemMeta().getDisplayName().replace("%sbStatus%", this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid).getProfileData().isScoreboard() ? ChatColor.valueOf(main.getInventoryLoader().getEnableColor()) + main.getInventoryLoader().getDisplayerEnable() : ChatColor.valueOf(main.getInventoryLoader().getDisableColor()) + main.getInventoryLoader().getDisplayerDisable()));
 			inventory[0].setItem(item.getKey(), item.getValue());
 		}
 	}
