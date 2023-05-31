@@ -77,6 +77,7 @@ public class MatchManager {
 			player.getInventory().setArmorContents(null);
 			player.updateInventory();
 		});
+		this.matchs.remove(matchEntry.getMatchID());
 		new BukkitRunnable() {
 			
 			@Override
