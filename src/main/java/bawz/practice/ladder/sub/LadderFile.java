@@ -42,7 +42,7 @@ public class LadderFile {
 				}
 			}	
 		}
-		System.out.println("[GYM] Ladders > Loaded");
+		System.out.println("[OGPOTS] Ladders > Loaded");
 	}
 
 	public void save() {
