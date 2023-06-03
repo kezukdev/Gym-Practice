@@ -30,7 +30,7 @@ public class MatchStatistics {
 	}
 
 	public void applyEnderPearlCooldown() {
-		this.enderpearlCooldown = Long.valueOf(System.currentTimeMillis() + this.matchEntry.getLadder().getCooldownTime() * 1000);
+		this.enderpearlCooldown = Long.valueOf(System.currentTimeMillis() + 16 * 1000);
 	}
 
 	public void removeEnderPearlCooldown() {

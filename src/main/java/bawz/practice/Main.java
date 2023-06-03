@@ -86,7 +86,6 @@ public class Main extends JavaPlugin {
 	
 	public void onEnable() {
 		instance = this;
-		this.saveDefaultConfig();
 		this.messageLoader = new StringLoader(this);
 		this.inventoryLoader = new InventoryLoader(this);
 		this.elosDefault = this.getConfig().getInt("default-elos");
@@ -134,6 +133,9 @@ public class Main extends JavaPlugin {
 
 	public void onDisable() {
 		if (this.checked) {
+			this.ladders.clear();
+			this.managerHandler.getItemManager().getInventory().clear();
+			this.managerHandler.getItemManager().getCommands().clear();
 			if (this.managerHandler.getProfileManager().getProfileData().size() != 0) {
 				for (UUID uuid : this.managerHandler.getProfileManager().getProfileData().keySet()) {
 					File file = new File(getDataFolder() + "/players/" + uuid.toString() + ".yml");

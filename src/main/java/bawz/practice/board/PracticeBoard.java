@@ -1,6 +1,7 @@
 package bawz.practice.board;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -59,11 +60,11 @@ public class PracticeBoard implements BoardAdapter {
         final List<String> board = new LinkedList<String>();
         final Profile pm = this.plugin.getManagerHandler().getProfileManager().getProfiles().get(player.getUniqueId());
         for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(0)) {
-        	board.add(StringUtils.translate(str.replace("%online%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%inQueue%", String.valueOf(this.plugin.getManagerHandler().getQueueManager().getQueues().size()))).replace("%inFight%", String.valueOf(this.plugin.getManagerHandler().getMatchManager().getMatchs().size())));
+        	board.add(StringUtils.translate(str.replace("%online%", String.valueOf(Bukkit.getOnlinePlayers().size())).replace("%inQueue%", String.valueOf(this.plugin.getManagerHandler().getQueueManager().getQueues().size())).replace("%inFight%", String.valueOf(this.plugin.getManagerHandler().getMatchManager().getMatchs().size())).replace("%ping%", String.valueOf(player.getPing())).replace("%date%", shortDateFormat.format(new Date()))));
         }
         if (this.plugin.getScoreboardFile().isQueueInLobby() && pm.getProfileState().equals(ProfileState.QUEUE)) {
             for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(1)) {
-            	board.add(StringUtils.translate(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString()))));
+            	board.add(StringUtils.translate(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString())).replace("%ping%", String.valueOf(player.getPing()).replace("%date%", shortDateFormat.format(new Date())))));
             }
         }
         return board;
@@ -72,7 +73,7 @@ public class PracticeBoard implements BoardAdapter {
 	private List<String> getQueueBoard(final Player player) {
         final List<String> board = new LinkedList<String>();
         for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(1)) {
-        	board.add(StringUtils.translate(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString()))));
+        	board.add(StringUtils.translate(str.replace("%ladderName%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getLadder().getDisplayName())).replace("%queueType%", ChatColor.stripColor(this.plugin.getManagerHandler().getQueueManager().getQueues().get(player.getUniqueId()).getQueueType().toString())).replace("%ping%", String.valueOf(player.getPing())).replace("%date%", shortDateFormat.format(new Date()))));
         }
         return board;
     }
@@ -87,7 +88,7 @@ public class PracticeBoard implements BoardAdapter {
         Integer index = matchEntry.getMatchState().equals(MatchState.STARTING) ? 2 : 3;
         if (matchEntry.getMatchState().equals(MatchState.ENDING)) index = 4;
         for (String str : this.plugin.getScoreboardFile().getAdaptaters().get(index)) {
-        	board.add(StringUtils.translate(str.replace("%opponent%", opponent).replace("%type%", type).replace("%opponentElo%", String.valueOf(opponentElo))));
+        	board.add(StringUtils.translate(str.replace("%opponent%", opponent).replace("%type%", type).replace("%opponentElo%", String.valueOf(opponentElo)).replace("%opponentPing%", String.valueOf(Bukkit.getPlayer(this.plugin.getManagerHandler().getMatchManager().getOpponent(player.getUniqueId())).getPing())).replace("%ping%", String.valueOf(player.getPing())).replace("%date%", shortDateFormat.format(new Date()))));
         }
         return board;
     }

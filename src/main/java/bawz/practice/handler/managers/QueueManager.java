@@ -35,7 +35,7 @@ public class QueueManager {
 	            this.getQueues().putIfAbsent(uuid, new QueueEntry(uuids, ladder, queueType));
 	            pm.setProfileState(ProfileState.QUEUE);	
 	            this.main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(uuid), "queue-items");
-	            Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getEnterQueue().replace("%ladderName%", ladder.getDisplayName()).replace("%queueType%", queueType.toString().toLowerCase()));
+	            Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getEnterQueue().replace("%ladderName%", ladder.getName()).replace("%queueType%", queueType.toString().toLowerCase()));
 			}
 			if (!this.getQueues().isEmpty()) {
 				UUID possibleUUID;
@@ -50,11 +50,10 @@ public class QueueManager {
 	                    if (possibleUUID == uuid) {
 	                        return;
 	                    }
-	                    if (value.getQueueType().equals(QueueType.RANKED)) {
+	                    if (value.getQueueType().equals(QueueType.Ranked)) {
 	                    	return;
 	                    }
 	                    final List<List<UUID>> list = Arrays.asList(Lists.newArrayList(uuid), Lists.newArrayList(possibleUUID));
-	                    System.out.println(list);
                         new MatchEntry(list, ladder, queueType, this.main);
 	                    this.getQueues().remove(uuid);
 	                    this.getQueues().remove(possibleUUID);

@@ -36,7 +36,6 @@ public class MatchEntry {
 	public MatchEntry(final List<List<UUID>> players, final Ladder ladder, final QueueType queueType, final Main main) {
 		this.main = main;
 		this.matchID = UUID.randomUUID();
-		System.out.println(players);
 		this.playersList = players;
 		this.ladder = ladder;
 		this.queueType = queueType;

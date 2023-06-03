@@ -67,17 +67,27 @@ public class MatchManager {
 		final TextComponent winnerComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builderOne.toString() : builderTwo.toString());
 		final TextComponent looserComponent = new TextComponent(matchEntry.getPlayersList().get(0).contains(winner) ? builderTwo.toString() : builderOne.toString());
 		inventoriesMsg.addExtra(winnerComponent);
-		inventoriesMsg.addExtra(ChatColor.GRAY + ", ");
 		inventoriesMsg.addExtra(looserComponent);
 		players.forEach(uuid -> {
 			Bukkit.getPlayer(uuid).spigot().sendMessage(inventoriesMsg);	
 			Bukkit.getPlayer(uuid).sendMessage(this.main.getMessageLoader().getWinnerMessage().replace("%winner%",  Bukkit.getPlayer(winner).getName()));
 			final Player player = Bukkit.getPlayer(uuid);
 			player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+			player.extinguish();
+			player.getInventory().clear();
 			player.getInventory().setArmorContents(null);
 			player.updateInventory();
 		});
-		this.matchs.remove(matchEntry.getMatchID());
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				players.forEach(uuid -> {
+					Bukkit.getPlayer(uuid).setAllowFlight(true);
+					Bukkit.getPlayer(uuid).setFlying(true);
+				});
+			}
+		}.runTaskLaterAsynchronously(main, 2L);
 		new BukkitRunnable() {
 			
 			@Override
@@ -88,6 +98,8 @@ public class MatchManager {
 					Bukkit.getPlayer(uuid).teleport(main.getSpawnLocation() != null ? main.getSpawnLocation() : Bukkit.getPlayer(uuid).getWorld().getSpawnLocation());
 					main.getManagerHandler().getProfileManager().getProfiles().get(uuid).setProfileState(ProfileState.FREE);
 					main.getManagerHandler().getItemManager().giveItems(Bukkit.getPlayer(uuid), "spawn-items");
+					resetPlayer(uuid);
+					matchs.remove(matchEntry.getMatchID());
 				});
 			}
 		}.runTaskLaterAsynchronously(this.main, this.main.getMessageLoader().getRespawnTime()*20L);
@@ -97,9 +109,8 @@ public class MatchManager {
     	UUID opponentUUID = null;
 		final Profile profile = this.main.getManagerHandler().getProfileManager().getProfiles().get(uuid);
 		final MatchEntry matchEntry = this.getMatchs().get(profile.getProfileCache().getMatchID());
-		Integer teamID = matchEntry.getPlayersList().get(0).contains(uuid) ? 1 : 0;
     	if (matchEntry != null) {
-    		for (UUID uuid1 : matchEntry.getPlayersList().get(teamID)) {
+    		for (UUID uuid1 : matchEntry.getPlayersList().get(matchEntry.getPlayersList().get(0).contains(uuid) ? 1 : 0)) {
     			opponentUUID = uuid1;
     		}
     	}
@@ -136,5 +147,13 @@ public class MatchManager {
 		    	}
 			}
 		}.runTaskLater(this.main, this.main.getMessageLoader().getRespawnTime()*20L);
+    }
+    
+    private void resetPlayer(final UUID uuid) {
+    	final Player player = Bukkit.getPlayer(uuid);
+    	player.setHealth(player.getMaxHealth());
+    	player.setFoodLevel(20);
+    	player.setAllowFlight(false);
+    	player.setFlying(false);
     }
 }

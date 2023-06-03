@@ -6,7 +6,6 @@ import bawz.practice.utils.hook.event.*;
 public enum Types
 {
     Default("None", "none", (KnockbackType)new Default()), 
-    SaturneSpigot("SaturneSpigot", "us.saturne.spigot.SaturneSpigot", (KnockbackType)new SaturneSpigot()),
 	BawzPaper("BawzPaper", "kezuk.bspigot.utils.DiscordWebhook", (KnockbackType)new BawzPaper());
     
     private final String name;

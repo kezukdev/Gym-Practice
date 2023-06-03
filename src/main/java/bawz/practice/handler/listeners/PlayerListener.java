@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -63,6 +62,7 @@ public class PlayerListener implements Listener {
 		for (PotionEffect effect : event.getPlayer().getActivePotionEffects()) {
 			event.getPlayer().removePotionEffect(effect.getType());
 		}
+		event.getPlayer().getInventory().clear();
 		this.main.getManagerHandler().getItemManager().giveItems(event.getPlayer(), "spawn-items");
 	}
 	
@@ -87,10 +87,11 @@ public class PlayerListener implements Listener {
 			if (profile.getProfileState().equals(ProfileState.FIGHT)) {
 				final ItemStack item = event.getItem();
 				final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
-				if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && item.getType() == Material.ENDER_PEARL && event.getPlayer().getGameMode() != GameMode.CREATIVE && matchEntry.getLadder().isCooldownPearl()) {
+				if (item.getType() == Material.ENDER_PEARL) {
+					System.out.println(matchEntry.getLadder().isCooldownPearl());
 					if (matchEntry.getMatchState() != MatchState.PLAYING) {
 						event.setUseItemInHand(Result.DENY);
-						event.getPlayer().sendMessage(StringUtils.translate(null));
+						event.getPlayer().sendMessage(StringUtils.translate(this.main.getMessageLoader().getCannotLaunchPearl()));
 						event.getPlayer().updateInventory();
 						return;
 					}
