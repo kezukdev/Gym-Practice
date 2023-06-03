@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.bizarrealex.aether.Aether;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import bawz.practice.arena.Arena;
 import bawz.practice.board.PracticeBoard;
@@ -45,11 +46,11 @@ public class Main extends JavaPlugin {
 	private CommandHandler commandHandler;
 	public CommandHandler getCommandHandler() { return commandHandler; }
 	
-	private List<Arena> arenas = Lists.newArrayList();;
+	private List<Arena> arenas;
 	public List<Arena> getArenas() { return arenas; }
-	private HashMap<String, Arena> arenasMap = new HashMap<>();
+	private HashMap<String, Arena> arenasMap;
 	public HashMap<String, Arena> getArenasMap() { return arenasMap; }
-	private List<Ladder> ladders = Lists.newArrayList();
+	private List<Ladder> ladders;
 	public List<Ladder> getLadders() { return ladders; }
 	
 	private Location spawnLocation;
@@ -76,6 +77,12 @@ public class Main extends JavaPlugin {
 	public SpigotHook getSpigotHook() { return spigotHook; }
 	private boolean scoreboardEnable;
 	public boolean isScoreboardEnable() { return scoreboardEnable; }
+	
+	public Main() {
+		this.arenas = Lists.newArrayList();
+		this.arenasMap = new HashMap<>();
+		this.ladders = Lists.newArrayList();
+	}
 	
 	public void onEnable() {
 		instance = this;
