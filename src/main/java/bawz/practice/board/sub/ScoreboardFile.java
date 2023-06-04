@@ -44,7 +44,6 @@ public class ScoreboardFile {
 				this.adaptaters.add(getConfig().getConfigurationSection("scoreboard").getStringList(str));
 			}
 		}
-		System.out.println(adaptaters.size());
 		System.out.println("[GYM] Scoreboards > Loaded");
 	}
 

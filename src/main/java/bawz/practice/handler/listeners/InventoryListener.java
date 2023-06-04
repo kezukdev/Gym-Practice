@@ -2,6 +2,7 @@ package bawz.practice.handler.listeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,6 +30,13 @@ public class InventoryListener implements Listener {
 			event.getWhoClicked().closeInventory();
 			this.main.getManagerHandler().getQueueManager().addPlayerToQueue(Lists.newArrayList(event.getWhoClicked().getUniqueId()), Ladder.getLadderBySlots(event.getSlot()), event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getQueue()[1].getName()) ? QueueType.Ranked : QueueType.Casual);
 			return;
+		}
+		if (event.getClickedInventory().getName().equalsIgnoreCase(this.main.getManagerHandler().getInventoryManager().getMerge()[0].getName())) {
+			if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) return;
+			if (event.getCurrentItem().getType() != Material.AIR) {
+				final Player player = (Player) event.getWhoClicked();
+				player.chat(this.main.getManagerHandler().getItemManager().getCommands().get("inventory.merge.items").get(event.getSlot()));	
+			}
 		}
 	}
 	

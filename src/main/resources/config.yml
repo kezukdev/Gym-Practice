@@ -78,7 +78,30 @@ queue-items:
     #############
 # Be aware that inventory sizes are only calculated by 9 (example 9+9 = 18) #
 inventory:
+  merge-casual-and-ranked: true
   automatic-calcul-size: "true"
+  merge:
+    name: "&eChoose mode:"
+    size: 9
+    items:
+     0:
+      displayname: "&eUnranked"
+      material: "IRON_SWORD"
+      material-id: 0
+      commands: "/unranked"
+      lore: 
+        - ""
+        - "&7test"
+        - ""
+     1:
+      displayname: "&6Ranked"
+      material: "DIAMOND_SWORD"
+      material-id: 0
+      commands: "/ranked"
+      lore:
+        - ""
+        - "&8test"
+        - ""
   casual:
     name: "&eCasual Queue:"
     size: 9

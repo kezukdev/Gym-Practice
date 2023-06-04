@@ -17,8 +17,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.bizarrealex.aether.Aether;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import bawz.practice.arena.Arena;
 import bawz.practice.board.PracticeBoard;
 import bawz.practice.board.sub.ScoreboardFile;
@@ -86,6 +84,7 @@ public class Main extends JavaPlugin {
 	
 	public void onEnable() {
 		instance = this;
+		this.saveDefaultConfig();
 		this.messageLoader = new StringLoader(this);
 		this.inventoryLoader = new InventoryLoader(this);
 		this.elosDefault = this.getConfig().getInt("default-elos");

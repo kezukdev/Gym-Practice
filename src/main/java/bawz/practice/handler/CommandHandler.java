@@ -5,6 +5,7 @@ import bawz.practice.handler.command.ArenaCommand;
 import bawz.practice.handler.command.CasualCommand;
 import bawz.practice.handler.command.LadderCommand;
 import bawz.practice.handler.command.LocationsCommand;
+import bawz.practice.handler.command.MergeCommand;
 import bawz.practice.handler.command.QueueCommand;
 import bawz.practice.handler.command.RankedCommand;
 import bawz.practice.handler.command.ScoreboardCommand;
@@ -21,6 +22,7 @@ public class CommandHandler {
 		main.getCommand("leavequeue").setExecutor(new QueueCommand(main));
 		main.getCommand("location").setExecutor(new LocationsCommand(main));
 		main.getCommand("sb").setExecutor(new ScoreboardCommand(main));
+		main.getCommand("merge").setExecutor(new MergeCommand(main));
 	}
 
 }

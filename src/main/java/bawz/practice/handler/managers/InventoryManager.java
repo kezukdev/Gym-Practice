@@ -12,12 +12,17 @@ import bawz.practice.ladder.Ladder;
 public class InventoryManager {
 	
 	private final Main main;
-	private Inventory[] 
+	private Inventory[] merge;
+	public Inventory[] getMerge() { return merge; }
 	private Inventory[] queue = new Inventory[2];
 	public Inventory[] getQueue() { return queue; }
 	
 	public InventoryManager(final Main main) {
 		this.main = main;
+		if (this.main.getConfig().getBoolean("inventory.merge-casual-and-ranked")) {
+			this.merge = new Inventory[1];
+			this.merge[0] = Bukkit.createInventory(null, this.main.getConfig().getInt("inventory.merge.size"),  ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.merge.name")));
+		}
 		this.queue[0] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.casual.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.casual.name")));
 		this.queue[1] = Bukkit.createInventory(null, Boolean.valueOf(this.main.getConfig().getString("inventory.automatic-calcul-size")) ? this.calculateSize(this.main.getLadders().size()) : this.main.getConfig().getInt("inventory.ranked.size"), ChatColor.translateAlternateColorCodes('&', this.main.getConfig().getString("inventory.ranked.name")));
 		this.refreshInventory();

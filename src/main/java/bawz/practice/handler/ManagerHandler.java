@@ -28,11 +28,12 @@ public class ManagerHandler {
 		this.itemManager.loadItems("spawn-items");
 		this.itemManager.loadItems("queue-items");
 		this.itemManager.loadItems("inventory.settings.items");
+		this.itemManager.loadItems("inventory.merge.items");
 		System.out.println("[GYM] Items > Loaded");
-		this.inventoryManager = new InventoryManager(main);
 		this.arenaManager = new ArenaManager(main);
 		this.queueManager = new QueueManager(main);
 		this.matchManager = new MatchManager(main);
 		this.profileManager = new ProfileManager(main);
+		this.inventoryManager = new InventoryManager(main);
 	}
 }

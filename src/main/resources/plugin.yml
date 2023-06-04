@@ -29,3 +29,6 @@ commands:
   sb:
     aliases: [scoreboard, board]
     description: "Enable or disable the board."
+  merge:
+    aliases: [mode]
+    description: "Choose if u want ranked or casual in one inventory."
