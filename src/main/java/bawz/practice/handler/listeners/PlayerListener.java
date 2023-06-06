@@ -88,7 +88,7 @@ public class PlayerListener implements Listener {
 				final ItemStack item = event.getItem();
 				final MatchEntry matchEntry = this.main.getManagerHandler().getMatchManager().getMatchs().get(profile.getProfileCache().getMatchID());
 				if (item.getType() == Material.ENDER_PEARL) {
-					System.out.println(matchEntry.getLadder().isCooldownPearl());
+					System.out.println(matchEntry.getLadder().getCooldownPearl());
 					if (matchEntry.getMatchState() != MatchState.PLAYING) {
 						event.setUseItemInHand(Result.DENY);
 						event.getPlayer().sendMessage(StringUtils.translate(this.main.getMessageLoader().getCannotLaunchPearl()));

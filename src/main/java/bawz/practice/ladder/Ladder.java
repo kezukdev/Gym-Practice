@@ -15,14 +15,13 @@ public class Ladder {
 	private ItemStack icon;
 	private ItemStack[] content;
 	private ItemStack[] armorContent;
-	private boolean ranked;
-	private boolean editable;
-	private boolean cooldownPearl;
-	private boolean knockbackProfile;
+	private String editable;
+	private String cooldownPearl;
+	private String knockbackProfile;
 	private String knockbackTypeProfile;
 	private Integer id;
 	
-	public Ladder(final String name, final ItemStack icon, final ItemStack[] content, final ItemStack[] armorContent,final String displayName, final LadderType ladderType, final Integer slots, final boolean editable, final boolean ranked, final boolean cooldownPearl, final boolean knockbackProfile, final String knockbackTypeProfile) {
+	public Ladder(final String name, final ItemStack icon, final ItemStack[] content, final ItemStack[] armorContent,final String displayName, final LadderType ladderType, final Integer slots, final String editable, final String cooldownPearl, final String knockbackProfile, final String knockbackTypeProfile) {
 		this.name = name;
 		this.icon = icon;
 		this.content = content;
@@ -31,7 +30,6 @@ public class Ladder {
 		this.ladderType = ladderType;
 		this.slots = slots;
 		this.editable = editable;
-		this.ranked = ranked;
 		this.cooldownPearl = cooldownPearl;
 		this.knockbackProfile = knockbackProfile;
 		this.knockbackTypeProfile = knockbackTypeProfile == null ? "default" : knockbackTypeProfile;
@@ -55,12 +53,16 @@ public class Ladder {
 		return name;
 	}
 	
-	public boolean isEditable() {
+	public String getCooldownPearl() {
+		return cooldownPearl;
+	}
+	
+	public String getEditable() {
 		return editable;
 	}
 	
-	public boolean isRanked() {
-		return ranked;
+	public String getKnockbackProfile() {
+		return knockbackProfile;
 	}
 	
 	public String getDisplayName() {
@@ -79,16 +81,8 @@ public class Ladder {
 		return id;
 	}
 	
-	public boolean isCooldownPearl() {
-		return cooldownPearl;
-	}
-	
 	public String getKnockbackTypeProfile() {
 		return knockbackTypeProfile;
-	}
-	
-	public boolean isKnockbackProfile() {
-		return knockbackProfile;
 	}
 	
     public static Ladder getLadderBySlots(Integer slots) {

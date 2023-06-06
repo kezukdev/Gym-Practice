@@ -35,7 +35,6 @@ public class InventoryManager {
 			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ladder.getDisplayName()));
 			item.setItemMeta(meta);
 			for (Inventory inventory : queue) {
-				if (inventory == queue[1] && !ladder.isRanked()) return;
 				inventory.setItem(ladder.getSlots(), item);
 			}
 		}
