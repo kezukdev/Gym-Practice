@@ -1,6 +1,6 @@
 configuration:
   enabled: "true"
-  global-name: "&3Bawz"
+  global-name: "&3PvP"
   queueboard-in-lobbyboard: "true"
   
 scoreboard:

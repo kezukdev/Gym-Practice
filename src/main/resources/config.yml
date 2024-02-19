@@ -1,4 +1,4 @@
-licence: "kezuk"  
+licence: "rimk"  
 
   ########################
   # SERVER CONFIGURATION #
@@ -159,9 +159,10 @@ inventory:
     ###############
     
 permissions:
-  ladder: "bawz.ladder"
-  arena: "bawz.arena"
-  locations: "bawz.location"
+  ladder: "gym.ladder"
+  arena: "gym.arena"
+  locations: "gym.location"
+  build: "gym.build"
   
     ############
     # MESSAGES #
@@ -198,6 +199,8 @@ messages:
   enter-in-queue: "&aYou have joined the queue in the ladder: %ladderName% in the type: %queueType%"
   leave-queue: "&cYou have been left the queue!"
   not-in-queue: "&cYou're not in queue at this moment!"
+  build-on: "&eYou've entered in build mode!"
+  build-off: "&cYou have left build mode!"
   
   #################
   # MATCH MESSAGE #
@@ -205,13 +208,14 @@ messages:
   
   match:
     cannot-launch-enderpearl: "&cYou cannot use this now!"
-    cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bseconds"
+    cooldown-enderpearl: "&3You can launch this in &f%cooldown%&bs"
     found: "&7⚠│ &fopponent found: &4%opponent%!"
     countdown: "&eMatch starting in &f%countdown% seconds!"
     kill: "&e%killer% &fkilled &e%killed%"
     winner: "&e%winner% &fwon!"
-    inventories: "&eInventories:"
+    inventories: "&aWinner&7: %winner% - &cLoser&7: %loser%"
     begin: "&fThe match start!"
+    cannot-drop-sword: "&cYou cannot drop this!"
   
   #######################
   # MATCH CONFIGURATION #
@@ -219,6 +223,7 @@ messages:
   
 #The result can only be calculated in second grade!#
 respawn-after-match-time: 10
+drop-sword: "false"
   
   #############
   # LOCATIONS #

@@ -1,7 +1,7 @@
 name: GYM
 auhtor: [kezukdev]
 version: 1.0
-main: bawz.practice.Main
+main: gym.practice.Main
 commands:
   kit:
     aliases: [ladder, gametype]
@@ -32,3 +32,6 @@ commands:
   merge:
     aliases: [mode]
     description: "Choose if u want ranked or casual in one inventory."
+  build:
+    aliases: [builder, builds, construct]
+    description: "Enable or disable the restriction to build for player."
